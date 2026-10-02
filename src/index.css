@@ -4,24 +4,24 @@
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ─── Ground & Surfaces (Warm Parchment / Ivory) ─── */
-  --color-bg-base: #F6F2EA;
-  --color-bg-parchment: #EFE8D8;
-  --color-bg-surface: #FAF7F0;
-  --color-bg-surface-elevated: #FFFFFF;
-  --color-bg-subtle: #ECE4D2;
-  --color-bg-hover: #E8DEC8;
+  /* ─── Ground & Surfaces (Aged Warm Parchment / Manuscript Tone) ─── */
+  --color-bg-base: #E8DECC;            /* Calmer, deeper antique parchment ground */
+  --color-bg-parchment: #DFD3BE;       /* Grounded surface for sidebar rail & headers */
+  --color-bg-surface: #EDE3D0;         /* Soft warm card/panel surface (no white glare) */
+  --color-bg-surface-elevated: #F2E9DB;/* Elevated cards/modals - gentle warm tone, zero #FFFFFF */
+  --color-bg-subtle: #D8CCA8;          /* Inset elements & subtle tags */
+  --color-bg-hover: #D2C4A6;           /* Quiet hover tone */
 
-  /* ─── Ink & Typography ─── */
-  --color-ink-primary: #27231D;
-  --color-ink-secondary: #70695C;
-  --color-ink-muted: #9E9585;
-  --color-ink-faint: #C4BCAC;
+  /* ─── Ink & Typography (Deepened for contrast against aged parchment) ─── */
+  --color-ink-primary: #1F1B16;        /* Deep charcoal ink */
+  --color-ink-secondary: #585043;      /* Clear scholarly ink */
+  --color-ink-muted: #7E7462;          /* Muted metadata */
+  --color-ink-faint: #A49984;          /* Subtle tick marks & faint guides */
 
   /* ─── Precision Instrument Accents (Aged Metals & Inks) ─── */
   --color-ochre: #A66A2C;              /* Deep Indian ochre / saffron */
   --color-ochre-dim: #D9A86E;
-  --color-ochre-soft: rgba(166, 106, 44, 0.08);
+  --color-ochre-soft: rgba(166, 106, 44, 0.1);
 
   --color-gold: #B08A3C;               /* Antique aged gold */
   --color-gold-deep: #7D6126;
@@ -64,10 +64,10 @@
   --color-code-highlight: #C5A059;
 
   /* ─── Borders & Hairlines ─── */
-  --border-hairline: 1px solid rgba(112, 105, 92, 0.16);
-  --border-rule: 1px solid rgba(176, 138, 60, 0.28);
-  --border-rule-strong: 1px solid rgba(32, 38, 58, 0.35);
-  --border-double: 3px double rgba(176, 138, 60, 0.4);
+  --border-hairline: 1px solid rgba(88, 80, 67, 0.22);
+  --border-rule: 1px solid rgba(176, 138, 60, 0.36);
+  --border-rule-strong: 1px solid rgba(32, 38, 58, 0.42);
+  --border-double: 3px double rgba(176, 138, 60, 0.48);
 
   /* ─── Typography Stacks ─── */
   --font-serif: 'Cormorant Garamond', 'Noto Serif Devanagari', Georgia, serif;
@@ -848,7 +848,7 @@ body::before {
 .sample-btn:hover {
   border-color: var(--color-ochre);
   color: var(--color-ochre);
-  background: #FFFFFF;
+  background: var(--color-bg-surface-elevated);
 }
 
 /* ─── Synchronized 3-Panel Layout ─── */
@@ -1142,8 +1142,8 @@ body::before {
   font-family: var(--font-ui);
   font-size: 0.84rem;
   color: var(--color-ink-primary);
-  background: #FFFFFF;
-  border: 1px solid rgba(112, 105, 92, 0.25);
+  background: var(--color-bg-surface-elevated);
+  border: 1px solid rgba(88, 80, 67, 0.28);
   border-radius: var(--radius-xs);
   transition: border-color var(--transition-fast);
 }
