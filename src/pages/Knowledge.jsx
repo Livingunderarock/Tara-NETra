@@ -11,12 +11,12 @@ export default function Knowledge({ showToast }) {
   const handleDelete = (id) => {
     deleteLearnedMapping(id);
     refresh();
-    showToast('Mapping deleted');
+    showToast('Knowledge mapping removed');
   };
 
   const handleExport = () => {
     exportKnowledge();
-    showToast('Knowledge exported');
+    showToast('Knowledge archive exported as JSON');
   };
 
   const handleImport = () => {
@@ -25,17 +25,17 @@ export default function Knowledge({ showToast }) {
       refresh();
       setShowImport(false);
       setImportText('');
-      showToast(`Imported ${result.imported} mappings`);
+      showToast(`Imported ${result.imported} knowledge mappings`);
     } else {
       showToast(result.error, 'error');
     }
   };
 
   const handleClear = () => {
-    if (confirm('Clear all learned mappings? This cannot be undone.')) {
+    if (confirm('Clear all learned mappings? This will reset custom knowledge.')) {
       clearLearnedMappings();
       refresh();
-      showToast('All mappings cleared');
+      showToast('All custom knowledge cleared');
     }
   };
 
@@ -47,7 +47,7 @@ export default function Knowledge({ showToast }) {
         const result = importKnowledge(ev.target.result);
         if (result.success) {
           refresh();
-          showToast(`Imported ${result.imported} mappings`);
+          showToast(`Imported ${result.imported} knowledge mappings`);
         } else {
           showToast(result.error, 'error');
         }
@@ -58,71 +58,106 @@ export default function Knowledge({ showToast }) {
 
   return (
     <div className="animate-fadeIn">
+      {/* Header */}
       <div className="page-header">
-        <h1 className="page-title">◈ TĀRĀ Memory</h1>
-        <p className="page-subtitle">{mappings.length} learned mappings stored in local knowledge base</p>
+        <div className="page-title-group">
+          <div className="page-tag">Persistent Archive</div>
+          <h1 className="page-title">TĀRĀ Memory</h1>
+          <div className="page-subtitle">
+            Curated repository of learned configuration semantics ({mappings.length} rules inscribed)
+          </div>
+        </div>
       </div>
 
-      {/* Actions */}
-      <div style={{ display: 'flex', gap: 'var(--space-sm)', marginBottom: 'var(--space-xl)', flexWrap: 'wrap' }}>
-        <button className="btn btn-secondary btn-sm" onClick={handleExport}>↓ Export Knowledge</button>
-        <button className="btn btn-secondary btn-sm" onClick={() => setShowImport(!showImport)}>↑ Import Knowledge</button>
-        <label className="btn btn-ghost btn-sm" style={{ cursor: 'pointer' }}>
-          📁 Import File
+      {/* Action Bar */}
+      <div style={{ display: 'flex', gap: 'var(--space-sm)', marginBottom: 'var(--space-xl)', flexWrap: 'wrap', alignItems: 'center' }}>
+        <button type="button" className="btn btn-secondary btn-sm" onClick={handleExport}>
+          Export Knowledge Pack
+        </button>
+        <button type="button" className="btn btn-secondary btn-sm" onClick={() => setShowImport(!showImport)}>
+          Import Text JSON
+        </button>
+        <label className="btn btn-secondary btn-sm" style={{ cursor: 'pointer' }}>
+          Import from Disk
           <input type="file" accept=".json" style={{ display: 'none' }} onChange={handleFileImport} />
         </label>
         {mappings.length > 0 && (
-          <button className="btn btn-danger btn-sm" onClick={handleClear}>✕ Clear All</button>
+          <button type="button" className="btn btn-danger btn-sm" onClick={handleClear} style={{ marginLeft: 'auto' }}>
+            Clear Archive
+          </button>
         )}
       </div>
 
-      {/* Import Textarea */}
+      {/* Import Drawer */}
       {showImport && (
-        <div className="card" style={{ marginBottom: 'var(--space-lg)' }}>
-          <div className="card-title">Import Knowledge JSON</div>
+        <div className="card" style={{ marginBottom: 'var(--space-xl)', borderTop: '2px solid var(--color-ochre)' }}>
+          <div className="card-title">Inscribe External Knowledge JSON</div>
           <textarea
             className="form-textarea"
             value={importText}
             onChange={(e) => setImportText(e.target.value)}
-            placeholder='Paste TĀRĀ-NETRA knowledge JSON here...'
-            style={{ minHeight: '120px' }}
+            placeholder="Paste TĀRĀ-NETRA knowledge JSON here..."
+            style={{ minHeight: '120px', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}
           />
           <div style={{ display: 'flex', gap: 'var(--space-sm)', marginTop: 'var(--space-md)' }}>
-            <button className="btn btn-primary btn-sm" onClick={handleImport}>Import</button>
-            <button className="btn btn-ghost btn-sm" onClick={() => { setShowImport(false); setImportText(''); }}>Cancel</button>
+            <button type="button" className="btn btn-primary btn-sm" onClick={handleImport}>Inscribe</button>
+            <button type="button" className="btn btn-ghost btn-sm" onClick={() => { setShowImport(false); setImportText(''); }}>Cancel</button>
           </div>
         </div>
       )}
 
-      {/* Mappings List */}
+      {/* Editorial Ledger Archive */}
       {mappings.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-state-icon">◈</div>
-          <div className="empty-state-text">No learned mappings yet. Use the Training Studio to teach TĀRĀ.</div>
+          <span className="empty-state-symbol">☵</span>
+          <div className="empty-state-text">No learned mappings inscribed in memory</div>
+          <div style={{ fontSize: '0.78rem', color: 'var(--color-ink-muted)', marginTop: '4px' }}>
+            Use the TĀRĀ Learning Studio to instruct the system on unfamiliar syntax.
+          </div>
         </div>
       ) : (
-        <div style={{ display: 'grid', gap: 'var(--space-sm)' }}>
+        <div className="memory-archive-ledger">
+          <div className="ledger-header">
+            <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600, color: 'var(--color-ink-muted)' }}>
+              Raw Directive Pattern &amp; Normalized Semantic Concept
+            </span>
+            <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600, color: 'var(--color-ink-muted)' }}>
+              Confidence &amp; Source
+            </span>
+          </div>
+
           {mappings.map((mapping) => (
-            <div key={mapping.id} className="card" style={{ padding: 'var(--space-md)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--color-cyan)', marginBottom: '4px' }}>
-                    {mapping.rawCommand || mapping.pattern}
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', flexWrap: 'wrap' }}>
-                    <span style={{ color: 'var(--color-gold)', fontSize: '0.8rem' }}>→ {mapping.controlName || mapping.semantic}</span>
-                    <span className="badge badge-learned" style={{ fontSize: '0.6rem' }}>LEARNED</span>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>Confidence: {mapping.confidence}%</span>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>Source: {mapping.source}</span>
-                  </div>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>
-                    Category: {mapping.category} • {mapping.timestamp ? new Date(mapping.timestamp).toLocaleDateString() : 'N/A'}
-                  </div>
+            <div key={mapping.id} className="ledger-item">
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="ledger-command">
+                  {mapping.rawCommand || mapping.pattern}
                 </div>
+                <div className="ledger-meta">
+                  <span className="ledger-arrow">⟶</span>
+                  <strong style={{ color: 'var(--color-ochre)' }}>
+                    {mapping.controlName || mapping.semantic}
+                  </strong>
+                  <span>•</span>
+                  <span>{mapping.category}</span>
+                  {mapping.timestamp && (
+                    <>
+                      <span>•</span>
+                      <span>{new Date(mapping.timestamp).toLocaleDateString()}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
+                <span className="badge badge-learned">
+                  {mapping.confidence || 97}% • {mapping.source || 'Admin'}
+                </span>
                 <button
-                  className="btn btn-danger btn-sm"
+                  type="button"
+                  className="btn btn-ghost btn-sm"
                   onClick={() => handleDelete(mapping.id)}
-                  style={{ flexShrink: 0, marginLeft: 'var(--space-md)' }}
+                  title="Remove from memory"
+                  style={{ padding: '4px 8px', fontSize: '0.7rem' }}
                 >
                   ✕
                 </button>

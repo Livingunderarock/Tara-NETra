@@ -2,17 +2,20 @@ import React, { useState } from 'react';
 import { frameworkInfo } from '../knowledge/semanticControls';
 
 export default function Compliance({ complianceResult, heatmapData, analysisResult }) {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('frameworks');
 
   if (!complianceResult) {
     return (
       <div className="animate-fadeIn">
         <div className="page-header">
-          <h1 className="page-title">◆ Compliance Engine</h1>
-          <p className="page-subtitle">Multi-framework compliance evaluation</p>
+          <div className="page-title-group">
+            <div className="page-tag">Regulatory Assurance</div>
+            <h1 className="page-title">Compliance Audit</h1>
+            <div className="page-subtitle">Deterministic evaluation against international benchmarks</div>
+          </div>
         </div>
         <div className="empty-state">
-          <div className="empty-state-icon">◆</div>
+          <span className="empty-state-symbol">◫</span>
           <div className="empty-state-text">Analyze a configuration first to evaluate compliance</div>
         </div>
       </div>
@@ -23,152 +26,254 @@ export default function Compliance({ complianceResult, heatmapData, analysisResu
 
   return (
     <div className="animate-fadeIn">
+      {/* Header */}
       <div className="page-header">
-        <h1 className="page-title">◆ Compliance Engine</h1>
-        <p className="page-subtitle">
-          {analysisResult?.deviceName || 'Device'} — {summary.total} controls evaluated across {Object.keys(frameworkScores).length} frameworks
-        </p>
+        <div className="page-title-group">
+          <div className="page-tag">Audit Assurance</div>
+          <h1 className="page-title">Compliance Evaluation</h1>
+          <div className="page-subtitle">
+            {analysisResult?.deviceName || 'Device'} — {summary.total} controls verified across {Object.keys(frameworkScores).length} standard frameworks
+          </div>
+        </div>
       </div>
 
-      {/* Top Summary */}
-      <div className="metrics-grid">
-        <div className="metric-card">
-          <div className="metric-value" style={{ color: 'var(--color-success)' }}>{summary.pass}</div>
-          <div className="metric-label">Pass</div>
-        </div>
-        <div className="metric-card">
-          <div className="metric-value" style={{ color: 'var(--color-danger)' }}>{summary.fail}</div>
-          <div className="metric-label">Fail</div>
-        </div>
-        <div className="metric-card">
-          <div className="metric-value" style={{ color: 'var(--color-warning)' }}>{summary.unknown}</div>
-          <div className="metric-label">Unknown</div>
-        </div>
-        <div className="metric-card">
-          <div className="metric-value" style={{ color: summary.compliancePercent >= 80 ? 'var(--color-success)' : 'var(--color-warning)' }}>
+      {/* Top Metrics Row */}
+      <div className="metrics-row" style={{ padding: 'var(--space-md) 0' }}>
+        <div className="metric-item">
+          <div className="metric-number" style={{ color: summary.compliancePercent >= 80 ? 'var(--color-pass)' : 'var(--color-ochre)' }}>
             {summary.compliancePercent}%
           </div>
-          <div className="metric-label">Overall Compliance</div>
+          <div className="metric-caption">Aggregate Compliance</div>
+        </div>
+
+        <div className="metric-item">
+          <div className="metric-number" style={{ color: 'var(--color-pass)' }}>
+            {summary.pass}
+          </div>
+          <div className="metric-caption">Satisfied (Pass)</div>
+        </div>
+
+        <div className="metric-item">
+          <div className="metric-number" style={{ color: 'var(--color-fail)' }}>
+            {summary.fail}
+          </div>
+          <div className="metric-caption">Unsatisfied (Fail)</div>
+        </div>
+
+        <div className="metric-item">
+          <div className="metric-number" style={{ color: 'var(--color-unknown)' }}>
+            {summary.unknown}
+          </div>
+          <div className="metric-caption">Unverified (Unknown)</div>
+        </div>
+
+        <div className="metric-item">
+          <div className="metric-number">
+            {summary.total}
+          </div>
+          <div className="metric-caption">Total Evaluated</div>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="tabs">
-        <button className={`tab ${activeTab === 'overview' ? 'active' : ''}`} onClick={() => setActiveTab('overview')}>Framework Scores</button>
-        <button className={`tab ${activeTab === 'heatmap' ? 'active' : ''}`} onClick={() => setActiveTab('heatmap')}>Heatmap</button>
-        <button className={`tab ${activeTab === 'debt' ? 'active' : ''}`} onClick={() => setActiveTab('debt')}>Security Debt</button>
+      {/* Segmented Navigation */}
+      <div className="segmented-nav">
+        <button
+          type="button"
+          className={`segmented-btn ${activeTab === 'frameworks' ? 'active' : ''}`}
+          onClick={() => setActiveTab('frameworks')}
+        >
+          Framework Summary
+        </button>
+        <button
+          type="button"
+          className={`segmented-btn ${activeTab === 'heatmap' ? 'active' : ''}`}
+          onClick={() => setActiveTab('heatmap')}
+        >
+          Compliance Heatmap
+        </button>
+        <button
+          type="button"
+          className={`segmented-btn ${activeTab === 'breakdown' ? 'active' : ''}`}
+          onClick={() => setActiveTab('breakdown')}
+        >
+          Category Ledger &amp; Debt
+        </button>
       </div>
 
-      {/* Framework Scores */}
-      {activeTab === 'overview' && (
-        <div className="grid-2">
+      {/* Tab 1: Framework Scores Cards */}
+      {activeTab === 'frameworks' && (
+        <div className="framework-cards-grid">
           {Object.entries(frameworkScores).map(([fw, score]) => (
-            <div key={fw} className="card">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
+            <div key={fw} className="framework-card">
+              <div className="framework-card-header">
                 <div>
-                  <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1rem', color: frameworkInfo[fw]?.color }}>
-                    {frameworkInfo[fw]?.name || fw}
+                  <div className="framework-name">{frameworkInfo[fw]?.name || fw}</div>
+                  <div style={{ fontSize: '0.68rem', color: 'var(--color-ink-muted)' }}>
+                    {frameworkInfo[fw]?.fullName}
                   </div>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>{frameworkInfo[fw]?.fullName}</div>
                 </div>
-                <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '2rem', color: frameworkInfo[fw]?.color }}>
+                <div className="framework-score">
                   {score.percent}%
                 </div>
               </div>
-              <div className="progress-bar" style={{ height: '8px', marginBottom: 'var(--space-md)' }}>
-                <div className={`progress-fill ${fw.toLowerCase()}`} style={{ width: `${score.percent}%` }} />
+
+              <div className="progress-rule">
+                <div
+                  className="progress-rule-fill"
+                  style={{
+                    width: `${score.percent}%`,
+                    background: score.percent >= 80 ? 'var(--color-pass)' : 'var(--color-ochre)'
+                  }}
+                />
               </div>
-              <div style={{ display: 'flex', gap: 'var(--space-lg)', fontSize: '0.8rem' }}>
-                <span><span style={{ color: 'var(--color-success)' }}>●</span> Pass: {score.pass}</span>
-                <span><span style={{ color: 'var(--color-danger)' }}>●</span> Fail: {score.fail}</span>
-                <span><span style={{ color: 'var(--color-warning)' }}>●</span> Unknown: {score.unknown}</span>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', color: 'var(--color-ink-secondary)', marginTop: 'auto' }}>
+                <span><span style={{ color: 'var(--color-pass)' }}>●</span> Pass: {score.pass}</span>
+                <span><span style={{ color: 'var(--color-fail)' }}>●</span> Fail: {score.fail}</span>
+                <span><span style={{ color: 'var(--color-unknown)' }}>○</span> Unknown: {score.unknown}</span>
               </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* Heatmap */}
+      {/* Tab 2: Compliance Heatmap Matrix */}
       {activeTab === 'heatmap' && heatmapData && (
         <div className="card">
-          <div className="card-title">Compliance Heatmap</div>
-          <div className="heatmap-grid" style={{ gridTemplateColumns: `160px repeat(${Object.keys(frameworkScores).length}, 1fr)` }}>
-            {/* Headers */}
-            <div className="heatmap-header"></div>
-            {Object.keys(frameworkScores).map(fw => (
-              <div key={fw} className="heatmap-header" style={{ color: frameworkInfo[fw]?.color }}>{fw}</div>
-            ))}
+          <div className="card-title">Framework Compliance Heatmap Matrix</div>
+          <div className="card-subtext">Visual distribution of pass/fail assurance across architectural security domains</div>
 
-            {/* Rows */}
-            {Object.entries(heatmapData).map(([category, fws]) => (
-              <React.Fragment key={category}>
-                <div className="heatmap-label">{category}</div>
-                {Object.entries(fws).map(([fw, status]) => (
-                  <div
-                    key={fw}
-                    className={`heatmap-cell ${status === 'PASS' ? 'pass' : status === 'FAIL' ? 'fail' : status === 'UNKNOWN' ? 'unknown-cell' : 'na'}`}
-                  >
-                    {status === 'PASS' ? '●' : status === 'FAIL' ? '●' : status === 'UNKNOWN' ? '○' : '—'}
-                  </div>
+          <div style={{ overflowX: 'auto', marginTop: 'var(--space-md)' }}>
+            <table className="heatmap-table">
+              <thead>
+                <tr>
+                  <th style={{ width: '220px' }}>Security Domain</th>
+                  {Object.keys(frameworkScores).map(fw => (
+                    <th key={fw} style={{ color: 'var(--color-indigo)' }}>
+                      {fw}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(heatmapData).map(([category, fws]) => (
+                  <tr key={category}>
+                    <td>{category}</td>
+                    {Object.entries(fws).map(([fw, status]) => (
+                      <td key={fw}>
+                        {status === 'PASS' && <span className="status-dot-pass" title="Pass" />}
+                        {status === 'FAIL' && <span className="status-dot-fail" title="Fail" />}
+                        {status === 'UNKNOWN' && <span className="status-dot-unknown" title="Unknown / Insufficient Evidence" />}
+                        {status === 'N/A' && <span style={{ color: 'var(--color-ink-muted)' }}>—</span>}
+                      </td>
+                    ))}
+                  </tr>
                 ))}
-              </React.Fragment>
-            ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div style={{ display: 'flex', gap: 'var(--space-xl)', marginTop: 'var(--space-lg)', fontSize: '0.74rem', color: 'var(--color-ink-secondary)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span className="status-dot-pass" /> Satisfied Requirement
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span className="status-dot-fail" /> Non-Compliant Finding
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span className="status-dot-unknown" /> Insufficient Evidence
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span>—</span> Not Mapped
+            </div>
           </div>
         </div>
       )}
 
-      {/* Security Debt */}
-      {activeTab === 'debt' && (
-        <div className="card">
-          <div className="card-title">Security Debt</div>
-          <div style={{ display: 'grid', gap: 'var(--space-lg)' }}>
-            {[
-              { label: 'HIGH', value: securityDebt.HIGH, color: 'var(--color-danger)' },
-              { label: 'MEDIUM', value: securityDebt.MEDIUM, color: 'var(--color-warning)' },
-              { label: 'LOW', value: securityDebt.LOW, color: 'var(--color-cyan)' },
-            ].map(item => (
-              <div key={item.label}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '0.8rem', color: item.color }}>{item.label}</span>
-                  <span style={{ fontWeight: 700 }}>{item.value}</span>
-                </div>
-                <div className="progress-bar" style={{ height: '12px' }}>
-                  <div style={{
-                    height: '100%', borderRadius: '3px',
-                    width: `${Math.min(item.value * 20, 100)}%`,
-                    background: item.color,
-                    transition: 'width 0.5s ease'
-                  }} />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Category Breakdown */}
-          <div style={{ marginTop: 'var(--space-xl)' }}>
-            <div className="card-title">Category Breakdown</div>
-            <table className="data-table">
+      {/* Tab 3: Category Ledger & Security Debt */}
+      {activeTab === 'breakdown' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 'var(--space-xl)' }}>
+          {/* Category Table */}
+          <div className="card">
+            <div className="card-title">Category Domain Ledger</div>
+            <table className="audit-table">
               <thead>
                 <tr>
-                  <th>Category</th>
-                  <th>Pass</th>
-                  <th>Fail</th>
-                  <th>Unknown</th>
-                  <th>Score</th>
+                  <th>Domain Category</th>
+                  <th style={{ textAlign: 'center' }}>Pass</th>
+                  <th style={{ textAlign: 'center' }}>Fail</th>
+                  <th style={{ textAlign: 'center' }}>Unknown</th>
+                  <th style={{ textAlign: 'right' }}>Score</th>
                 </tr>
               </thead>
               <tbody>
                 {Object.entries(categoryScores).map(([cat, score]) => (
                   <tr key={cat}>
-                    <td style={{ fontWeight: 500, color: 'var(--color-text)' }}>{cat}</td>
-                    <td><span style={{ color: 'var(--color-success)' }}>{score.pass}</span></td>
-                    <td><span style={{ color: 'var(--color-danger)' }}>{score.fail}</span></td>
-                    <td><span style={{ color: 'var(--color-warning)' }}>{score.unknown}</span></td>
-                    <td><span style={{ fontWeight: 700, color: score.percent >= 80 ? 'var(--color-success)' : 'var(--color-warning)' }}>{score.percent}%</span></td>
+                    <td style={{ fontWeight: 500 }}>{cat}</td>
+                    <td style={{ textAlign: 'center', color: 'var(--color-pass)' }}>{score.pass}</td>
+                    <td style={{ textAlign: 'center', color: 'var(--color-fail)' }}>{score.fail}</td>
+                    <td style={{ textAlign: 'center', color: 'var(--color-unknown)' }}>{score.unknown}</td>
+                    <td style={{ textAlign: 'right', fontWeight: 600 }}>{score.percent}%</td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Security Debt */}
+          <div className="card">
+            <div className="card-title">Weighted Security Debt</div>
+            <div className="card-subtext">Distribution of unmitigated findings weighted by risk severity</div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)', marginTop: 'var(--space-lg)' }}>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--color-fail)' }}>High Severity</span>
+                  <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>{securityDebt.HIGH}</span>
+                </div>
+                <div className="progress-rule">
+                  <div
+                    className="progress-rule-fill"
+                    style={{
+                      width: `${Math.min(securityDebt.HIGH * 25, 100)}%`,
+                      background: 'var(--color-fail)'
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--color-unknown)' }}>Medium Severity</span>
+                  <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>{securityDebt.MEDIUM}</span>
+                </div>
+                <div className="progress-rule">
+                  <div
+                    className="progress-rule-fill"
+                    style={{
+                      width: `${Math.min(securityDebt.MEDIUM * 25, 100)}%`,
+                      background: 'var(--color-unknown)'
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--color-indigo)' }}>Low Severity</span>
+                  <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>{securityDebt.LOW}</span>
+                </div>
+                <div className="progress-rule">
+                  <div
+                    className="progress-rule-fill"
+                    style={{
+                      width: `${Math.min(securityDebt.LOW * 25, 100)}%`,
+                      background: 'var(--color-indigo)'
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

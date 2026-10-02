@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Findings({ complianceResult, analysisResult, configText }) {
+  const navigate = useNavigate();
   const [selectedFinding, setSelectedFinding] = useState(null);
   const [filter, setFilter] = useState('all');
   const [severityFilter, setSeverityFilter] = useState('all');
@@ -9,11 +11,14 @@ export default function Findings({ complianceResult, analysisResult, configText 
     return (
       <div className="animate-fadeIn">
         <div className="page-header">
-          <h1 className="page-title">⚠ Findings</h1>
-          <p className="page-subtitle">Security findings and evidence chains</p>
+          <div className="page-title-group">
+            <div className="page-tag">Explainable Reasoning</div>
+            <h1 className="page-title">Security Findings</h1>
+            <div className="page-subtitle">Evidence-backed compliance observations</div>
+          </div>
         </div>
         <div className="empty-state">
-          <div className="empty-state-icon">⚠</div>
+          <span className="empty-state-symbol">△</span>
           <div className="empty-state-text">Analyze a configuration first to generate findings</div>
         </div>
       </div>
@@ -29,178 +34,229 @@ export default function Findings({ complianceResult, analysisResult, configText 
 
   return (
     <div className="animate-fadeIn">
+      {/* Header */}
       <div className="page-header">
-        <h1 className="page-title">⚠ Findings</h1>
-        <p className="page-subtitle">{results.length} controls evaluated — {results.filter(r => r.status === 'FAIL').length} failures detected</p>
+        <div className="page-title-group">
+          <div className="page-tag">Audit Discoveries</div>
+          <h1 className="page-title">Security Findings</h1>
+          <div className="page-subtitle">
+            {results.length} controls evaluated • {results.filter(r => r.status === 'FAIL').length} deficiencies identified
+          </div>
+        </div>
       </div>
 
-      {/* Filters */}
-      <div style={{ display: 'flex', gap: 'var(--space-sm)', marginBottom: 'var(--space-lg)', flexWrap: 'wrap' }}>
-        {['all', 'FAIL', 'PASS', 'UNKNOWN'].map(f => (
-          <button
-            key={f}
-            className={`btn btn-sm ${filter === f ? 'btn-primary' : 'btn-ghost'}`}
-            onClick={() => setFilter(f)}
-          >
-            {f === 'all' ? 'All' : f} {f !== 'all' && `(${results.filter(r => r.status === f).length})`}
-          </button>
-        ))}
-        <span style={{ color: 'var(--color-text-muted)', alignSelf: 'center', margin: '0 var(--space-sm)' }}>|</span>
-        {['all', 'HIGH', 'MEDIUM', 'LOW'].map(s => (
-          <button
-            key={s}
-            className={`btn btn-sm ${severityFilter === s ? 'btn-secondary' : 'btn-ghost'}`}
-            onClick={() => setSeverityFilter(s)}
-          >
-            {s === 'all' ? 'All Severity' : s}
-          </button>
-        ))}
+      {/* Filter Segment */}
+      <div style={{ display: 'flex', gap: 'var(--space-md)', marginBottom: 'var(--space-xl)', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div className="segmented-nav" style={{ marginBottom: 0 }}>
+          {['all', 'FAIL', 'PASS', 'UNKNOWN'].map(f => (
+            <button
+              key={f}
+              type="button"
+              className={`segmented-btn ${filter === f ? 'active' : ''}`}
+              onClick={() => setFilter(f)}
+            >
+              {f === 'all' ? 'All' : f} {f !== 'all' && `(${results.filter(r => r.status === f).length})`}
+            </button>
+          ))}
+        </div>
+
+        <div className="segmented-nav" style={{ marginBottom: 0 }}>
+          {['all', 'HIGH', 'MEDIUM', 'LOW'].map(s => (
+            <button
+              key={s}
+              type="button"
+              className={`segmented-btn ${severityFilter === s ? 'active' : ''}`}
+              onClick={() => setSeverityFilter(s)}
+            >
+              {s === 'all' ? 'All Severity' : s}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="grid-2" style={{ alignItems: 'start' }}>
-        {/* Findings List */}
-        <div style={{ display: 'grid', gap: 'var(--space-sm)' }}>
+      {/* Findings Two-Column Layout */}
+      <div className="findings-layout">
+        {/* Left Column: Finding Cards */}
+        <div>
           {filtered.map((finding, i) => (
             <div
               key={i}
-              className="card"
-              style={{
-                padding: 'var(--space-md)',
-                cursor: 'pointer',
-                borderColor: selectedFinding === finding ? 'var(--color-gold)' : undefined,
-              }}
+              className={`finding-card ${selectedFinding?.controlId === finding.controlId ? 'selected' : ''} ${
+                finding.status === 'FAIL' ? 'fail' : finding.status === 'PASS' ? 'pass' : 'unknown'
+              }`}
               onClick={() => setSelectedFinding(finding)}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', marginBottom: '4px' }}>
-                    <span className={`badge badge-${finding.severity.toLowerCase()}`}>{finding.severity}</span>
-                    <span className={`badge badge-${finding.status.toLowerCase()}`}>{finding.status}</span>
-                  </div>
-                  <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>
-                    {finding.controlName}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '2px' }}>
-                    {finding.controlId} • {finding.category}
-                  </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                  <span className={`badge badge-${finding.severity.toLowerCase()}`}>
+                    {finding.severity}
+                  </span>
+                  <span className={`badge ${
+                    finding.status === 'PASS' ? 'badge-pass' : finding.status === 'FAIL' ? 'badge-fail' : 'badge-warning'
+                  }`}>
+                    {finding.status}
+                  </span>
                 </div>
-              </div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginTop: 'var(--space-sm)' }}>
-                Expected: <span style={{ color: 'var(--color-cyan)' }}>{JSON.stringify(finding.expected)}</span>
-                {' • '}
-                Observed: <span style={{ color: finding.status === 'FAIL' ? 'var(--color-danger)' : 'var(--color-success)' }}>
-                  {JSON.stringify(finding.observed) || 'Not found'}
+                <span style={{ fontSize: '0.68rem', fontFamily: 'var(--font-mono)', color: 'var(--color-ink-muted)' }}>
+                  {finding.controlId}
                 </span>
+              </div>
+
+              <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.05rem', fontWeight: 600, color: 'var(--color-indigo)' }}>
+                {finding.controlName}
+              </div>
+
+              <div style={{ fontSize: '0.74rem', color: 'var(--color-ink-secondary)', marginTop: '4px' }}>
+                {finding.category}
+              </div>
+
+              <div style={{
+                marginTop: 'var(--space-sm)',
+                paddingTop: 'var(--space-xs)',
+                borderTop: 'var(--border-hairline)',
+                display: 'flex',
+                gap: 'var(--space-md)',
+                fontSize: '0.72rem',
+                color: 'var(--color-ink-muted)'
+              }}>
+                <span>Expected: <strong style={{ color: 'var(--color-indigo)' }}>{JSON.stringify(finding.expected)}</strong></span>
+                <span>Observed: <strong style={{ color: finding.status === 'FAIL' ? 'var(--color-fail)' : 'var(--color-pass)' }}>
+                  {JSON.stringify(finding.observed) || 'None'}
+                </strong></span>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Evidence Chain */}
+        {/* Right Column: 5-Step Evidence Chain */}
         <div>
           {selectedFinding ? (
-            <div className="card">
+            <div className="card" style={{ borderTop: '2px solid var(--color-indigo)' }}>
               <div className="card-title">Evidence Chain</div>
-              <div className="evidence-chain">
-                {/* Raw Config */}
-                <div className="evidence-step">
-                  <div className="evidence-connector">
-                    <div className="evidence-dot" />
-                    <div className="evidence-line" />
+              <div className="card-subtext">Verifiable trace from raw syntax to regulatory audit conclusion</div>
+
+              <div className="chain-container" style={{ marginTop: 'var(--space-md)' }}>
+                {/* Step 1: Raw Configuration */}
+                <div className="chain-step">
+                  <div className="chain-indicator">
+                    <div className="chain-dot" />
+                    <div className="chain-line" />
                   </div>
-                  <div className="evidence-content">
-                    <div className="evidence-label">Raw Configuration</div>
-                    <div className="evidence-value">
+                  <div className="chain-content">
+                    <div className="chain-label">1. Raw Configuration Evidence</div>
+                    <div className="chain-value">
                       {selectedFinding.evidence?.lineNumber && configLines[selectedFinding.evidence.lineNumber - 1]
                         ? configLines[selectedFinding.evidence.lineNumber - 1].trim()
-                        : 'No direct evidence line'}
+                        : 'No direct directive in configuration file'}
                     </div>
                     {selectedFinding.evidence?.lineNumber && (
-                      <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>
-                        Line {selectedFinding.evidence.lineNumber}
+                      <div style={{ fontSize: '0.68rem', color: 'var(--color-ink-muted)', marginTop: '2px' }}>
+                        Line {selectedFinding.evidence.lineNumber} ({selectedFinding.evidence.source})
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* Semantic Interpretation */}
-                <div className="evidence-step">
-                  <div className="evidence-connector">
-                    <div className="evidence-dot" style={{ background: 'var(--color-cyan)' }} />
-                    <div className="evidence-line" style={{ background: 'linear-gradient(180deg, var(--color-cyan-dim), transparent)' }} />
+                {/* Step 2: Semantic Interpretation */}
+                <div className="chain-step">
+                  <div className="chain-indicator">
+                    <div className="chain-dot" />
+                    <div className="chain-line" />
                   </div>
-                  <div className="evidence-content">
-                    <div className="evidence-label" style={{ color: 'var(--color-cyan)' }}>Semantic Interpretation</div>
-                    <div className="evidence-value">{selectedFinding.controlName}</div>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+                  <div className="chain-content">
+                    <div className="chain-label">2. Semantic Interpretation</div>
+                    <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-indigo)' }}>
+                      {selectedFinding.controlName}
+                    </div>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--color-ink-secondary)', marginTop: '2px' }}>
                       {selectedFinding.description}
                     </div>
                   </div>
                 </div>
 
-                {/* Security Control */}
-                <div className="evidence-step">
-                  <div className="evidence-connector">
-                    <div className="evidence-dot" style={{ background: 'var(--color-purple)' }} />
-                    <div className="evidence-line" style={{ background: 'linear-gradient(180deg, var(--color-purple-dim), transparent)' }} />
+                {/* Step 3: Security Control */}
+                <div className="chain-step">
+                  <div className="chain-indicator">
+                    <div className="chain-dot" />
+                    <div className="chain-line" />
                   </div>
-                  <div className="evidence-content">
-                    <div className="evidence-label" style={{ color: 'var(--color-purple)' }}>Security Control</div>
-                    <div className="evidence-value">{selectedFinding.controlId}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginTop: '4px' }}>
-                      Category: {selectedFinding.category}
+                  <div className="chain-content">
+                    <div className="chain-label">3. Baseline Security Control</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--color-ochre)', fontWeight: 600 }}>
+                      {selectedFinding.controlId}
+                    </div>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--color-ink-muted)', marginTop: '2px' }}>
+                      Domain Category: {selectedFinding.category}
                     </div>
                   </div>
                 </div>
 
-                {/* Framework Requirement */}
-                <div className="evidence-step">
-                  <div className="evidence-connector">
-                    <div className="evidence-dot" style={{ background: 'var(--color-info)' }} />
-                    <div className="evidence-line" style={{ background: 'linear-gradient(180deg, rgba(68, 138, 255, 0.3), transparent)' }} />
+                {/* Step 4: Framework Citations */}
+                <div className="chain-step">
+                  <div className="chain-indicator">
+                    <div className="chain-dot" />
+                    <div className="chain-line" />
                   </div>
-                  <div className="evidence-content">
-                    <div className="evidence-label" style={{ color: 'var(--color-info)' }}>Framework Requirements</div>
-                    {Object.entries(selectedFinding.frameworks).map(([fw, ref]) => (
-                      <div key={fw} style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '2px' }}>
-                        <span style={{ fontWeight: 600 }}>{fw}:</span> {ref}
-                      </div>
-                    ))}
+                  <div className="chain-content">
+                    <div className="chain-label">4. Regulatory Requirements</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginTop: '2px' }}>
+                      {Object.entries(selectedFinding.frameworks).map(([fw, ref]) => (
+                        <div key={fw} style={{ fontSize: '0.72rem', color: 'var(--color-ink-secondary)' }}>
+                          <strong style={{ color: 'var(--color-indigo)' }}>{fw}:</strong> {ref}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                {/* Compliance Result */}
-                <div className="evidence-step">
-                  <div className="evidence-connector">
-                    <div className="evidence-dot" style={{
-                      background: selectedFinding.status === 'PASS' ? 'var(--color-success)' : selectedFinding.status === 'FAIL' ? 'var(--color-danger)' : 'var(--color-warning)'
-                    }} />
+                {/* Step 5: Compliance Result */}
+                <div className="chain-step">
+                  <div className="chain-indicator">
+                    <div
+                      className="chain-dot"
+                      style={{
+                        borderColor: selectedFinding.status === 'PASS' ? 'var(--color-pass)' : selectedFinding.status === 'FAIL' ? 'var(--color-fail)' : 'var(--color-unknown)'
+                      }}
+                    />
                   </div>
-                  <div className="evidence-content" style={{
-                    borderColor: selectedFinding.status === 'PASS' ? 'rgba(0,230,118,0.2)' : selectedFinding.status === 'FAIL' ? 'rgba(255,82,82,0.2)' : 'rgba(255,171,0,0.2)'
+                  <div className="chain-content" style={{
+                    background: selectedFinding.status === 'PASS' ? 'var(--color-pass-bg)' : selectedFinding.status === 'FAIL' ? 'var(--color-fail-bg)' : 'var(--color-unknown-bg)'
                   }}>
-                    <div className="evidence-label" style={{
-                      color: selectedFinding.status === 'PASS' ? 'var(--color-success)' : selectedFinding.status === 'FAIL' ? 'var(--color-danger)' : 'var(--color-warning)'
+                    <div className="chain-label" style={{
+                      color: selectedFinding.status === 'PASS' ? 'var(--color-pass)' : selectedFinding.status === 'FAIL' ? 'var(--color-fail)' : 'var(--color-unknown)'
                     }}>
-                      Compliance Result
+                      5. Audit Conclusion
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
-                      <span className={`badge badge-${selectedFinding.status.toLowerCase()}`} style={{ fontSize: '0.9rem', padding: '4px 16px' }}>
+                      <span className={`badge ${
+                        selectedFinding.status === 'PASS' ? 'badge-pass' : selectedFinding.status === 'FAIL' ? 'badge-fail' : 'badge-warning'
+                      }`} style={{ fontSize: '0.78rem', padding: '3px 10px' }}>
                         {selectedFinding.status}
                       </span>
-                      <span className={`badge badge-${selectedFinding.severity.toLowerCase()}`}>
-                        {selectedFinding.severity}
+                      <span style={{ fontSize: '0.76rem', color: 'var(--color-ink-secondary)' }}>
+                        {selectedFinding.reason}
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', gap: 'var(--space-sm)', marginTop: 'var(--space-lg)' }}>
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => navigate('/remediation')}
+                >
+                  View Remediation
+                </button>
+              </div>
             </div>
           ) : (
-            <div className="card" style={{ textAlign: 'center', padding: 'var(--space-xl)' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-md)', opacity: 0.5 }}>⚠</div>
-              <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                Select a finding to view its complete evidence chain
+            <div className="card" style={{ textAlign: 'center', padding: 'var(--space-2xl) var(--space-md)' }}>
+              <span className="empty-state-symbol">△</span>
+              <div className="empty-state-text" style={{ fontSize: '1rem' }}>
+                Select a finding to trace its 5-step evidence chain
               </div>
             </div>
           )}

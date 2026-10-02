@@ -13,12 +13,17 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
     return (
       <div className="animate-fadeIn">
         <div className="page-header">
-          <h1 className="page-title">⚡ Training Studio</h1>
-          <p className="page-subtitle">Teach TĀRĀ-NETRA to understand unknown configuration constructs</p>
+          <div className="page-title-group">
+            <div className="page-tag">Adaptive Reasoning</div>
+            <h1 className="page-title">TĀRĀ Learning Studio</h1>
+            <div className="page-subtitle">Teach TĀRĀ the security meaning of unfamiliar configuration</div>
+          </div>
         </div>
         <div className="empty-state">
-          <div className="empty-state-icon">⚡</div>
-          <div className="empty-state-text">Analyze a configuration first to discover unknown constructs</div>
+          <span className="empty-state-symbol">⚚</span>
+          <div className="empty-state-text">
+            Analyze a configuration first to discover unknown constructs
+          </div>
         </div>
       </div>
     );
@@ -53,7 +58,7 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
     });
 
     setTaught(prev => ({ ...prev, [selectedItem.lineNumber]: true }));
-    showToast(`Learned: "${selectedItem.trimmed.substring(0, 40)}..." → ${control?.name || mappingSemantic}`);
+    showToast(`Knowledge acquired: ${control?.name || mappingSemantic}`);
     setSelectedItem(null);
     setMappingCategory('');
     setMappingSemantic('');
@@ -64,61 +69,73 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
     handleTeach();
     setTimeout(() => {
       onReanalyze();
-    }, 500);
+    }, 450);
   };
 
   return (
     <div className="animate-fadeIn">
+      {/* Header */}
       <div className="page-header">
-        <h1 className="page-title">⚡ Training Studio</h1>
-        <p className="page-subtitle">
-          {unknownLines.length} unknown or low-confidence constructs detected —
-          Teach TĀRĀ to understand them
-        </p>
+        <div className="page-title-group">
+          <div className="page-tag">Adaptive Knowledge Acquisition</div>
+          <h1 className="page-title">TĀRĀ Learning Studio</h1>
+          <div className="page-subtitle">
+            Teach TĀRĀ the security meaning of unfamiliar configuration
+          </div>
+        </div>
       </div>
 
-      {/* Learning Transition Demo */}
+      {/* Before / After Learning Transition Indicator */}
       {Object.keys(taught).length > 0 && (
-        <div className="learning-transition">
-          <div className="learning-before">
-            <span className="badge badge-unknown" style={{ fontSize: '0.8rem', padding: '4px 12px' }}>Before</span>
-            <div style={{ marginTop: 'var(--space-sm)', fontSize: '1.2rem', fontWeight: 700, color: 'var(--color-danger)' }}>UNKNOWN</div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Confidence: ~50%</div>
+        <div className="learning-transition-card">
+          <div className="learning-state-box">
+            <div className="state-caption">Initial Observation</div>
+            <div className="state-title" style={{ color: 'var(--color-fail)' }}>UNKNOWN</div>
+            <div className="state-score">Confidence ~50%</div>
           </div>
-          <div className="learning-arrow">⟶</div>
-          <div style={{ textAlign: 'center', flex: 0.5 }}>
-            <div style={{ fontSize: '0.7rem', color: 'var(--color-purple)', textTransform: 'uppercase', letterSpacing: '1px' }}>Human Training</div>
-            <div style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>Knowledge Update</div>
+
+          <div className="learning-divider-arrow">⟶</div>
+
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--color-ochre)', fontWeight: 600 }}>
+              Human Instruction
+            </div>
+            <div style={{ fontSize: '0.74rem', color: 'var(--color-ink-muted)', marginTop: '2px' }}>
+              Persistent Knowledge Inscribed
+            </div>
           </div>
-          <div className="learning-arrow">⟶</div>
-          <div className="learning-after">
-            <span className="badge badge-learned" style={{ fontSize: '0.8rem', padding: '4px 12px' }}>After</span>
-            <div style={{ marginTop: 'var(--space-sm)', fontSize: '1.2rem', fontWeight: 700, color: 'var(--color-success)' }}>LEARNED</div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Confidence: 97%</div>
+
+          <div className="learning-divider-arrow">⟶</div>
+
+          <div className="learning-state-box">
+            <div className="state-caption">Updated Knowledge</div>
+            <div className="state-title" style={{ color: 'var(--color-pass)' }}>LEARNED</div>
+            <div className="state-score">Confidence 97%</div>
           </div>
         </div>
       )}
 
-      <div className="grid-2" style={{ alignItems: 'start' }}>
-        {/* Unknown constructs list */}
+      {/* Two Column Layout: Unfamiliar List + Scholar Teaching Panel */}
+      <div className="training-studio-grid">
+        {/* Column 1: Unfamiliar Constructs */}
         <div>
-          <div className="card-title" style={{ marginBottom: 'var(--space-md)' }}>Unknown Constructs</div>
+          <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--color-ink-muted)', fontWeight: 600, marginBottom: 'var(--space-md)' }}>
+            Unfamiliar Constructs ({unknownLines.length})
+          </div>
+
           {unknownLines.length === 0 ? (
             <div className="card" style={{ textAlign: 'center', padding: 'var(--space-xl)' }}>
-              <div style={{ fontSize: '2rem', marginBottom: 'var(--space-sm)' }}>✓</div>
-              <div style={{ color: 'var(--color-success)', fontWeight: 600 }}>All constructs recognized!</div>
+              <div style={{ color: 'var(--color-pass)', fontSize: '1.4rem', marginBottom: 'var(--space-xs)' }}>✓</div>
+              <div style={{ fontWeight: 600, color: 'var(--color-ink-primary)' }}>All constructs recognized</div>
+              <div style={{ fontSize: '0.78rem', color: 'var(--color-ink-muted)', marginTop: '4px' }}>
+                The configuration is completely parsed by the current baseline model.
+              </div>
             </div>
           ) : (
             unknownLines.map((line, i) => (
               <div
                 key={i}
-                className="training-card"
-                style={{
-                  marginBottom: 'var(--space-sm)',
-                  cursor: 'pointer',
-                  borderColor: selectedItem?.lineNumber === line.lineNumber ? 'var(--color-purple)' : taught[line.lineNumber] ? 'rgba(0, 230, 118, 0.3)' : undefined,
-                  opacity: taught[line.lineNumber] ? 0.6 : 1,
-                }}
+                className={`training-item-card ${selectedItem?.lineNumber === line.lineNumber ? 'selected' : ''} ${taught[line.lineNumber] ? 'taught' : ''}`}
                 onClick={() => {
                   if (!taught[line.lineNumber]) {
                     setSelectedItem(line);
@@ -136,14 +153,14 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: taught[line.lineNumber] ? 'var(--color-success)' : 'var(--color-text)' }}>
-                    {line.trimmed.substring(0, 50)}{line.trimmed.length > 50 ? '...' : ''}
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: taught[line.lineNumber] ? 'var(--color-pass)' : 'var(--color-ink-primary)' }}>
+                    {line.trimmed}
                   </span>
-                  <span className={`badge ${taught[line.lineNumber] ? 'badge-learned' : line.state === 'UNKNOWN' ? 'badge-unknown' : 'badge-low-confidence'}`}>
+                  <span className={`badge ${taught[line.lineNumber] ? 'badge-learned' : line.state === 'UNKNOWN' ? 'badge-fail' : 'badge-warning'}`}>
                     {taught[line.lineNumber] ? 'LEARNED' : line.state}
                   </span>
                 </div>
-                <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--color-ink-muted)', marginTop: '4px' }}>
                   Line {line.lineNumber} • Confidence: {taught[line.lineNumber] ? '97%' : `${line.confidence}%`}
                   {line.hypothesis && !taught[line.lineNumber] && ` • ${line.hypothesis}`}
                 </div>
@@ -152,94 +169,129 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
           )}
         </div>
 
-        {/* Teaching Panel */}
+        {/* Column 2: Scholar Teaching Instrument Panel */}
         <div>
           {selectedItem ? (
-            <div className="card" style={{ border: '2px solid rgba(124, 77, 255, 0.3)' }}>
-              <div className="card-title" style={{ color: 'var(--color-purple)' }}>Teach TĀRĀ</div>
+            <div className="card" style={{ borderTop: '2px solid var(--color-ochre)' }}>
+              <div className="card-title">Inscribe Security Meaning</div>
 
-              {/* Raw Evidence */}
-              <div style={{ marginBottom: 'var(--space-lg)' }}>
-                <div className="form-label">Raw Command</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', padding: 'var(--space-md)', background: 'var(--color-bg-deep)', borderRadius: 'var(--radius-sm)', color: 'var(--color-cyan)' }}>
-                  {selectedItem.trimmed}
+              {/* 3 Step Flow inside Teaching Panel */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+                {/* 1. Raw Command */}
+                <div>
+                  <div className="form-label">1. Raw Command</div>
+                  <div style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.78rem',
+                    padding: '8px 12px',
+                    background: 'var(--color-bg-subtle)',
+                    border: 'var(--border-hairline)',
+                    borderRadius: 'var(--radius-xs)',
+                    color: 'var(--color-indigo)'
+                  }}>
+                    {selectedItem.trimmed}
+                  </div>
                 </div>
-              </div>
 
-              {/* AI Hypothesis */}
-              {selectedItem.hypothesis && (
-                <div style={{ marginBottom: 'var(--space-lg)', padding: 'var(--space-md)', background: 'rgba(255, 171, 0, 0.05)', border: '1px solid rgba(255, 171, 0, 0.15)', borderRadius: 'var(--radius-md)' }}>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--color-warning)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>TĀRĀ Hypothesis</div>
-                  <div style={{ fontSize: '0.85rem' }}>{selectedItem.hypothesis}</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>Confidence: {selectedItem.confidence}%</div>
+                {/* 2. TĀRĀ Hypothesis */}
+                {selectedItem.hypothesis && (
+                  <div style={{
+                    padding: '8px 12px',
+                    background: 'var(--color-unknown-bg)',
+                    borderLeft: '3px solid var(--color-unknown)',
+                    borderRadius: 'var(--radius-xs)'
+                  }}>
+                    <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--color-ochre)', fontWeight: 600 }}>
+                      2. TĀRĀ Hypothesis ({selectedItem.confidence}%)
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--color-ink-primary)', marginTop: '2px' }}>
+                      {selectedItem.hypothesis}
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. Security Meaning Form */}
+                <div>
+                  <div className="form-label">3. Map to Security Baseline Concept</div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: 'var(--color-ink-muted)', fontSize: '0.66rem' }}>
+                      Security Concept
+                    </label>
+                    <select
+                      className="form-select"
+                      value={mappingSemantic}
+                      onChange={(e) => {
+                        setMappingSemantic(e.target.value);
+                        const ctrl = semanticControls.find(c => c.semanticParameter === e.target.value);
+                        if (ctrl) setMappingCategory(ctrl.category);
+                      }}
+                    >
+                      <option value="">Select standard security concept...</option>
+                      {semanticControls.map(c => (
+                        <option key={c.id} value={c.semanticParameter}>
+                          {c.name} ({c.semanticParameter})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: 'var(--color-ink-muted)', fontSize: '0.66rem' }}>
+                      Category
+                    </label>
+                    <input
+                      className="form-input"
+                      value={mappingCategory}
+                      onChange={(e) => setMappingCategory(e.target.value)}
+                      placeholder="e.g. Administrative Access"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: 'var(--color-ink-muted)', fontSize: '0.66rem' }}>
+                      Extracted Parameter Value
+                    </label>
+                    <input
+                      className="form-input"
+                      value={mappingValue}
+                      onChange={(e) => setMappingValue(e.target.value)}
+                      placeholder="e.g. 900 or true"
+                    />
+                  </div>
                 </div>
-              )}
 
-              {/* Mapping Form */}
-              <div className="form-group">
-                <label className="form-label">Security Concept</label>
-                <select
-                  className="form-select"
-                  value={mappingSemantic}
-                  onChange={(e) => {
-                    setMappingSemantic(e.target.value);
-                    const ctrl = semanticControls.find(c => c.semanticParameter === e.target.value);
-                    if (ctrl) setMappingCategory(ctrl.category);
-                  }}
-                >
-                  <option value="">Select security concept...</option>
-                  {semanticControls.map(c => (
-                    <option key={c.id} value={c.semanticParameter}>
-                      {c.name} ({c.semanticParameter})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Category</label>
-                <input
-                  className="form-input"
-                  value={mappingCategory}
-                  onChange={(e) => setMappingCategory(e.target.value)}
-                  placeholder="e.g. Administrative Access"
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Extracted Value (optional)</label>
-                <input
-                  className="form-input"
-                  value={mappingValue}
-                  onChange={(e) => setMappingValue(e.target.value)}
-                  placeholder="e.g. 900 or true"
-                />
-              </div>
-
-              <div style={{ display: 'flex', gap: 'var(--space-sm)', marginTop: 'var(--space-lg)' }}>
-                <button
-                  className="btn btn-ghost btn-sm"
-                  onClick={handleTeach}
-                  disabled={!mappingSemantic}
-                  style={{ opacity: mappingSemantic ? 1 : 0.5 }}
-                >
-                  Accept Mapping
-                </button>
-                <button
-                  className="btn btn-primary"
-                  onClick={handleTeachAndReprocess}
-                  disabled={!mappingSemantic}
-                  style={{ opacity: mappingSemantic ? 1 : 0.5 }}
-                >
-                  ⚡ Teach & Reprocess
-                </button>
+                {/* Submit Actions */}
+                <div style={{ display: 'flex', gap: 'var(--space-sm)', marginTop: 'var(--space-sm)' }}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={handleTeach}
+                    disabled={!mappingSemantic}
+                    style={{ opacity: mappingSemantic ? 1 : 0.5 }}
+                  >
+                    Accept Mapping
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-sm"
+                    onClick={handleTeachAndReprocess}
+                    disabled={!mappingSemantic}
+                    style={{ opacity: mappingSemantic ? 1 : 0.5 }}
+                  >
+                    Teach &amp; Reprocess Configuration
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
-            <div className="card" style={{ textAlign: 'center', padding: 'var(--space-xl)' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-md)', opacity: 0.5 }}>⚡</div>
-              <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                Select an unknown construct to teach TĀRĀ its security meaning
+            <div className="card" style={{ textAlign: 'center', padding: 'var(--space-2xl) var(--space-md)' }}>
+              <span className="empty-state-symbol">⚚</span>
+              <div className="empty-state-text" style={{ fontSize: '1rem' }}>
+                Select an unfamiliar construct to guide TĀRĀ's interpretation
+              </div>
+              <div style={{ fontSize: '0.76rem', color: 'var(--color-ink-muted)', marginTop: '6px' }}>
+                The mapped semantic rule will be persisted locally and applied across future configuration audits.
               </div>
             </div>
           )}

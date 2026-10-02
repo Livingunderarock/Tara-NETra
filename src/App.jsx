@@ -12,14 +12,15 @@ import { analyzeConfiguration } from './core/interpreter';
 import { evaluateCompliance, generateHeatmap } from './core/compliance';
 import { saveAnalysis, getAnalysisHistory } from './services/storage';
 
+// Refined, understated astronomical/instrument icons
 const navItems = [
-  { path: '/', label: 'Overview', icon: '◉' },
-  { path: '/analyze', label: 'Analyze', icon: '⬡' },
-  { path: '/training', label: 'Training Studio', icon: '⚡' },
-  { path: '/knowledge', label: 'Knowledge', icon: '◈' },
-  { path: '/compliance', label: 'Compliance', icon: '◆' },
-  { path: '/findings', label: 'Findings', icon: '⚠' },
-  { path: '/remediation', label: 'Remediation', icon: '⟳' },
+  { path: '/', label: 'Overview', icon: '☉' },
+  { path: '/analyze', label: 'Analyze', icon: '◬' },
+  { path: '/training', label: 'Training', icon: '⚚' },
+  { path: '/knowledge', label: 'Knowledge', icon: '☵' },
+  { path: '/compliance', label: 'Compliance', icon: '◫' },
+  { path: '/findings', label: 'Findings', icon: '△' },
+  { path: '/remediation', label: 'Remediation', icon: '↻' },
   { path: '/evidence', label: 'Evidence', icon: '◎' },
 ];
 
@@ -39,7 +40,7 @@ export default function App() {
 
   const showToast = useCallback((message, type = 'success') => {
     setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
+    setTimeout(() => setToast(null), 3200);
   }, []);
 
   const handleAnalyze = useCallback((text, name) => {
@@ -62,25 +63,44 @@ export default function App() {
     saveAnalysis(analysis);
     setHistory(getAnalysisHistory());
 
-    showToast(`Analysis complete — ${analysis.vendor.vendor} detected with ${analysis.stats.recognizedPercent}% recognition`);
+    showToast(`Analysis completed — ${analysis.vendor.vendor} (${analysis.stats.recognizedPercent}% recognized)`);
     navigate('/analyze');
   }, [navigate, showToast]);
 
   const handleReanalyze = useCallback(() => {
     if (configText) {
       handleAnalyze(configText, deviceName);
-      showToast('Configuration reprocessed with updated knowledge');
+      showToast('Configuration re-analyzed with updated knowledge');
     }
   }, [configText, deviceName, handleAnalyze, showToast]);
 
   return (
     <div className="app-layout">
-      {/* Sidebar */}
+      {/* Sidebar Rail */}
       <nav className="sidebar">
         <div className="sidebar-header">
-          <NavLink to="/" className="sidebar-brand">TĀRĀ-NETRA</NavLink>
-          <div className="sidebar-brand-sub">The Guiding Eye</div>
+          <NavLink to="/" className="sidebar-brand-wrapper">
+            {/* Engraved Yantra Emblem */}
+            <svg className="sidebar-emblem" viewBox="0 0 36 36" fill="none">
+              <circle cx="18" cy="18" r="16.5" stroke="#B08A3C" strokeWidth="0.8" strokeDasharray="1.5 2.5"/>
+              <circle cx="18" cy="18" r="14" stroke="#20263A" strokeWidth="1"/>
+              <circle cx="18" cy="18" r="10.5" stroke="#B08A3C" strokeWidth="0.7"/>
+              <path d="M 8 18 C 11.5 12, 24.5 12, 28 18 C 24.5 24, 11.5 24, 8 18 Z" stroke="#20263A" strokeWidth="1.1"/>
+              <circle cx="18" cy="18" r="3.5" stroke="#B08A3C" strokeWidth="0.9"/>
+              <circle cx="18" cy="18" r="1.4" fill="#A66A2C"/>
+              <line x1="18" y1="1" x2="18" y2="4" stroke="#A66A2C" strokeWidth="1"/>
+              <line x1="18" y1="32" x2="18" y2="35" stroke="#A66A2C" strokeWidth="1"/>
+              <line x1="1" y1="18" x2="4" y2="18" stroke="#A66A2C" strokeWidth="1"/>
+              <line x1="32" y1="18" x2="35" y2="18" stroke="#A66A2C" strokeWidth="1"/>
+            </svg>
+            <div>
+              <span className="sidebar-brand">TĀRĀ-NETRA</span>
+              <div className="sidebar-devanagari">तारानेत्र</div>
+            </div>
+          </NavLink>
+          <div className="sidebar-brand-sub">The Guiding Eye for Security</div>
         </div>
+
         <div className="sidebar-nav">
           {navItems.map(item => (
             <NavLink
@@ -94,10 +114,10 @@ export default function App() {
             </NavLink>
           ))}
         </div>
+
         <div className="sidebar-footer">
-          <div style={{ color: 'var(--color-gold-dim)', fontSize: '0.65rem', letterSpacing: '1px' }}>
-            v1.0 — SIH 2026
-          </div>
+          <div className="sidebar-footer-title">Network Reasoning & Assurance</div>
+          <div>SIH 2026 • Astronomical Engine</div>
         </div>
       </nav>
 
@@ -166,7 +186,8 @@ export default function App() {
       {/* Toast */}
       {toast && (
         <div className={`toast ${toast.type}`}>
-          {toast.message}
+          <span>{toast.type === 'error' ? '⚠' : '◈'}</span>
+          <span>{toast.message}</span>
         </div>
       )}
     </div>

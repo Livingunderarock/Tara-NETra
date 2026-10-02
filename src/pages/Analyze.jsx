@@ -31,17 +31,6 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
     onAnalyze(sample.content, sample.name);
   };
 
-  const getLineClass = (state) => {
-    switch (state) {
-      case 'RECOGNIZED': return 'recognized';
-      case 'INFERRED': return 'inferred';
-      case 'LEARNED': return 'learned';
-      case 'LOW_CONFIDENCE': return 'low-confidence';
-      case 'UNKNOWN': return 'unknown-line';
-      default: return '';
-    }
-  };
-
   const getBadgeClass = (state) => {
     switch (state) {
       case 'RECOGNIZED': return 'badge-recognized';
@@ -55,12 +44,18 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
 
   return (
     <div className="animate-fadeIn">
+      {/* Header */}
       <div className="page-header">
-        <h1 className="page-title">⬡ Configuration Analysis</h1>
-        <p className="page-subtitle">Upload a configuration file or load a demo sample</p>
+        <div className="page-title-group">
+          <div className="page-tag">Precision Ingestion</div>
+          <h1 className="page-title">Configuration Analyzer</h1>
+          <div className="page-subtitle">
+            Upload heterogeneous network device configurations for semantic interpretation
+          </div>
+        </div>
       </div>
 
-      {/* Upload Zone */}
+      {/* Upload Zone (Parchment & Hairline) */}
       <div
         className={`upload-zone ${dragging ? 'dragging' : ''}`}
         onDrop={handleDrop}
@@ -68,11 +63,15 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
         onDragLeave={handleDragLeave}
         onClick={() => fileInputRef.current?.click()}
       >
-        <span className="upload-icon">⬡</span>
-        <div className="upload-title">Drop Configuration Here</div>
-        <div className="upload-formats">.txt &nbsp; .cfg &nbsp; .conf &nbsp; .log</div>
-        <button className="btn btn-primary" onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}>
-          Select File
+        <span className="upload-icon">◬</span>
+        <div className="upload-title">Drop Configuration File</div>
+        <div className="upload-formats">Supported: .cfg • .conf • .txt • .log</div>
+        <button
+          type="button"
+          className="btn btn-secondary btn-sm"
+          onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+        >
+          Select File from Disk
         </button>
         <input
           ref={fileInputRef}
@@ -83,169 +82,228 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
         />
       </div>
 
-      {/* Demo Shortcuts */}
-      <div className="sample-configs">
-        <button className="sample-btn" onClick={() => loadSample('cisco')}>▶ Load Cisco Sample</button>
-        <button className="sample-btn" onClick={() => loadSample('fortinet')}>▶ Load Fortinet Sample</button>
-        <button className="sample-btn" onClick={() => loadSample('junos')}>▶ Load JunOS Sample</button>
-        <button className="sample-btn" onClick={() => loadSample('unknown')}>▶ Load Unknown Vendor Sample</button>
+      {/* Sample Configurations Shortcuts */}
+      <div className="sample-configs-bar">
+        <span className="sample-configs-label">Observatory Samples:</span>
+        <button type="button" className="sample-btn" onClick={() => loadSample('cisco')}>Cisco IOS (EDGE-FW-01)</button>
+        <button type="button" className="sample-btn" onClick={() => loadSample('fortinet')}>Fortinet FortiOS (CORE-FW-02)</button>
+        <button type="button" className="sample-btn" onClick={() => loadSample('junos')}>Juniper JunOS (DIST-SW-03)</button>
+        <button type="button" className="sample-btn" onClick={() => loadSample('unknown')} style={{ color: 'var(--color-ochre)' }}>
+          Unknown Vendor (BRANCH-GW-04)
+        </button>
       </div>
 
-      {/* Analysis Results */}
+      {/* Analysis Output */}
       {analysisResult && (
         <div style={{ marginTop: 'var(--space-xl)' }}>
-          <div className="mandala-divider" />
-
-          {/* Vendor & Stats */}
-          <div className="metrics-grid">
-            <div className="metric-card">
-              <div className="metric-value" style={{ fontSize: '1.2rem', color: 'var(--color-gold)' }}>
+          {/* Detected Vendor & Line Stats */}
+          <div className="metrics-row" style={{ padding: 'var(--space-md) 0' }}>
+            <div className="metric-item">
+              <div className="metric-number" style={{ fontSize: '1.6rem', color: 'var(--color-indigo)' }}>
                 {analysisResult.vendor.vendor}
               </div>
-              <div className="metric-label">Detected Vendor</div>
+              <div className="metric-caption">Detected Operating System</div>
             </div>
-            <div className="metric-card">
-              <div className="metric-value">{analysisResult.vendor.confidence}%</div>
-              <div className="metric-label">Vendor Confidence</div>
+
+            <div className="metric-item">
+              <div className="metric-number" style={{ fontSize: '1.6rem' }}>
+                {analysisResult.vendor.confidence}%
+              </div>
+              <div className="metric-caption">Vendor Confidence</div>
             </div>
-            <div className="metric-card">
-              <div className="metric-value" style={{ color: 'var(--color-success)' }}>{analysisResult.stats.recognized + analysisResult.stats.inferred + analysisResult.stats.learned}</div>
-              <div className="metric-label">Recognized</div>
+
+            <div className="metric-item">
+              <div className="metric-number" style={{ fontSize: '1.6rem', color: 'var(--color-pass)' }}>
+                {analysisResult.stats.recognized + analysisResult.stats.inferred + analysisResult.stats.learned}
+              </div>
+              <div className="metric-caption">Recognized Directives</div>
             </div>
-            <div className="metric-card">
-              <div className="metric-value" style={{ color: 'var(--color-warning)' }}>{analysisResult.stats.lowConfidence}</div>
-              <div className="metric-label">Low Confidence</div>
+
+            <div className="metric-item">
+              <div className="metric-number" style={{ fontSize: '1.6rem', color: 'var(--color-unknown)' }}>
+                {analysisResult.stats.lowConfidence}
+              </div>
+              <div className="metric-caption">Low Confidence Hypotheses</div>
             </div>
-            <div className="metric-card">
-              <div className="metric-value" style={{ color: 'var(--color-danger)' }}>{analysisResult.stats.unknown}</div>
-              <div className="metric-label">Unknown</div>
+
+            <div className="metric-item">
+              <div className="metric-number" style={{ fontSize: '1.6rem', color: 'var(--color-fail)' }}>
+                {analysisResult.stats.unknown}
+              </div>
+              <div className="metric-caption">Unknown Constructs</div>
             </div>
           </div>
 
-          {/* Vendor unknown warning */}
+          {/* Unknown Vendor Alert if applicable */}
           {analysisResult.vendor.vendor === 'Unknown' && (
-            <div style={{ padding: 'var(--space-md)', background: 'rgba(255, 171, 0, 0.05)', border: '1px solid rgba(255, 171, 0, 0.2)', borderRadius: 'var(--radius-md)', marginBottom: 'var(--space-lg)', fontSize: '0.85rem', color: 'var(--color-warning)' }}>
-              ⚠ Vendor identification is uncertain. Semantic analysis is continuing with confidence-aware interpretation.
+            <div style={{
+              padding: '10px 16px',
+              background: 'var(--color-unknown-bg)',
+              borderLeft: '3px solid var(--color-unknown)',
+              marginBottom: 'var(--space-md)',
+              fontSize: '0.8rem',
+              color: 'var(--color-ink-primary)'
+            }}>
+              <strong>Observation Note:</strong> Vendor identification is unverified. Semantic interpretation is proceeding using cross-vendor heuristics and confidence thresholds.
             </div>
           )}
 
-          {/* Three-Panel View */}
+          {/* Synchronized 3-Panel View */}
           <div className="three-panel">
-            {/* Raw Config */}
-            <div className="panel">
-              <div className="panel-title">Raw Configuration</div>
-              <div className="config-viewer">
+            {/* Panel 1: Raw Configuration in Dark Indigo Technical Surface */}
+            <div className="panel panel-dark">
+              <div className="panel-title">Raw Configuration (CLI)</div>
+              <div className="config-viewer-dark">
                 {analysisResult.lines.map((line, i) => (
                   <div
                     key={i}
-                    className={`config-line ${getLineClass(line.state)}`}
+                    className={`config-line-dark ${selectedLine?.lineNumber === line.lineNumber ? 'selected' : ''} ${line.state === 'UNKNOWN' ? 'unknown-highlight' : ''}`}
                     onClick={() => setSelectedLine(line)}
                   >
-                    <span className="config-line-number">{line.lineNumber}</span>
-                    <span className="config-line-content">{line.raw || ' '}</span>
+                    <span className="config-line-num">{line.lineNumber}</span>
+                    <span className="config-line-code">{line.raw || ' '}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* TĀRĀ Interpretation */}
+            {/* Panel 2: TĀRĀ Interpretation */}
             <div className="panel">
               <div className="panel-title">TĀRĀ Interpretation</div>
-              <div className="config-viewer">
+              <div className="interpretation-list">
                 {analysisResult.lines.filter(l => l.state !== 'SKIP').map((line, i) => (
                   <div
                     key={i}
-                    className={`config-line ${getLineClass(line.state)}`}
+                    className={`interpretation-item ${selectedLine?.lineNumber === line.lineNumber ? 'selected' : ''} ${
+                      line.state === 'UNKNOWN' ? 'item-unknown' :
+                      line.state === 'LOW_CONFIDENCE' ? 'item-low' :
+                      line.state === 'LEARNED' ? 'item-learned' : 'item-recognized'
+                    }`}
                     onClick={() => setSelectedLine(line)}
-                    style={{ cursor: 'pointer' }}
                   >
-                    <span className="config-line-content" style={{ fontSize: '0.75rem' }}>
-                      {line.state === 'UNKNOWN' ? (
-                        <span style={{ color: 'var(--color-danger)' }}>UNKNOWN — Unrecognized construct</span>
-                      ) : line.hypothesis ? (
-                        <span style={{ color: 'var(--color-warning)' }}>{line.hypothesis}</span>
-                      ) : (
-                        <span style={{ color: 'var(--color-success)' }}>{line.control?.name || line.semantic || '—'}</span>
-                      )}
-                    </span>
-                    <span className="config-line-badge">
-                      <span className={`badge ${getBadgeClass(line.state)}`} style={{ fontSize: '0.6rem' }}>
-                        {line.confidence > 0 ? `${line.confidence}%` : line.state}
-                      </span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="interpretation-name">
+                        {line.state === 'UNKNOWN' ? (
+                          <span style={{ color: 'var(--color-fail)' }}>Unrecognized Command</span>
+                        ) : line.control ? (
+                          line.control.name
+                        ) : line.semantic ? (
+                          line.semantic
+                        ) : (
+                          'Directive'
+                        )}
+                      </div>
+                      <div className="interpretation-sub">
+                        Line {line.lineNumber} • {line.source}
+                      </div>
+                    </div>
+                    <span className={`badge ${getBadgeClass(line.state)}`}>
+                      {line.confidence > 0 ? `${line.confidence}%` : 'Unknown'}
                     </span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Semantic Model */}
+            {/* Panel 3: Semantic Model Detail */}
             <div className="panel">
-              <div className="panel-title">Semantic Model</div>
+              <div className="panel-title">Security Semantic Model</div>
               {selectedLine && selectedLine.state !== 'SKIP' ? (
-                <div style={{ fontSize: '0.8rem' }}>
-                  <div style={{ marginBottom: 'var(--space-md)' }}>
-                    <div style={{ color: 'var(--color-text-muted)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Raw Command</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-cyan)', marginTop: '4px', padding: 'var(--space-sm)', background: 'var(--color-bg-deep)', borderRadius: 'var(--radius-sm)' }}>{selectedLine.trimmed}</div>
+                <div className="semantic-detail-panel">
+                  <div className="detail-section">
+                    <div className="detail-label">Raw CLI Syntax</div>
+                    <div className="detail-value-code">{selectedLine.trimmed}</div>
                   </div>
-                  <div style={{ marginBottom: 'var(--space-md)' }}>
-                    <div style={{ color: 'var(--color-text-muted)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px' }}>State</div>
-                    <span className={`badge ${getBadgeClass(selectedLine.state)}`}>{selectedLine.state}</span>
+
+                  <div className="detail-section">
+                    <div className="detail-label">Classification State</div>
+                    <span className={`badge ${getBadgeClass(selectedLine.state)}`}>
+                      {selectedLine.state} ({selectedLine.confidence}%)
+                    </span>
                   </div>
+
                   {selectedLine.semantic && (
-                    <div style={{ marginBottom: 'var(--space-md)' }}>
-                      <div style={{ color: 'var(--color-text-muted)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Semantic Parameter</div>
-                      <div style={{ color: 'var(--color-gold)', fontWeight: 600, marginTop: '4px' }}>{selectedLine.semantic}</div>
+                    <div className="detail-section">
+                      <div className="detail-label">Normalized Semantic Parameter</div>
+                      <div className="detail-value-text" style={{ color: 'var(--color-ochre)', fontFamily: 'var(--font-mono)' }}>
+                        {selectedLine.semantic}
+                      </div>
                     </div>
                   )}
+
                   {selectedLine.value !== null && selectedLine.value !== undefined && (
-                    <div style={{ marginBottom: 'var(--space-md)' }}>
-                      <div style={{ color: 'var(--color-text-muted)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Value</div>
-                      <div style={{ color: 'var(--color-text)', fontWeight: 600, marginTop: '4px' }}>{String(selectedLine.value)}</div>
+                    <div className="detail-section">
+                      <div className="detail-label">Observed Value</div>
+                      <div className="detail-value-text">
+                        {String(selectedLine.value)}
+                      </div>
                     </div>
                   )}
+
                   {selectedLine.control && (
-                    <div style={{ marginBottom: 'var(--space-md)' }}>
-                      <div style={{ color: 'var(--color-text-muted)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Control</div>
-                      <div style={{ color: 'var(--color-text)', marginTop: '4px' }}>{selectedLine.control.id} — {selectedLine.control.name}</div>
-                      <div style={{ color: 'var(--color-text-secondary)', fontSize: '0.75rem', marginTop: '2px' }}>{selectedLine.control.category}</div>
+                    <div className="detail-section">
+                      <div className="detail-label">Control Mapping</div>
+                      <div className="detail-value-text" style={{ fontWeight: 600 }}>
+                        {selectedLine.control.id} — {selectedLine.control.name}
+                      </div>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--color-ink-muted)', marginTop: '2px' }}>
+                        Category: {selectedLine.control.category}
+                      </div>
                     </div>
                   )}
+
                   {selectedLine.control?.frameworks && (
-                    <div>
-                      <div style={{ color: 'var(--color-text-muted)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Framework Mappings</div>
-                      {Object.entries(selectedLine.control.frameworks).map(([fw, ref]) => (
-                        <div key={fw} style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '2px' }}>
-                          <span style={{ color: 'var(--color-success)' }}>✓</span> {fw}: {ref}
-                        </div>
-                      ))}
+                    <div className="detail-section">
+                      <div className="detail-label">Regulatory Crosswalk</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginTop: '4px' }}>
+                        {Object.entries(selectedLine.control.frameworks).map(([fw, ref]) => (
+                          <div key={fw} style={{ fontSize: '0.72rem', color: 'var(--color-ink-secondary)' }}>
+                            <strong style={{ color: 'var(--color-indigo)' }}>{fw}:</strong> {ref}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
+
                   {(selectedLine.state === 'UNKNOWN' || selectedLine.state === 'LOW_CONFIDENCE') && (
-                    <button
-                      className="btn btn-secondary btn-sm"
-                      style={{ marginTop: 'var(--space-md)' }}
-                      onClick={() => navigate('/training')}
-                    >
-                      ⚡ Teach TĀRĀ
-                    </button>
+                    <div style={{ marginTop: 'var(--space-md)' }}>
+                      <button
+                        type="button"
+                        className="btn btn-primary btn-sm"
+                        onClick={() => navigate('/training')}
+                      >
+                        Teach TĀRĀ this Construct
+                      </button>
+                    </div>
                   )}
                 </div>
               ) : (
-                <div className="empty-state" style={{ padding: 'var(--space-lg)' }}>
-                  <div className="empty-state-icon">◈</div>
-                  <div className="empty-state-text">Click a configuration line to view semantic details</div>
+                <div className="empty-state" style={{ padding: 'var(--space-xl) var(--space-md)' }}>
+                  <span className="empty-state-symbol">☉</span>
+                  <div className="empty-state-text" style={{ fontSize: '0.95rem' }}>
+                    Select any configuration line to inspect its security semantics
+                  </div>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: 'var(--space-lg)' }}>
-            <button className="btn btn-primary" onClick={() => navigate('/compliance')}>◆ View Compliance</button>
-            <button className="btn btn-secondary" onClick={() => navigate('/findings')}>⚠ View Findings</button>
+          {/* Action Footer */}
+          <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: 'var(--space-xl)' }}>
+            <button type="button" className="btn btn-primary" onClick={() => navigate('/compliance')}>
+              View Compliance Audit
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={() => navigate('/findings')}>
+              Inspect Findings
+            </button>
             {(analysisResult.stats.unknown > 0 || analysisResult.stats.lowConfidence > 0) && (
-              <button className="btn btn-ghost" onClick={() => navigate('/training')} style={{ borderColor: 'rgba(124, 77, 255, 0.3)', color: 'var(--color-purple)' }}>
-                ⚡ Open Training Studio ({analysisResult.stats.unknown + analysisResult.stats.lowConfidence} items)
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => navigate('/training')}
+                style={{ color: 'var(--color-ochre)', borderColor: 'rgba(166, 106, 44, 0.4)' }}
+              >
+                Open Learning Studio ({analysisResult.stats.unknown + analysisResult.stats.lowConfidence} items)
               </button>
             )}
           </div>

@@ -1,4 +1,5 @@
-// TĀRĀ Evidence & Hashing Service — SHA-256 + PDF generation
+// TĀRĀ Evidence & Hashing Service — SHA-256 + Audit Certificate PDF Generation
+// Designed as an ancient astronomical manuscript & precision audit document
 
 import jsPDF from 'jspdf';
 
@@ -11,149 +12,175 @@ export async function computeSHA256(text) {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Generate audit-ready PDF report
+// Generate audit-ready PDF document in parchment & ink aesthetic
 export async function generateReport(analysisData, complianceData, configText) {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
-  let y = 20;
-  const margin = 15;
-  const lineHeight = 6;
+  const pageHeight = doc.internal.pageSize.getHeight();
+  let y = 24;
+  const margin = 18;
+  const lineHeight = 5.5;
   const maxWidth = pageWidth - margin * 2;
 
   const configHash = await computeSHA256(configText);
 
-  // Helper functions
-  const addLine = (text, size = 10, style = 'normal', color = [220, 220, 220]) => {
-    if (y > 270) { doc.addPage(); y = 20; }
+  // Helper to paint page background & subtle astronomical border
+  const paintPageGround = () => {
+    // Warm ivory / parchment background
+    doc.setFillColor(250, 247, 240);
+    doc.rect(0, 0, pageWidth, pageHeight, 'F');
+
+    // Thin double manuscript border
+    doc.setDrawColor(176, 138, 60);
+    doc.setLineWidth(0.4);
+    doc.rect(margin - 6, margin - 6, pageWidth - (margin - 6) * 2, pageHeight - (margin - 6) * 2);
+
+    doc.setDrawColor(112, 105, 92);
+    doc.setLineWidth(0.15);
+    doc.rect(margin - 4, margin - 4, pageWidth - (margin - 4) * 2, pageHeight - (margin - 4) * 2);
+
+    // Corner yantra tick marks
+    const tickLen = 5;
+    doc.setDrawColor(166, 106, 44);
+    doc.setLineWidth(0.5);
+    // Top-left
+    doc.line(margin - 6, margin - 6 + tickLen, margin - 6 + tickLen, margin - 6);
+    // Top-right
+    doc.line(pageWidth - margin + 6 - tickLen, margin - 6, pageWidth - margin + 6, margin - 6 + tickLen);
+    // Bottom-left
+    doc.line(margin - 6, pageHeight - margin + 6 - tickLen, margin - 6 + tickLen, pageHeight - margin + 6);
+    // Bottom-right
+    doc.line(pageWidth - margin + 6 - tickLen, pageHeight - margin + 6, pageWidth - margin + 6, pageHeight - margin + 6 - tickLen);
+  };
+
+  const addLine = (text, size = 9.5, style = 'normal', color = [39, 35, 29], indent = 0) => {
+    if (y > 265) {
+      doc.addPage();
+      paintPageGround();
+      y = 24;
+    }
     doc.setFontSize(size);
-    doc.setFont('helvetica', style);
+    doc.setFont('times', style);
     doc.setTextColor(...color);
-    const lines = doc.splitTextToSize(text, maxWidth);
-    doc.text(lines, margin, y);
+    const lines = doc.splitTextToSize(text, maxWidth - indent);
+    doc.text(lines, margin + indent, y);
     y += lines.length * lineHeight;
   };
 
-  const addSeparator = () => {
-    if (y > 270) { doc.addPage(); y = 20; }
-    doc.setDrawColor(212, 168, 67);
-    doc.setLineWidth(0.5);
-    doc.line(margin, y, pageWidth - margin, y);
-    y += 5;
-  };
-
-  // Background
-  doc.setFillColor(13, 15, 25);
-  doc.rect(0, 0, pageWidth, doc.internal.pageSize.getHeight(), 'F');
-
-  // Title
-  doc.setFontSize(24);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(212, 168, 67);
-  doc.text('TARA-NETRA', margin, y);
-  y += 10;
-
-  addLine('TARA PROOF — Audit Evidence Report', 14, 'bold', [0, 229, 255]);
-  y += 3;
-  addLine('Trustworthy Adaptive Risk Analytics — Network Reasoning & Assurance', 8, 'normal', [150, 150, 150]);
-  y += 5;
-  addSeparator();
-
-  // Report metadata
-  addLine('REPORT METADATA', 12, 'bold', [212, 168, 67]);
-  y += 2;
-  addLine(`Report Generated: ${new Date().toLocaleString()}`, 9);
-  addLine(`Report ID: TARA-${Date.now()}`, 9);
-  y += 3;
-
-  // Device information
-  addSeparator();
-  addLine('DEVICE INFORMATION', 12, 'bold', [212, 168, 67]);
-  y += 2;
-  addLine(`Device: ${analysisData.deviceName || 'Unknown'}`, 9);
-  addLine(`Vendor: ${analysisData.vendor?.vendor || 'Unknown'}`, 9);
-  addLine(`Vendor Confidence: ${analysisData.vendor?.confidence || 0}%`, 9);
-  addLine(`Configuration Hash (SHA-256): ${configHash}`, 8, 'normal', [0, 229, 255]);
-  y += 3;
-
-  // Interpretation Summary
-  addSeparator();
-  addLine('INTERPRETATION SUMMARY', 12, 'bold', [212, 168, 67]);
-  y += 2;
-  const stats = analysisData.stats;
-  addLine(`Total Lines Analyzed: ${stats.total}`, 9);
-  addLine(`Recognized: ${stats.recognized} | Inferred: ${stats.inferred} | Learned: ${stats.learned}`, 9);
-  addLine(`Low Confidence: ${stats.lowConfidence} | Unknown: ${stats.unknown}`, 9);
-  addLine(`Recognition Rate: ${stats.recognizedPercent}%`, 9, 'bold', [0, 230, 118]);
-  y += 3;
-
-  // Compliance Summary
-  addSeparator();
-  addLine('COMPLIANCE SUMMARY', 12, 'bold', [212, 168, 67]);
-  y += 2;
-  const summary = complianceData.summary;
-  addLine(`Total Controls Evaluated: ${summary.total}`, 9);
-  addLine(`PASS: ${summary.pass}`, 9, 'normal', [0, 230, 118]);
-  addLine(`FAIL: ${summary.fail}`, 9, 'normal', [255, 82, 82]);
-  addLine(`UNKNOWN: ${summary.unknown}`, 9, 'normal', [255, 171, 0]);
-  addLine(`Overall Compliance: ${summary.compliancePercent}%`, 10, 'bold', [0, 229, 255]);
-  y += 3;
-
-  // Framework Scores
-  addSeparator();
-  addLine('FRAMEWORK SCORES', 12, 'bold', [212, 168, 67]);
-  y += 2;
-  for (const [fw, score] of Object.entries(complianceData.frameworkScores)) {
-    addLine(`${fw}: ${score.percent}% (${score.pass}/${score.total} pass)`, 9);
-  }
-  y += 3;
-
-  // Findings Detail
-  addSeparator();
-  addLine('FINDINGS', 12, 'bold', [212, 168, 67]);
-  y += 2;
-
-  for (const result of complianceData.results) {
-    if (y > 250) { doc.addPage(); y = 20; 
-      doc.setFillColor(13, 15, 25);
-      doc.rect(0, 0, pageWidth, doc.internal.pageSize.getHeight(), 'F');
-    }
-
-    const statusColor = result.status === 'PASS' ? [0, 230, 118] : result.status === 'FAIL' ? [255, 82, 82] : [255, 171, 0];
-    addLine(`[${result.status}] ${result.controlId} — ${result.controlName}`, 9, 'bold', statusColor);
-    addLine(`  Category: ${result.category} | Severity: ${result.severity}`, 8, 'normal', [180, 180, 180]);
-    addLine(`  Expected: ${JSON.stringify(result.expected)} | Observed: ${JSON.stringify(result.observed)}`, 8, 'normal', [180, 180, 180]);
-    if (result.evidence) {
-      addLine(`  Evidence: Line ${result.evidence.lineNumber} (${result.evidence.source})`, 8, 'normal', [150, 150, 150]);
+  const addSeparator = (title = null) => {
+    if (y > 255) {
+      doc.addPage();
+      paintPageGround();
+      y = 24;
     }
     y += 2;
-  }
+    doc.setDrawColor(176, 138, 60);
+    doc.setLineWidth(0.35);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 5;
 
-  // Evidence Hashes
-  doc.addPage();
-  y = 20;
-  doc.setFillColor(13, 15, 25);
-  doc.rect(0, 0, pageWidth, doc.internal.pageSize.getHeight(), 'F');
+    if (title) {
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(166, 106, 44);
+      doc.text(title.toUpperCase(), margin, y);
+      y += 5;
+    }
+  };
 
-  addSeparator();
-  addLine('TAMPER-EVIDENT HASHES', 12, 'bold', [212, 168, 67]);
-  y += 2;
-  addLine(`Configuration SHA-256:`, 9, 'bold', [0, 229, 255]);
-  addLine(configHash, 8, 'normal', [180, 180, 180]);
-  y += 3;
+  // ─── First Page ───
+  paintPageGround();
 
-  const reportContent = JSON.stringify({ analysisData: analysisData.stats, complianceData: complianceData.summary });
-  const reportHash = await computeSHA256(reportContent);
-  addLine(`Report Content SHA-256:`, 9, 'bold', [0, 229, 255]);
-  addLine(reportHash, 8, 'normal', [180, 180, 180]);
+  // Document Title & Heading
+  doc.setFontSize(22);
+  doc.setFont('times', 'bold');
+  doc.setTextColor(32, 38, 58);
+  doc.text('TĀRĀ-NETRA', margin, y);
+  y += 7;
+
+  doc.setFontSize(11);
+  doc.setFont('times', 'italic');
+  doc.setTextColor(166, 106, 44);
+  doc.text('TĀRĀ PROOF — Compliance & Verification Audit Certificate', margin, y);
   y += 5;
 
-  addSeparator();
-  addLine('TARA-NETRA — The Guiding Eye for Network Security', 10, 'italic', [212, 168, 67]);
-  addLine('Understand. Learn. Audit. Assure.', 9, 'italic', [150, 150, 150]);
-  y += 3;
-  addLine('This report was generated entirely in-browser. No configuration data was transmitted externally.', 8, 'normal', [100, 100, 100]);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(112, 105, 92);
+  doc.text('Trustworthy Adaptive Risk Analytics • Network Reasoning & Assurance', margin, y);
+  y += 6;
 
-  // Save
-  doc.save(`TARA-NETRA-Report-${new Date().toISOString().split('T')[0]}.pdf`);
+  // Metadata Block
+  addSeparator('Audit Metadata');
+  addLine(`Timestamp: ${new Date().toUTCString()}`, 9);
+  addLine(`Report Certificate ID: TN-${Date.now().toString(36).toUpperCase()}`, 9);
+  addLine(`Target Device: ${analysisData.deviceName || 'Unknown Appliance'}`, 9);
+  addLine(`Detected Operating System: ${analysisData.vendor?.vendor || 'Unknown'} (${analysisData.vendor?.confidence || 0}% confidence)`, 9);
+
+  // Interpretation Summary Block
+  addSeparator('Observation & Parsing Precision');
+  const stats = analysisData.stats;
+  addLine(`Total Directives Analyzed: ${stats.total}`, 9);
+  addLine(`Recognized: ${stats.recognized}  |  Cross-Vendor Inferred: ${stats.inferred}  |  Locally Learned: ${stats.learned}`, 9);
+  addLine(`Low Confidence: ${stats.lowConfidence}  |  Unresolved Constructs: ${stats.unknown}`, 9);
+  addLine(`Recognition Precision Rate: ${stats.recognizedPercent}%`, 9.5, 'bold', [45, 107, 63]);
+
+  // Compliance Summary
+  addSeparator('Compliance Assurance Evaluation');
+  const summary = complianceData.summary;
+  addLine(`Total Standard Controls Evaluated: ${summary.total}`, 9);
+  addLine(`Satisfied (Pass): ${summary.pass}`, 9, 'normal', [45, 107, 63]);
+  addLine(`Deficiencies (Fail): ${summary.fail}`, 9, 'normal', [166, 52, 40]);
+  addLine(`Unverified (Unknown): ${summary.unknown}`, 9, 'normal', [181, 121, 43]);
+  addLine(`Aggregate Compliance Index: ${summary.compliancePercent}%`, 10, 'bold', [32, 38, 58]);
+
+  // Framework Breakdown
+  addSeparator('Standard Regulatory Crosswalk');
+  for (const [fw, score] of Object.entries(complianceData.frameworkScores)) {
+    addLine(`${fw}: ${score.percent}% assurance (${score.pass}/${score.total} controls compliant)`, 9);
+  }
+
+  // Findings Detail Section
+  addSeparator('Specific Audit Findings');
+  for (const result of complianceData.results) {
+    if (y > 250) {
+      doc.addPage();
+      paintPageGround();
+      y = 24;
+    }
+
+    const statusColor = result.status === 'PASS' ? [45, 107, 63] : result.status === 'FAIL' ? [166, 52, 40] : [181, 121, 43];
+    addLine(`[${result.status}] ${result.controlId} — ${result.controlName}`, 9, 'bold', statusColor);
+    addLine(`Domain: ${result.category} | Severity: ${result.severity}`, 8, 'normal', [112, 105, 92], 4);
+    addLine(`Expected: ${JSON.stringify(result.expected)} | Observed: ${JSON.stringify(result.observed) || 'None'}`, 8, 'normal', [39, 35, 29], 4);
+    if (result.evidence) {
+      addLine(`Evidence: Line ${result.evidence.lineNumber} (${result.evidence.source})`, 7.5, 'italic', [112, 105, 92], 4);
+    }
+    y += 1.5;
+  }
+
+  // Final Page: Cryptographic Hashes & Tamper-Evident Signatures
+  doc.addPage();
+  paintPageGround();
+  y = 24;
+
+  addSeparator('Cryptographic Integrity Verification');
+  addLine('Configuration SHA-256 Digest:', 9, 'bold', [166, 106, 44]);
+  addLine(configHash, 8, 'normal', [32, 38, 58], 4);
+  y += 3;
+
+  const reportContent = JSON.stringify({ analysis: analysisData.stats, compliance: complianceData.summary, ts: analysisData.timestamp });
+  const reportHash = await computeSHA256(reportContent);
+  addLine('Audit Findings SHA-256 Digest:', 9, 'bold', [166, 106, 44]);
+  addLine(reportHash, 8, 'normal', [32, 38, 58], 4);
+  y += 6;
+
+  addSeparator();
+  addLine('TĀRĀ-NETRA — The Guiding Eye for Network Security', 10, 'italic', [166, 106, 44]);
+  addLine('Understand. Learn. Audit. Assure.', 9, 'italic', [112, 105, 92]);
+  y += 3;
+  addLine('This audit certificate was rendered entirely within the local browser runtime using Web Crypto SHA-256 primitives. No proprietary configuration text or administrative credentials were transmitted across the network.', 8, 'normal', [112, 105, 92]);
+
+  doc.save(`TARA-NETRA-Audit-${new Date().toISOString().split('T')[0]}.pdf`);
   return { configHash, reportHash };
 }

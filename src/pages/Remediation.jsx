@@ -8,12 +8,15 @@ export default function Remediation({ complianceResult, analysisResult }) {
     return (
       <div className="animate-fadeIn">
         <div className="page-header">
-          <h1 className="page-title">⟳ TĀRĀ Resolve</h1>
-          <p className="page-subtitle">Vendor-specific remediation recommendations</p>
+          <div className="page-title-group">
+            <div className="page-tag">Actionable Resolution</div>
+            <h1 className="page-title">TĀRĀ Resolve</h1>
+            <div className="page-subtitle">Technical remediation instructions</div>
+          </div>
         </div>
         <div className="empty-state">
-          <div className="empty-state-icon">⟳</div>
-          <div className="empty-state-text">Analyze a configuration first to generate remediations</div>
+          <span className="empty-state-symbol">↻</span>
+          <div className="empty-state-text">Analyze a configuration first to generate remediation instructions</div>
         </div>
       </div>
     );
@@ -22,126 +25,139 @@ export default function Remediation({ complianceResult, analysisResult }) {
   const failures = complianceResult.results.filter(r => r.status === 'FAIL');
   const vendor = analysisResult?.vendor?.vendor || 'Generic';
 
-  // Workflow steps
-  const workflowSteps = ['Detect', 'Recommend', 'Simulate', 'Human Approval', 'Export'];
-
   return (
     <div className="animate-fadeIn">
+      {/* Header */}
       <div className="page-header">
-        <h1 className="page-title">⟳ TĀRĀ Resolve</h1>
-        <p className="page-subtitle">{failures.length} remediation recommendations for {analysisResult?.deviceName || 'device'}</p>
+        <div className="page-title-group">
+          <div className="page-tag">Technical Resolution</div>
+          <h1 className="page-title">TĀRĀ Resolve</h1>
+          <div className="page-subtitle">
+            {failures.length} remediation directives for {analysisResult?.deviceName || 'device'} ({vendor})
+          </div>
+        </div>
       </div>
 
-      {/* Workflow */}
-      <div className="workflow" style={{ marginBottom: 'var(--space-xl)' }}>
-        {workflowSteps.map((step, i) => (
+      {/* Process Pipeline */}
+      <div className="process-line" style={{ marginBottom: 'var(--space-2xl)' }}>
+        {['Detected', 'Recommended', 'Simulate', 'Human Approval', 'Export'].map((step, i) => (
           <React.Fragment key={step}>
-            {i > 0 && <span className="workflow-arrow">→</span>}
-            <span className={`workflow-step ${i <= 1 ? 'active' : ''}`}>{step}</span>
+            {i > 0 && <span className="process-arrow">→</span>}
+            <span className="process-step" style={{ color: i <= 1 ? 'var(--color-indigo)' : 'var(--color-ink-muted)' }}>
+              {step}
+            </span>
           </React.Fragment>
         ))}
       </div>
 
       {failures.length === 0 ? (
-        <div className="card" style={{ textAlign: 'center', padding: 'var(--space-xl)' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-md)' }}>✓</div>
-          <div style={{ color: 'var(--color-success)', fontSize: '1.1rem', fontWeight: 600 }}>All evaluated controls are passing!</div>
-          <div style={{ color: 'var(--color-text-muted)', marginTop: 'var(--space-sm)' }}>No remediation actions required.</div>
+        <div className="card" style={{ textAlign: 'center', padding: 'var(--space-2xl)' }}>
+          <div style={{ color: 'var(--color-pass)', fontSize: '2rem', marginBottom: 'var(--space-xs)' }}>✓</div>
+          <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 600 }}>All evaluated controls passing</div>
+          <div style={{ fontSize: '0.8rem', color: 'var(--color-ink-muted)', marginTop: '4px' }}>
+            No remediation actions required for this device configuration.
+          </div>
         </div>
       ) : (
-        <div className="grid-2" style={{ alignItems: 'start' }}>
-          {/* Remediation List */}
-          <div style={{ display: 'grid', gap: 'var(--space-sm)' }}>
+        <div className="findings-layout">
+          {/* Left Column: Failure list */}
+          <div>
+            <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--color-ink-muted)', fontWeight: 600, marginBottom: 'var(--space-sm)' }}>
+              Deficiencies Requiring Correction ({failures.length})
+            </div>
+
             {failures.map((finding, i) => (
               <div
                 key={i}
-                className="card"
-                style={{
-                  padding: 'var(--space-md)',
-                  cursor: 'pointer',
-                  borderColor: selectedFix === finding ? 'var(--color-gold)' : approved[finding.controlId] ? 'rgba(0, 230, 118, 0.3)' : undefined,
-                }}
+                className={`finding-card fail ${selectedFix?.controlId === finding.controlId ? 'selected' : ''}`}
                 onClick={() => setSelectedFix(finding)}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', marginBottom: '4px' }}>
-                      <span className={`badge badge-${finding.severity.toLowerCase()}`}>{finding.severity}</span>
-                      {approved[finding.controlId] && <span className="badge badge-pass">APPROVED</span>}
-                    </div>
-                    <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{finding.controlName}</div>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>{finding.controlId} • {finding.category}</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                    <span className={`badge badge-${finding.severity.toLowerCase()}`}>
+                      {finding.severity}
+                    </span>
+                    {approved[finding.controlId] && (
+                      <span className="badge badge-pass">Approved</span>
+                    )}
                   </div>
+                  <span style={{ fontSize: '0.68rem', fontFamily: 'var(--font-mono)', color: 'var(--color-ink-muted)' }}>
+                    {finding.controlId}
+                  </span>
+                </div>
+
+                <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.05rem', fontWeight: 600, color: 'var(--color-indigo)' }}>
+                  {finding.controlName}
+                </div>
+                <div style={{ fontSize: '0.72rem', color: 'var(--color-ink-muted)', marginTop: '2px' }}>
+                  {finding.category}
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Remediation Detail */}
+          {/* Right Column: Remediation Instruction Sheet */}
           <div>
             {selectedFix ? (
-              <div className="card">
-                <div className="card-title">Remediation Detail</div>
+              <div className="card" style={{ borderTop: '2px solid var(--color-ochre)' }}>
+                <div className="card-title">Remediation Directive Sheet</div>
 
-                {/* Finding */}
-                <div style={{ marginBottom: 'var(--space-lg)' }}>
-                  <div className="form-label">Finding</div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-danger)' }}>
+                {/* Finding Summary */}
+                <div style={{ marginBottom: 'var(--space-md)' }}>
+                  <div className="detail-label">Deficiency</div>
+                  <div style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--color-fail)' }}>
                     {selectedFix.controlName}
                   </div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginTop: '4px' }}>
+                  <div style={{ fontSize: '0.76rem', color: 'var(--color-ink-secondary)', marginTop: '2px' }}>
                     {selectedFix.description}
                   </div>
                 </div>
 
-                {/* Device */}
-                <div style={{ marginBottom: 'var(--space-lg)' }}>
-                  <div className="form-label">Device</div>
-                  <div style={{ fontSize: '0.85rem' }}>
-                    {analysisResult?.deviceName || 'Unknown'} ({vendor})
+                {/* Target Device */}
+                <div style={{ marginBottom: 'var(--space-md)' }}>
+                  <div className="detail-label">Target Appliance</div>
+                  <div style={{ fontSize: '0.82rem', color: 'var(--color-ink-primary)' }}>
+                    {analysisResult?.deviceName || 'Device'} ({vendor})
                   </div>
                 </div>
 
-                {/* Suggested Remediation */}
-                <div style={{ marginBottom: 'var(--space-lg)' }}>
-                  <div className="form-label">Suggested Remediation</div>
+                {/* Suggested Remediation Command */}
+                <div style={{ marginBottom: 'var(--space-md)' }}>
+                  <div className="detail-label">Recommended Vendor CLI Directives</div>
                   {selectedFix.remediation ? (
-                    <div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
                       {Object.entries(selectedFix.remediation).map(([v, cmd]) => (
-                        <div key={v} style={{ marginBottom: 'var(--space-sm)' }}>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--color-gold)', marginBottom: '2px' }}>{v}:</div>
-                          <div style={{
-                            fontFamily: 'var(--font-mono)', fontSize: '0.8rem',
-                            padding: 'var(--space-md)',
-                            background: 'var(--color-bg-deep)',
-                            borderRadius: 'var(--radius-sm)',
-                            color: 'var(--color-cyan)',
-                            whiteSpace: 'pre-wrap',
-                            border: v === vendor ? '1px solid rgba(0, 229, 255, 0.2)' : 'var(--border-subtle)',
-                          }}>
+                        <div key={v}>
+                          <div style={{ fontSize: '0.68rem', color: 'var(--color-ochre)', fontWeight: 600, marginBottom: '2px' }}>
+                            {v}:
+                          </div>
+                          <div className="remediation-box">
                             {cmd}
                           </div>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div style={{ color: 'var(--color-text-muted)' }}>No specific remediation available</div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--color-ink-muted)' }}>No remediation template registered</div>
                   )}
                 </div>
 
-                {/* Verification */}
+                {/* Verification Command */}
                 {selectedFix.verification && (
                   <div style={{ marginBottom: 'var(--space-lg)' }}>
-                    <div className="form-label">Verification Command</div>
+                    <div className="detail-label">Verification Command</div>
                     {Object.entries(selectedFix.verification).map(([v, cmd]) => (
-                      <div key={v} style={{ marginBottom: 'var(--space-sm)' }}>
-                        <div style={{ fontSize: '0.7rem', color: 'var(--color-gold)', marginBottom: '2px' }}>{v}:</div>
+                      <div key={v} style={{ marginBottom: '4px' }}>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--color-gold)', fontWeight: 600, marginBottom: '2px' }}>
+                          {v}:
+                        </div>
                         <div style={{
-                          fontFamily: 'var(--font-mono)', fontSize: '0.8rem',
-                          padding: 'var(--space-sm) var(--space-md)',
-                          background: 'var(--color-bg-deep)',
-                          borderRadius: 'var(--radius-sm)',
-                          color: 'var(--color-success)',
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.78rem',
+                          background: 'var(--color-bg-subtle)',
+                          padding: '6px 10px',
+                          borderRadius: 'var(--radius-xs)',
+                          color: 'var(--color-indigo)'
                         }}>
                           {cmd}
                         </div>
@@ -150,27 +166,36 @@ export default function Remediation({ complianceResult, analysisResult }) {
                   </div>
                 )}
 
-                {/* Approval */}
-                <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
+                {/* Approval Action */}
+                <div>
                   {approved[selectedFix.controlId] ? (
-                    <span className="badge badge-pass" style={{ fontSize: '0.85rem', padding: '6px 16px' }}>
-                      ✓ Approved for Implementation
-                    </span>
+                    <div style={{
+                      padding: '8px 14px',
+                      background: 'var(--color-pass-bg)',
+                      border: '1px solid var(--color-pass-border)',
+                      borderRadius: 'var(--radius-xs)',
+                      color: 'var(--color-pass)',
+                      fontSize: '0.78rem',
+                      fontWeight: 600
+                    }}>
+                      ✓ Approved for implementation by network administrator
+                    </div>
                   ) : (
                     <button
-                      className="btn btn-primary"
+                      type="button"
+                      className="btn btn-primary btn-sm"
                       onClick={() => setApproved(prev => ({ ...prev, [selectedFix.controlId]: true }))}
                     >
-                      ✓ Approve Remediation
+                      Approve Remediation Directive
                     </button>
                   )}
                 </div>
               </div>
             ) : (
-              <div className="card" style={{ textAlign: 'center', padding: 'var(--space-xl)' }}>
-                <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-md)', opacity: 0.5 }}>⟳</div>
-                <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                  Select a finding to view vendor-specific remediation
+              <div className="card" style={{ textAlign: 'center', padding: 'var(--space-2xl) var(--space-md)' }}>
+                <span className="empty-state-symbol">↻</span>
+                <div className="empty-state-text" style={{ fontSize: '1rem' }}>
+                  Select a deficiency to view vendor-specific remediation directives
                 </div>
               </div>
             )}
