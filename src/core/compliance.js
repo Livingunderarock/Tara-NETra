@@ -134,8 +134,9 @@ export function evaluateCompliance(sbm, selectedFrameworks = ['CIS', 'NIST', 'ST
   };
 }
 
-// Generate compliance heatmap data
+// Generate rich compliance heatmap matrix data
 export function generateHeatmap(complianceResults, frameworks = ['CIS', 'NIST', 'STIG', 'ISO']) {
+  if (!complianceResults?.results) return {};
   const controls = complianceResults.results;
   const categories = [...new Set(controls.map(c => c.category))];
   
@@ -145,11 +146,39 @@ export function generateHeatmap(complianceResults, frameworks = ['CIS', 'NIST', 
     for (const fw of frameworks) {
       const catControls = controls.filter(c => c.category === cat && c.frameworks[fw]);
       if (catControls.length === 0) {
-        heatmap[cat][fw] = 'N/A';
+        heatmap[cat][fw] = {
+          status: 'N/A',
+          total: 0,
+          passed: 0,
+          failed: 0,
+          unknown: 0,
+          percent: null,
+          controls: []
+        };
       } else {
-        const allPass = catControls.every(c => c.status === 'PASS');
-        const anyFail = catControls.some(c => c.status === 'FAIL');
-        heatmap[cat][fw] = allPass ? 'PASS' : anyFail ? 'FAIL' : 'UNKNOWN';
+        const passed = catControls.filter(c => c.status === 'PASS').length;
+        const failed = catControls.filter(c => c.status === 'FAIL').length;
+        const unknown = catControls.filter(c => c.status === 'UNKNOWN').length;
+        const total = catControls.length;
+        const percent = Math.round((passed / total) * 100);
+        const status = passed === total ? 'PASS' : failed > 0 ? (passed > 0 ? 'PARTIAL' : 'FAIL') : 'UNKNOWN';
+
+        heatmap[cat][fw] = {
+          status,
+          total,
+          passed,
+          failed,
+          unknown,
+          percent,
+          controls: catControls.map(c => ({
+            id: c.controlId,
+            name: c.name,
+            status: c.status,
+            requirement: c.frameworks[fw],
+            severity: c.severity,
+            finding: c.finding
+          }))
+        };
       }
     }
   }
