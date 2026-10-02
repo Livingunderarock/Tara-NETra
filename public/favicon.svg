@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#D4A843" stop-opacity="0.8"/>
+      <stop offset="70%" stop-color="#D4A843" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#D4A843" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Outer mandala ring -->
+  <circle cx="32" cy="32" r="28" fill="none" stroke="#D4A843" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#00E5FF" stroke-width="0.5" opacity="0.4"/>
+  <!-- Inner eye -->
+  <ellipse cx="32" cy="32" rx="16" ry="10" fill="none" stroke="#D4A843" stroke-width="2"/>
+  <!-- Iris -->
+  <circle cx="32" cy="32" r="6" fill="#00E5FF" opacity="0.9"/>
+  <circle cx="32" cy="32" r="3" fill="#D4A843"/>
+  <!-- Star points -->
+  <circle cx="32" cy="4" r="2" fill="#D4A843" opacity="0.8"/>
+  <circle cx="32" cy="60" r="2" fill="#D4A843" opacity="0.8"/>
+  <circle cx="4" cy="32" r="2" fill="#D4A843" opacity="0.8"/>
+  <circle cx="60" cy="32" r="2" fill="#D4A843" opacity="0.8"/>
+  <!-- Glow -->
+  <circle cx="32" cy="32" r="20" fill="url(#glow)" opacity="0.3"/>
+</svg>
