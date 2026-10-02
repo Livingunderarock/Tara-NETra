@@ -27,7 +27,7 @@ export async function generateReport(analysisData, complianceData, configText) {
   // Helper to paint page background & subtle astronomical border
   const paintPageGround = () => {
     // Aged warm parchment background
-    doc.setFillColor(232, 222, 204);
+    doc.setFillColor(222, 209, 186);
     doc.rect(0, 0, pageWidth, pageHeight, 'F');
 
     // Thin double manuscript border

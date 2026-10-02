@@ -8,6 +8,7 @@ import Compliance from './pages/Compliance';
 import Findings from './pages/Findings';
 import Remediation from './pages/Remediation';
 import Evidence from './pages/Evidence';
+import TutorialGuide from './components/TutorialGuide';
 import { analyzeConfiguration } from './core/interpreter';
 import { evaluateCompliance, generateHeatmap } from './core/compliance';
 import { saveAnalysis, getAnalysisHistory } from './services/storage';
@@ -33,6 +34,7 @@ export default function App() {
   const [deviceName, setDeviceName] = useState('');
   const [toast, setToast] = useState(null);
   const [history, setHistory] = useState([]);
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   useEffect(() => {
     setHistory(getAnalysisHistory());
@@ -115,6 +117,16 @@ export default function App() {
           ))}
         </div>
 
+        {/* Global Instrument Guide & Tutorial Trigger */}
+        <button
+          className="sidebar-tutorial-btn"
+          onClick={() => setIsTutorialOpen(true)}
+          title="Interactive walkthrough of all TĀRĀ-NETRA features"
+        >
+          <span>✧</span>
+          <span>Guide &amp; Tutorial</span>
+        </button>
+
         <div className="sidebar-footer">
           <div className="sidebar-footer-title">Network Reasoning & Assurance</div>
           <div>SIH 2026 • Astronomical Engine</div>
@@ -130,6 +142,7 @@ export default function App() {
               complianceResult={complianceResult}
               history={history}
               onAnalyze={handleAnalyze}
+              onOpenTutorial={() => setIsTutorialOpen(true)}
               navigate={navigate}
             />
           } />
@@ -190,6 +203,13 @@ export default function App() {
           <span>{toast.message}</span>
         </div>
       )}
+
+      {/* Global Interactive Instrument Guide & Tutorial Modal */}
+      <TutorialGuide
+        isOpen={isTutorialOpen}
+        onClose={() => setIsTutorialOpen(false)}
+        navigate={navigate}
+      />
     </div>
   );
 }
