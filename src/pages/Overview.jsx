@@ -18,42 +18,49 @@ export default function Overview({ analysisResult, complianceResult, history, on
 
         {/* Astronomical Instrument Security Baseline Model Diagram - Center Stage on Page Open */}
         <div className="yantra-diagram-wrapper">
-          <svg className="yantra-svg" viewBox="0 0 460 220" fill="none">
+          <svg className="yantra-svg" viewBox="0 0 520 260" fill="none">
             {/* Subtle concentric orbital arcs */}
-            <circle cx="230" cy="110" r="90" stroke="#B08A3C" strokeWidth="0.6" strokeDasharray="2 3"/>
-            <circle cx="230" cy="110" r="60" stroke="#20263A" strokeWidth="0.8" opacity="0.7"/>
-            <circle cx="230" cy="110" r="28" stroke="#A66A2C" strokeWidth="1"/>
+            <circle cx="260" cy="130" r="82" stroke="#B08A3C" strokeWidth="0.8" strokeDasharray="3 3.5"/>
+            <circle cx="260" cy="130" r="56" stroke="#20263A" strokeWidth="0.8" opacity="0.65"/>
+            
+            {/* Central Core Medallion with parchment backdrop to prevent any line intersection */}
+            <circle cx="260" cy="130" r="42" stroke="#A66A2C" strokeWidth="1.2" fill="var(--color-bg-base)"/>
 
-            {/* Central Core Bindu */}
-            <circle cx="230" cy="110" r="5" fill="#A66A2C"/>
-            <circle cx="230" cy="110" r="2" fill="var(--color-bg-base)"/>
+            {/* Central Bindu celestial marker */}
+            <circle cx="260" cy="105" r="3.5" fill="#A66A2C"/>
+            <circle cx="260" cy="105" r="1.5" fill="var(--color-bg-base)"/>
 
-            {/* Primary Cross-Axes */}
-            <line x1="60" y1="110" x2="400" y2="110" stroke="#70695C" strokeWidth="0.6" strokeDasharray="3 3"/>
-            <line x1="230" y1="20" x2="230" y2="200" stroke="#70695C" strokeWidth="0.6" strokeDasharray="3 3"/>
+            {/* Segmented Cross-Axes that stop cleanly before the central medallion */}
+            {/* Horizontal axes */}
+            <line x1="80" y1="130" x2="216" y2="130" stroke="#70695C" strokeWidth="0.7" strokeDasharray="3 3"/>
+            <line x1="304" y1="130" x2="440" y2="130" stroke="#70695C" strokeWidth="0.7" strokeDasharray="3 3"/>
+            
+            {/* Vertical axes */}
+            <line x1="260" y1="48" x2="260" y2="86" stroke="#70695C" strokeWidth="0.7" strokeDasharray="3 3"/>
+            <line x1="260" y1="174" x2="260" y2="212" stroke="#70695C" strokeWidth="0.7" strokeDasharray="3 3"/>
 
-            {/* Node Labels */}
-            {/* Top: Security Semantics */}
-            <circle cx="230" cy="30" r="3.2" fill="#20263A"/>
-            <text x="230" y="20" textAnchor="middle" className="yantra-label">Security Semantics</text>
+            {/* Node Markers & Labels */}
+            {/* Top: Security Semantics (Ample breathing room above circle apex) */}
+            <circle cx="260" cy="48" r="3.5" fill="#20263A"/>
+            <text x="260" y="20" textAnchor="middle" className="yantra-label">SECURITY SEMANTICS</text>
 
-            {/* Bottom: Remediation & Assurance */}
-            <circle cx="230" cy="190" r="3.2" fill="#20263A"/>
-            <text x="230" y="208" textAnchor="middle" className="yantra-label">Remediation &amp; Proof</text>
+            {/* Bottom: Remediation & Proof (Ample breathing room below circle apex) */}
+            <circle cx="260" cy="212" r="3.5" fill="#20263A"/>
+            <text x="260" y="242" textAnchor="middle" className="yantra-label">REMEDIATION &amp; PROOF</text>
 
             {/* Left: Heterogeneous Vendors */}
-            <circle cx="70" cy="110" r="3.2" fill="#20263A"/>
-            <text x="65" y="103" textAnchor="end" className="yantra-label">Vendors</text>
-            <text x="65" y="122" textAnchor="end" fontSize="7.5" fill="#726754" fontFamily="var(--font-ui)">Cisco • Fortinet • Junos</text>
+            <circle cx="80" cy="130" r="3.5" fill="#20263A"/>
+            <text x="68" y="122" textAnchor="end" className="yantra-label">VENDORS</text>
+            <text x="68" y="139" textAnchor="end" className="yantra-sublabel">Cisco • Fortinet • Junos</text>
 
             {/* Right: Regulatory Frameworks */}
-            <circle cx="390" cy="110" r="3.2" fill="#20263A"/>
-            <text x="395" y="103" textAnchor="start" className="yantra-label">Frameworks</text>
-            <text x="395" y="122" textAnchor="start" fontSize="7.5" fill="#726754" fontFamily="var(--font-ui)">CIS • NIST • STIG • ISO</text>
+            <circle cx="440" cy="130" r="3.5" fill="#20263A"/>
+            <text x="452" y="122" textAnchor="start" className="yantra-label">FRAMEWORKS</text>
+            <text x="452" y="139" textAnchor="start" className="yantra-sublabel">CIS • NIST • STIG • ISO</text>
 
-            {/* Central Label */}
-            <text x="230" y="132" textAnchor="middle" className="yantra-node-text" letterSpacing="0.8">TĀRĀ CORE</text>
-            <text x="230" y="143" textAnchor="middle" fontSize="7" fill="#4E4537" fontFamily="var(--font-ui)">Security Baseline Model</text>
+            {/* Central Core Text: Pristine, centered, and undisturbed */}
+            <text x="260" y="126" textAnchor="middle" className="yantra-node-text">TĀRĀ CORE</text>
+            <text x="260" y="141" textAnchor="middle" className="yantra-subnode-text">Security Baseline Model</text>
           </svg>
         </div>
 
