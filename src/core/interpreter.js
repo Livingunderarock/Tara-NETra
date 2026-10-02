@@ -38,7 +38,43 @@ function interpretLine(line, vendor, learnedMappings) {
     return { ...line, state: 'SKIP', semantic: null, confidence: 100 };
   }
 
-  // Layer 1: Exact match from vendor patterns
+  // Layer 1: Learned mappings (Administrator-taught ground truth)
+  if (learnedMappings && learnedMappings.length > 0) {
+    for (const mapping of learnedMappings) {
+      try {
+        const mappingRegex = new RegExp(mapping.pattern, 'i');
+        if (mappingRegex.test(line.trimmed)) {
+          const control = semanticControls.find(c => c.semanticParameter === mapping.semantic);
+          return {
+            ...line,
+            state: 'LEARNED',
+            semantic: mapping.semantic,
+            value: mapping.value,
+            control: control || null,
+            confidence: mapping.confidence || 97,
+            source: 'Learned Mapping',
+            learnedFrom: mapping.source || 'Administrator',
+          };
+        }
+      } catch {
+        if (line.trimmed.toLowerCase() === mapping.rawCommand?.toLowerCase()) {
+          const control = semanticControls.find(c => c.semanticParameter === mapping.semantic);
+          return {
+            ...line,
+            state: 'LEARNED',
+            semantic: mapping.semantic,
+            value: mapping.value,
+            control: control || null,
+            confidence: mapping.confidence || 97,
+            source: 'Learned Mapping',
+            learnedFrom: mapping.source || 'Administrator',
+          };
+        }
+      }
+    }
+  }
+
+  // Layer 2: Exact match from vendor patterns
   if (vendor !== 'Unknown' && vendorPatterns[vendor]) {
     for (const pattern of vendorPatterns[vendor].patterns) {
       const match = line.raw.match(pattern.regex);
@@ -58,7 +94,7 @@ function interpretLine(line, vendor, learnedMappings) {
     }
   }
 
-  // Layer 2: Try all vendor patterns if vendor is unknown
+  // Layer 3: Try all vendor patterns if vendor is unknown
   if (vendor === 'Unknown') {
     for (const [v, data] of Object.entries(vendorPatterns)) {
       for (const pattern of data.patterns) {
@@ -76,26 +112,6 @@ function interpretLine(line, vendor, learnedMappings) {
             source: `Inferred (${v} pattern)`,
           };
         }
-      }
-    }
-  }
-
-  // Layer 3: Learned mappings
-  if (learnedMappings && learnedMappings.length > 0) {
-    for (const mapping of learnedMappings) {
-      const mappingRegex = new RegExp(mapping.pattern, 'i');
-      if (mappingRegex.test(line.trimmed)) {
-        const control = semanticControls.find(c => c.semanticParameter === mapping.semantic);
-        return {
-          ...line,
-          state: 'LEARNED',
-          semantic: mapping.semantic,
-          value: mapping.value,
-          control: control || null,
-          confidence: mapping.confidence || 97,
-          source: 'Learned Mapping',
-          learnedFrom: mapping.source || 'Administrator',
-        };
       }
     }
   }

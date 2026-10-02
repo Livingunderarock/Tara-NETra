@@ -309,8 +309,8 @@ body::before {
 /* ─── Main Content Canvas ─── */
 .main-content {
   flex: 1;
-  padding: var(--space-2xl) var(--space-3xl);
-  max-width: 1260px;
+  padding: var(--space-xl) var(--space-2xl);
+  max-width: 1440px;
   margin: 0 auto;
   width: calc(100% - 240px);
 }
@@ -1065,80 +1065,241 @@ body::before {
    TRAINING STUDIO (TĀRĀ LEARNING STUDIO)
    ═══════════════════════════════════════════════════════════════ */
 
-.learning-transition-card {
-  background: var(--color-bg-surface);
-  border: 1px solid rgba(176, 138, 60, 0.35);
-  border-radius: var(--radius-xs);
-  padding: var(--space-lg) var(--space-xl);
-  margin-bottom: var(--space-xl);
+/* Studio Action Bar */
+.studio-action-bar {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  gap: var(--space-md);
-}
-
-.learning-state-box {
-  text-align: center;
-}
-
-.learning-state-box .state-caption {
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: var(--color-ink-muted);
-}
-
-.learning-state-box .state-title {
-  font-family: var(--font-serif);
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin: 2px 0;
-}
-
-.learning-state-box .state-score {
-  font-size: 0.74rem;
-  color: var(--color-ink-secondary);
-}
-
-.learning-divider-arrow {
-  color: var(--color-ochre);
-  font-size: 1.3rem;
-  font-weight: 300;
-}
-
-/* Training 3-Column Layout */
-.training-studio-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-xl);
-  align-items: start;
-}
-
-.training-item-card {
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+  padding: 10px var(--space-md);
   background: var(--color-bg-surface);
   border: var(--border-hairline);
   border-radius: var(--radius-xs);
-  padding: var(--space-md);
-  margin-bottom: var(--space-sm);
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.studio-stats-chips {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.studio-chip {
+  font-size: 0.76rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-ink-primary);
+}
+
+.studio-chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.btn-batch-learn {
+  background: rgba(166, 106, 44, 0.14);
+  color: var(--color-indigo);
+  border: 1px solid var(--color-ochre);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-batch-learn:hover:not(:disabled) {
+  background: var(--color-ochre);
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-subtle);
+}
+
+.btn-batch-learn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: rgba(112, 105, 92, 0.3);
+}
+
+/* Master-Detail Split Workbench (Zero Scroll Outside) */
+.learning-workbench {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+/* Left Pane: Construct Ledger */
+.constructs-ledger-pane {
+  background: var(--color-bg-surface);
+  border: var(--border-hairline);
+  border-radius: var(--radius-xs);
+  display: flex;
+  flex-direction: column;
+}
+
+.ledger-pane-header {
+  padding: 10px var(--space-md);
+  border-bottom: var(--border-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-bg-parchment);
+}
+
+.ledger-pane-title {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--color-ink-primary);
+  font-weight: 700;
+}
+
+.ledger-scroll-area {
+  max-height: calc(100vh - 300px);
+  min-height: 380px;
+  overflow-y: auto;
+  padding: var(--space-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Compact Construct Row */
+.construct-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--color-bg-base);
+  border: 1px solid rgba(88, 80, 67, 0.15);
+  border-radius: var(--radius-xs);
   cursor: pointer;
   transition: all var(--transition-fast);
   border-left: 3px solid var(--color-ochre);
+  gap: var(--space-sm);
 }
 
-.training-item-card:hover {
-  background: var(--color-bg-subtle);
+.construct-row:hover {
+  background: var(--color-bg-hover);
+  border-color: rgba(88, 80, 67, 0.35);
 }
 
-.training-item-card.selected {
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-indigo);
+.construct-row.selected {
+  background: var(--color-bg-surface-elevated);
+  border-color: var(--color-indigo);
   border-left: 3px solid var(--color-indigo);
+  box-shadow: var(--shadow-subtle);
+}
+
+.construct-row.taught {
+  border-left-color: var(--color-pass);
+  background: rgba(45, 107, 63, 0.05);
+}
+
+.construct-row-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.construct-line-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-ink-muted);
+  background: var(--color-bg-subtle);
+  padding: 2px 6px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.construct-cmd-text {
+  font-family: var(--font-mono);
+  font-size: 0.77rem;
+  color: var(--color-ink-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.construct-cmd-text.taught {
+  color: var(--color-pass);
+}
+
+.construct-hypothesis-pill {
+  font-size: 0.68rem;
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+  flex-shrink: 0;
+}
+
+.construct-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-inline-accept {
+  padding: 3px 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(45, 107, 63, 0.12);
+  color: var(--color-pass);
+  border: 1px solid rgba(45, 107, 63, 0.35);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-inline-accept:hover {
+  background: var(--color-pass);
+  color: #FFFFFF;
+}
+
+/* Right Pane: Sticky Teaching Desk */
+.teaching-desk-pane {
+  position: sticky;
+  top: var(--space-md);
+  max-height: calc(100vh - 240px);
+  overflow-y: auto;
+}
+
+.teaching-desk-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-gold);
+  border-radius: var(--radius-xs);
+  padding: var(--space-lg);
   box-shadow: var(--shadow-card);
 }
 
-.training-item-card.taught {
-  border-left-color: var(--color-pass);
-  opacity: 0.7;
+.teaching-desk-empty {
+  background: var(--color-bg-surface);
+  border: var(--border-hairline);
+  border-radius: var(--radius-xs);
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Form inputs in Training Studio */

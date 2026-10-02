@@ -103,13 +103,29 @@ export function getLearnedMappings() {
 
 export function saveLearnedMapping(mapping) {
   const mappings = getLearnedMappings();
-  mapping.id = Date.now();
+  mapping.id = Date.now() + Math.floor(Math.random() * 1000);
   mapping.timestamp = new Date().toISOString();
   mappings.push(mapping);
   localStorage.setItem(MAPPINGS_KEY, JSON.stringify(mappings));
   // Also save to IndexedDB
   dbAdd(STORES.MAPPINGS, mapping).catch(() => {});
   return mapping;
+}
+
+export function saveLearnedMappingsBatch(newMappingsList) {
+  const mappings = getLearnedMappings();
+  const now = Date.now();
+  const timestamp = new Date().toISOString();
+
+  newMappingsList.forEach((m, idx) => {
+    m.id = now + idx;
+    m.timestamp = timestamp;
+    mappings.push(m);
+    dbAdd(STORES.MAPPINGS, m).catch(() => {});
+  });
+
+  localStorage.setItem(MAPPINGS_KEY, JSON.stringify(mappings));
+  return mappings;
 }
 
 export function deleteLearnedMapping(id) {
