@@ -1,4 +1,4 @@
-// TĀRĀ Intelligence Core — Real Calculated Learning Impact Engine
+// Tārā Intelligence Core — Real Calculated Learning Impact Engine
 // Quantifies the exact delta in compliance and semantic evaluation
 // before vs after Human-in-the-Loop knowledge inscription.
 // NO MOCK DATA. 100% computed from deterministic compliance engine.

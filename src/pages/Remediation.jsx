@@ -10,7 +10,7 @@ export default function Remediation({ complianceResult, analysisResult }) {
         <div className="page-header">
           <div className="page-title-group">
             <div className="page-tag">Actionable Resolution</div>
-            <h1 className="page-title">TĀRĀ Resolve</h1>
+            <h1 className="page-title">Tārā Resolve</h1>
             <div className="page-subtitle">Technical remediation instructions</div>
           </div>
         </div>
@@ -31,7 +31,7 @@ export default function Remediation({ complianceResult, analysisResult }) {
       <div className="page-header">
         <div className="page-title-group">
           <div className="page-tag">Technical Resolution</div>
-          <h1 className="page-title">TĀRĀ Resolve</h1>
+          <h1 className="page-title">Tārā Resolve</h1>
           <div className="page-subtitle">
             {failures.length} remediation directives for {analysisResult?.deviceName || 'device'} ({vendor})
           </div>

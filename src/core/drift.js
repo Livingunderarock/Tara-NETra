@@ -1,4 +1,4 @@
-// TĀRĀ Security Semantic Drift Engine
+// Tārā Security Semantic Drift Engine
 // Compares the underlying SECURITY MEANING of two configurations rather than simple text diffs.
 // Distinguishes cosmetic configuration changes (e.g. comments, whitespace, non-security directives)
 // from high-severity security baseline alterations.

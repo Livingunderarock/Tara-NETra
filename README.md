@@ -42,28 +42,28 @@ Historically, security compliance auditing has required:
 
 ## 2. Core Engine & Backend Architecture (100% Client-Side)
 
-TĀRĀ-NETRA operates entirely within the user's browser, utilizing the browser as a hardened, high-performance execution environment. No server-side runtime, cloud API, or remote telemetry is required.
+Tārā-NETra operates entirely within the user's browser, utilizing the browser as a hardened, high-performance execution environment. No server-side runtime, cloud API, or remote telemetry is required.
 
 ```
                       GITHUB PAGES / STATIC WEB SERVER
                                       │
                                       ▼
                       ┌───────────────────────────────┐
-                      │      TĀRĀ-NETRA Client        │
+                      │      Tārā-NETra Client        │
                       │    (React 19 + Vite Engine)   │
                       └───────────────┬───────────────┘
                                       │
         ┌─────────────────────────────┼─────────────────────────────┐
         ▼                             ▼                             ▼
 ┌──────────────┐              ┌──────────────┐              ┌──────────────┐
-│ Ingestion &  │              │   Learning   │              │ TĀRĀ PROOF   │
+│ Ingestion &  │              │   Learning   │              │ Tārā PROOF   │
 │ Normalizer   │              │   Studio     │              │ Report Engine│
 └───────┬──────┘              └───────┬──────┘              └───────┬──────┘
         │                             │                             │
         └──────────────────────┬──────┘                             │
                                ▼                                    │
                ┌───────────────────────────────┐                    │
-               │    TĀRĀ Intelligence Core     │                    │
+               │    Tārā Intelligence Core     │                    │
                │ (5-Layer Semantic Interpreter)│                    │
                └───────────────┬───────────────┘                    │
                                │                                    │
@@ -76,7 +76,7 @@ TĀRĀ-NETRA operates entirely within the user's browser, utilizing the browser 
                ┌───────────────┴───────────────┐                    │
                ▼                               ▼                    │
 ┌──────────────────────────────┐ ┌───────────────────────────┐      │
-│ Deterministic Audit Engine   │ │ TĀRĀ Persistent Memory    │      │
+│ Deterministic Audit Engine   │ │ Tārā Persistent Memory    │      │
 │ ├── CIS Benchmarks (v2.0)    │ │ ├── localStorage (Sync)   │      │
 │ ├── NIST SP 800-53 (Rev 5)   │ │ └── IndexedDB (Dual-Tier) │      │
 │ ├── DISA STIGs (SRG-APP)     │ └───────────────────────────┘      │
@@ -86,7 +86,7 @@ TĀRĀ-NETRA operates entirely within the user's browser, utilizing the browser 
                ▼                    (SHA-256 Hashing)               │
 ┌──────────────────────────────┐               │                    │
 │ Findings, Heatmap & Debt     │               ▼                    ▼
-│ + TĀRĀ RESOLVE CLI Fixes     │ ════════════► Audit-Grade Evidence PDF
+│ + Tārā RESOLVE CLI Fixes     │ ════════════► Audit-Grade Evidence PDF
 └──────────────────────────────┘
 ```
 
@@ -95,7 +95,7 @@ TĀRĀ-NETRA operates entirely within the user's browser, utilizing the browser 
 When a configuration is analyzed, each CLI line traverses a strict hierarchical resolution pipeline implemented in [`interpreter.js`](file:///c:/Users/manas/Documents/SIH%202026/Tara-NETra/src/core/interpreter.js):
 
 1. **Layer 1: Learned Mappings (Human Ground Truth — 97% Confidence)**:
-   - Queries persistent TĀRĀ Memory for administrator-taught regex patterns.
+   - Queries persistent Tārā Memory for administrator-taught regex patterns.
    - Evaluated first so that human decisions take absolute precedence over generic automated heuristics.
    - Directly assigns the taught SBM category and flags the directive as `✓ LEARNED`.
 2. **Layer 2: Exact Vendor Pattern Matching (95–100% Confidence)**:
@@ -133,9 +133,9 @@ While machine learning and heuristic deduction assist in understanding CLI synta
 - **DISA STIGs** (SRG-APP)
 - **ISO/IEC 27001:2022**
 
-### 2.4 TĀRĀ Memory & Dual Persistence Architecture
+### 2.4 Tārā Memory & Dual Persistence Architecture
 
-TĀRĀ-NETRA features a zero-maintenance, dual-tier local persistence architecture implemented in [`storage.js`](file:///c:/Users/manas/Documents/SIH%202026/Tara-NETra/src/services/storage.js):
+Tārā-NETra features a zero-maintenance, dual-tier local persistence architecture implemented in [`storage.js`](file:///c:/Users/manas/Documents/SIH%202026/Tara-NETra/src/services/storage.js):
 - **Fast Synchronous Tier (`localStorage`)**: Maintains immediate cache of taught rules, UI preferences, and theme tokens for sub-millisecond access during interpretation.
 - **High-Capacity Durable Tier (`IndexedDB`)**: Stores comprehensive configuration audit histories, full diff snapshots, and batch learning models.
 - **Batch Training API (`saveLearnedMappingsBatch`)**: Atomically writes multi-rule inscriptions with cryptographic timestamping.
@@ -144,14 +144,14 @@ TĀRĀ-NETRA features a zero-maintenance, dual-tier local persistence architectu
 
 ## 3. Frontend Architecture & Ancient Indian Astronomical Design System
 
-TĀRĀ-NETRA avoids generic SaaS dashboards in favor of an **Ancient Indian Astronomical Instrument and Manuscript Design System**, drawing inspiration from Jantar Mantar observatories, Yantra geometry, and classical Indian scholar traditions.
+Tārā-NETra avoids generic SaaS dashboards in favor of an **Ancient Indian Astronomical Instrument and Manuscript Design System**, drawing inspiration from Jantar Mantar observatories, Yantra geometry, and classical Indian scholar traditions.
 
 ```
        ASTRONOMICAL CORE (YANTRA SBM SCHEMATIC)
                     SECURITY SEMANTICS
                             ●
                        ╭────┴────╮
-          VENDORS  ●──┤ TĀRĀ CORE ├──●  FRAMEWORKS
+          VENDORS  ●──┤ Tārā CORE ├──●  FRAMEWORKS
                        ╰────┬────╯
                             ●
                     REMEDIATION & PROOF
@@ -187,10 +187,10 @@ TĀRĀ-NETRA avoids generic SaaS dashboards in favor of an **Ancient Indian Astr
    - 6-step interactive modal walkthrough detailing every feature: Analyzer, Training Studio, Compliance Dashboard, Heatmap, Findings, and PDF Evidence.
 5. **Multi-Framework Compliance Dashboard ([`Compliance.jsx`](file:///c:/Users/manas/Documents/SIH%202026/Tara-NETra/src/pages/Compliance.jsx))**:
    - Radar framework metrics, category heatmap matrix, and weighted **Security Debt** vulnerability scores.
-6. **TĀRĀ RESOLVE: Explainable Remediation ([`Remediation.jsx`](file:///c:/Users/manas/Documents/SIH%202026/Tara-NETra/src/pages/Remediation.jsx))**:
+6. **Tārā RESOLVE: Explainable Remediation ([`Remediation.jsx`](file:///c:/Users/manas/Documents/SIH%202026/Tara-NETra/src/pages/Remediation.jsx))**:
    - 5-step explainability chain: `Raw CLI → SBM Interpretation → Security Control → Framework → Finding → Remediation → Verification`.
    - Generates copy-pasteable CLI commands tailored to the target vendor OS and verification test scripts.
-7. **TĀRĀ PROOF: Tamper-Evident Audit Evidence ([`Evidence.jsx`](file:///c:/Users/manas/Documents/SIH%202026/Tara-NETra/src/pages/Evidence.jsx))**:
+7. **Tārā PROOF: Tamper-Evident Audit Evidence ([`Evidence.jsx`](file:///c:/Users/manas/Documents/SIH%202026/Tara-NETra/src/pages/Evidence.jsx))**:
    - Computes SHA-256 hashes of source configurations and audit outputs using the browser's native Web Crypto API.
    - One-click export of audit-grade, branded PDF compliance packages.
 
@@ -198,7 +198,7 @@ TĀRĀ-NETRA avoids generic SaaS dashboards in favor of an **Ancient Indian Astr
 
 ## 4. Security Controls & Framework Crosswalk
 
-TĀRĀ-NETRA deterministically assesses 16 critical network security controls cross-mapped across international frameworks:
+Tārā-NETra deterministically assesses 16 critical network security controls cross-mapped across international frameworks:
 
 | Control ID | Semantic Concept | CIS Benchmark (v2.0) | NIST SP 800-53 (Rev 5) | DISA STIG | ISO/IEC 27001:2022 |
 |:----------:|:-----------------|:--------------------:|:----------------------:|:---------:|:------------------:|
@@ -223,29 +223,29 @@ TĀRĀ-NETRA deterministically assesses 16 critical network security controls cr
 
 ## 5. Two-Minute Live Demonstration Script
 
-Follow this curated sequence to demonstrate the core value proposition of TĀRĀ-NETRA:
+Follow this curated sequence to demonstrate the core value proposition of Tārā-NETra:
 
 1. **The Core Premise (0:00 - 0:15)**:
-   - Present TĀRĀ-NETRA: *"Enterprise networks don't speak one configuration language. TĀRĀ-NETRA learns the security meaning behind unfamiliar syntax."*
+   - Present Tārā-NETra: *"Enterprise networks don't speak one configuration language. Tārā-NETra learns the security meaning behind unfamiliar syntax."*
    - Highlight the central architectural axiom: *"Different syntax. One security language."*
 
 2. **Ingest Unknown Vendor Configuration (0:15 - 0:30)**:
    - Navigate to `#/analyze` and click **"Unknown Device A (BRANCH-GW-04)"**.
-   - Note `Vendor: UNKNOWN`. TĀRĀ recognizes baseline directives using heuristic deduction, but unfamiliar constructs remain flagged.
+   - Note `Vendor: UNKNOWN`. Tārā recognizes baseline directives using heuristic deduction, but unfamiliar constructs remain flagged.
    - Highlight the unknown construct on line 10: `set secure-admin session-limit 900`.
 
-3. **Inspect TĀRĀ's Semantic Hypothesis (0:30 - 0:45)**:
-   - Select `set secure-admin session-limit 900` to inspect TĀRĀ's reasoning:
+3. **Inspect Tārā's Semantic Hypothesis (0:30 - 0:45)**:
+   - Select `set secure-admin session-limit 900` to inspect Tārā's reasoning:
      - Classification: `UNKNOWN`
      - Hypothesis: `Administrative Session Timeout` (78% confidence)
      - SBM Binding: Unresolved until human confirmation.
 
-4. **Human Teaches & TĀRĀ Generalizes (0:45 - 1:00)**:
-   - Click **"Teach TĀRĀ this Construct"** to enter the **TĀRĀ Learning Studio** (`#/training`).
+4. **Human Teaches & Tārā Generalizes (0:45 - 1:00)**:
+   - Click **"Teach Tārā this Construct"** to enter the **Tārā Learning Studio** (`#/training`).
    - The administrator confirms the semantic concept: `ADMIN_SESSION_TIMEOUT` (parameter: 900s).
-   - TĀRĀ does **not** simply memorize the exact CLI line. It synthesizes a **generalized parameterized pattern**:
+   - Tārā does **not** simply memorize the exact CLI line. It synthesizes a **generalized parameterized pattern**:
      `set secure-admin session-limit <VALUE>`
-   - Click **"Accept & Learn Generalized Pattern ✦"**. The mapping is inscribed into persistent **TĀRĀ Memory**.
+   - Click **"Accept & Learn Generalized Pattern ✦"**. The mapping is inscribed into persistent **Tārā Memory**.
 
 5. **Test Unseen Device B — Generalization Proof (1:00 - 1:15)**:
    - Return to `#/analyze` and load **"✦ Unseen Device B (CAMPUS-GW-05)"**.
@@ -254,7 +254,7 @@ Follow this curated sequence to demonstrate the core value proposition of TĀRĀ
      - `✓ LEARNED PATTERN MATCH`
      - Semantic Control: `ADMIN_SESSION_TIMEOUT`
      - Value: `600 seconds`
-     - Knowledge Source: `TĀRĀ MEMORY`
+     - Knowledge Source: `Tārā MEMORY`
      - Proof Banner: *"This configuration was not used during training. Pattern learned from another configuration."*
 
 6. **Learning Impact on Compliance (1:15 - 1:30)**:
@@ -266,9 +266,9 @@ Follow this curated sequence to demonstrate the core value proposition of TĀRĀ
    - Navigate to `#/findings` and click any failing control.
    - Walk through the explainability chain: `Raw CLI → SBM Interpretation → Security Control → Framework Citation → Result`.
 
-8. **TĀRĀ Resolve & Cryptographic SHA-256 Proof (1:45 - 2:00)**:
-   - Switch to `#/remediation` (**TĀRĀ Resolve**): show vendor-specific remediation directive and verification command. Real devices are never automatically modified.
-   - Navigate to `#/evidence` (**TĀRĀ Proof**): compute native Web Crypto **SHA-256** digests and generate the archival PDF audit certificate.
+8. **Tārā Resolve & Cryptographic SHA-256 Proof (1:45 - 2:00)**:
+   - Switch to `#/remediation` (**Tārā Resolve**): show vendor-specific remediation directive and verification command. Real devices are never automatically modified.
+   - Navigate to `#/evidence` (**Tārā Proof**): compute native Web Crypto **SHA-256** digests and generate the archival PDF audit certificate.
    - Conclude: *"Different syntax. One security language."*
 
 ---
@@ -307,10 +307,10 @@ npm run preview
 
 ## 7. Automated Deployment to GitHub Pages
 
-TĀRĀ-NETRA requires zero backend infrastructure and is configured for automated deployment to GitHub Pages via [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml):
+Tārā-NETra requires zero backend infrastructure and is configured for automated deployment to GitHub Pages via [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml):
 
 ```yaml
-name: Deploy TARA-NETRA
+name: Deploy Tārā-NETra
 on:
   push:
     branches: [ main ]
@@ -349,7 +349,7 @@ To enable GitHub Pages in your repository:
 ## 8. Data Privacy & Security Sovereignty
 
 - **100% In-Browser Execution**: Network configurations, topology diagrams, hostnames, and credentials never leave the user's browser.
-- **Air-Gapped Operation**: Once assets are cached by the browser, TĀRĀ-NETRA functions fully in air-gapped and disconnected environments.
+- **Air-Gapped Operation**: Once assets are cached by the browser, Tārā-NETra functions fully in air-gapped and disconnected environments.
 - **Cryptographic Evidence Seals**: Web Crypto API SHA-256 hashing guarantees tamper-evident validation for all inputs and assessment artifacts.
 - **No Third-Party Telemetry**: Zero analytics trackers, third-party cookies, or telemetry beacons.
 
@@ -357,9 +357,9 @@ To enable GitHub Pages in your repository:
 
 ## 9. Project Metadata & Hackathon Information
 
-- **Project**: TĀRĀ-NETRA (तारानेत्र)
+- **Project**: Tārā-NETra (तारानेत्र)
 - **Initiative**: Smart India Hackathon (SIH 2026)
 - **Theme**: Trustworthy Adaptive Risk Analytics — Network Reasoning & Assurance
 - **License**: [MIT License](LICENSE)
 
-**TĀRĀ-NETRA: Understand. Learn. Audit. Assure.**
+**Tārā-NETra: Understand. Learn. Audit. Assure.**

@@ -35,7 +35,7 @@ export function interpretLine(line, vendor, learnedMappings) {
     return { ...line, state: 'SKIP', semantic: null, confidence: 100 };
   }
 
-  // Layer 1: Learned mappings (Administrator-taught ground truth via TĀRĀ Memory)
+  // Layer 1: Learned mappings (Administrator-taught ground truth via Tārā Memory)
   // Evaluates generalized parameterized patterns first so human decisions take precedence.
   if (learnedMappings && learnedMappings.length > 0) {
     for (const mapping of learnedMappings) {
@@ -49,7 +49,7 @@ export function interpretLine(line, vendor, learnedMappings) {
           value: matchResult.extractedValue,
           control: control || null,
           confidence: matchResult.confidence || 97,
-          source: 'TĀRĀ Memory',
+          source: 'Tārā Memory',
           provenance: matchResult.provenance || (matchResult.isUnseenVariant ? '✓ LEARNED PATTERN MATCH' : '✓ HUMAN LEARNED'),
           learnedFrom: mapping.originDevice || mapping.source || 'Administrator',
           learnedPattern: matchResult.learnedPattern,

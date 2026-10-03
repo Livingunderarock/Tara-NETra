@@ -14,7 +14,7 @@ export default function Evidence({ analysisResult, complianceResult, configText,
     try {
       const result = await generateReport(analysisResult, complianceResult, configText);
       setHashes(result);
-      showToast('TĀRĀ PROOF audit certificate generated');
+      showToast('Tārā PROOF audit certificate generated');
     } catch (err) {
       showToast(`Error: ${err.message}`, 'error');
     }
@@ -36,7 +36,7 @@ export default function Evidence({ analysisResult, complianceResult, configText,
       <div className="page-header">
         <div className="page-title-group">
           <div className="page-tag">Cryptographic Assurance</div>
-          <h1 className="page-title">TĀRĀ Proof</h1>
+          <h1 className="page-title">Tārā Proof</h1>
           <div className="page-subtitle">
             Audit-ready evidence generation with tamper-evident SHA-256 verification
           </div>
@@ -159,7 +159,7 @@ export default function Evidence({ analysisResult, complianceResult, configText,
             <div className="card" style={{ textAlign: 'center', padding: 'var(--space-xl)' }}>
               <span className="empty-state-symbol">◎</span>
               <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 600, color: 'var(--color-indigo)', marginBottom: 'var(--space-xs)' }}>
-                TĀRĀ PROOF Certificate
+                Tārā PROOF Certificate
               </div>
               <div style={{ fontSize: '0.76rem', color: 'var(--color-ink-muted)', marginBottom: 'var(--space-lg)' }}>
                 Render an archival PDF audit certificate with tamper-evident cryptographic digests and full evidence chain.
@@ -172,7 +172,7 @@ export default function Evidence({ analysisResult, complianceResult, configText,
                 disabled={generating}
                 style={{ width: '100%' }}
               >
-                {generating ? 'Compiling Audit Certificate...' : 'Generate TĀRĀ PROOF PDF'}
+                {generating ? 'Compiling Audit Certificate...' : 'Generate Tārā PROOF PDF'}
               </button>
 
               <div style={{ fontSize: '0.68rem', color: 'var(--color-ink-muted)', marginTop: 'var(--space-md)' }}>

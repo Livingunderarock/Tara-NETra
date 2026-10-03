@@ -29,20 +29,20 @@ const tutorialSteps = [
   },
   {
     id: 'learning-studio',
-    title: 'TĀRĀ Learning Studio',
+    title: 'Tārā Learning Studio',
     tagline: 'Human-in-the-Loop Intelligence',
     icon: '⚚',
     path: '/training',
     description:
-      'When new, proprietary, or unknown vendor commands are ingested, TĀRĀ does not guess blindly. The Learning Studio provides an interactive scholar desk where network administrators teach TĀRĀ the true security meaning.',
+      'When new, proprietary, or unknown vendor commands are ingested, Tārā does not guess blindly. The Learning Studio provides an interactive scholar desk where network administrators teach Tārā the true security meaning.',
     howToUse:
-      'Review TĀRĀ’s initial hypothesis, select the canonical security control (e.g. SSH_V2_ENFORCED, ADMIN_SESSION_TIMEOUT), confirm the semantic value, and save the mapping to permanently expand system intelligence.',
+      'Review Tārā’s initial hypothesis, select the canonical security control (e.g. SSH_V2_ENFORCED, ADMIN_SESSION_TIMEOUT), confirm the semantic value, and save the mapping to permanently expand system intelligence.',
     cybersecurityImpact:
       'Prevents blind audit gaps when organizations deploy novel firmware versions or custom vendor appliances.'
   },
   {
     id: 'knowledge-memory',
-    title: 'TĀRĀ Memory',
+    title: 'Tārā Memory',
     tagline: 'Curated Knowledge Archive',
     icon: '☵',
     path: '/knowledge',
@@ -51,7 +51,7 @@ const tutorialSteps = [
     howToUse:
       'Search through learned commands, filter by category or vendor dialect, inspect rule confidence, or export the entire knowledge bank as a portable JSON package for air-gapped security enclaves.',
     cybersecurityImpact:
-      'Ensures organizational knowledge retention. What one senior engineer teaches TĀRĀ benefits every subsequent network audit across the enterprise.'
+      'Ensures organizational knowledge retention. What one senior engineer teaches Tārā benefits every subsequent network audit across the enterprise.'
   },
   {
     id: 'compliance-ledger',
@@ -73,7 +73,7 @@ const tutorialSteps = [
     icon: '△',
     path: '/findings',
     description:
-      'Unlike black-box AI tools, TĀRĀ guarantees 100% explainability. Every single finding displays a rigorous 5-step provenance chain from raw configuration line to audit conclusion.',
+      'Unlike black-box AI tools, Tārā guarantees 100% explainability. Every single finding displays a rigorous 5-step provenance chain from raw configuration line to audit conclusion.',
     howToUse:
       'Filter findings by severity (High, Medium, Low) or framework. Click any finding to inspect the Raw CLI → Semantic Interpretation → Security Control → Benchmark Rule → Audit Verdict progression.',
     cybersecurityImpact:
@@ -81,7 +81,7 @@ const tutorialSteps = [
   },
   {
     id: 'remediation-resolve',
-    title: 'TĀRĀ Resolve',
+    title: 'Tārā Resolve',
     tagline: 'Directives & Verification Checks',
     icon: '↻',
     path: '/remediation',
@@ -94,7 +94,7 @@ const tutorialSteps = [
   },
   {
     id: 'evidence-proof',
-    title: 'TĀRĀ Proof',
+    title: 'Tārā Proof',
     tagline: 'Cryptographic Integrity & PDF Certificates',
     icon: '◎',
     path: '/evidence',

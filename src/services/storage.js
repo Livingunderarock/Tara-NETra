@@ -1,4 +1,4 @@
-// TĀRĀ Storage Service — IndexedDB + localStorage for persistence
+// Tārā Storage Service — IndexedDB + localStorage for persistence
 
 const DB_NAME = 'tara-netra-db';
 const DB_VERSION = 1;

@@ -317,7 +317,7 @@ export default function Findings({ complianceResult, analysisResult, configText 
                   className="btn btn-primary btn-sm"
                   onClick={() => navigate('/remediation')}
                 >
-                  Open TĀRĀ Resolve ✦
+                  Open Tārā Resolve ✦
                 </button>
               </div>
             </div>

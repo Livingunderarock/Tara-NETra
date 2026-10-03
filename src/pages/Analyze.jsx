@@ -155,7 +155,7 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
             </div>
           </div>
 
-          {/* TĀRĀ Learning Proof: Visual Proof Architecture */}
+          {/* Tārā Learning Proof: Visual Proof Architecture */}
           {unseenLearnedLines.length > 0 ? (
             <div className="card" style={{
               padding: '16px 20px',
@@ -169,7 +169,7 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span className="badge badge-learned" style={{ fontSize: '0.72rem', padding: '3px 8px' }}>
-                      ✓ TĀRĀ LEARNING PROOF
+                      ✓ Tārā LEARNING PROOF
                     </span>
                     <span style={{ fontSize: '0.72rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>
                       Generalization Confirmed
@@ -185,7 +185,7 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
 
                 <div style={{ textAlign: 'right' }}>
                   <span className="badge badge-recognized" style={{ fontSize: '0.68rem' }}>
-                    Knowledge Source: TĀRĀ Memory
+                    Knowledge Source: Tārā Memory
                   </span>
                 </div>
               </div>
@@ -254,7 +254,7 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
                   ✓ HUMAN LEARNED
                 </span>
                 <span style={{ fontSize: '0.82rem', color: 'var(--color-ink-primary)' }}>
-                  <strong>Ground Truth Active:</strong> {analysisResult.stats.learned} construct(s) recognized via TĀRĀ Memory.
+                  <strong>Ground Truth Active:</strong> {analysisResult.stats.learned} construct(s) recognized via Tārā Memory.
                 </span>
               </div>
               <button
@@ -301,9 +301,9 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
               </div>
             </div>
 
-            {/* Panel 2: TĀRĀ Interpretation */}
+            {/* Panel 2: Tārā Interpretation */}
             <div className="panel">
-              <div className="panel-title">TĀRĀ Interpretation</div>
+              <div className="panel-title">Tārā Interpretation</div>
               <div className="interpretation-list">
                 {analysisResult.lines.filter(l => l.state !== 'SKIP').map((line, i) => (
                   <div
@@ -399,7 +399,7 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
 
                   {selectedLine.isUnseenVariant && (
                     <div className="detail-section" style={{ background: 'rgba(84, 58, 122, 0.12)', padding: '10px 12px', borderRadius: 'var(--radius-xs)', border: '1px dashed var(--color-purple)' }}>
-                      <div className="detail-label" style={{ color: 'var(--color-purple)', fontWeight: 600 }}>TĀRĀ Learning Proof (Generalization)</div>
+                      <div className="detail-label" style={{ color: 'var(--color-purple)', fontWeight: 600 }}>Tārā Learning Proof (Generalization)</div>
                       <div style={{ fontSize: '0.78rem', color: 'var(--color-ink-primary)', marginTop: '2px' }}>
                         Pattern learned from another configuration (<strong>{selectedLine.originDevice}</strong>)
                       </div>
@@ -432,7 +432,7 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
                         className="btn btn-primary btn-sm"
                         onClick={() => navigate('/training')}
                       >
-                        Teach TĀRĀ this Construct
+                        Teach Tārā this Construct
                       </button>
                     </div>
                   )}

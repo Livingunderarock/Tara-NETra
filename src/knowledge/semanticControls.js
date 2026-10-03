@@ -1,4 +1,4 @@
-// TĀRĀ-NETRA Security Semantic Controls Database
+// Tārā-NETra Security Semantic Controls Database
 // Maps vendor-neutral security concepts to framework requirements
 
 export const semanticControls = [

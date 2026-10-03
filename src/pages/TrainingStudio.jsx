@@ -107,8 +107,8 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
         <div className="page-header">
           <div className="page-title-group">
             <div className="page-tag">Adaptive Reasoning</div>
-            <h1 className="page-title">TĀRĀ Learning Studio</h1>
-            <div className="page-subtitle">Teach TĀRĀ the security meaning of unfamiliar configuration</div>
+            <h1 className="page-title">Tārā Learning Studio</h1>
+            <div className="page-subtitle">Teach Tārā the security meaning of unfamiliar configuration</div>
           </div>
         </div>
         <div className="empty-state">
@@ -210,7 +210,7 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
 
     setTaught(prev => ({ ...prev, ...newlyTaught }));
     setSelectedItem(null);
-    showToast(`Batch Inscribed: ${untaughtLines.length} generalized patterns into TĀRĀ Memory!`);
+    showToast(`Batch Inscribed: ${untaughtLines.length} generalized patterns into Tārā Memory!`);
     setTimeout(() => {
       onReanalyze();
     }, 450);
@@ -232,9 +232,9 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
       <div className="page-header" style={{ marginBottom: 'var(--space-md)' }}>
         <div className="page-title-group">
           <div className="page-tag">Adaptive Knowledge Acquisition</div>
-          <h1 className="page-title">TĀRĀ Learning Studio</h1>
+          <h1 className="page-title">Tārā Learning Studio</h1>
           <div className="page-subtitle">
-            Teach TĀRĀ the security meaning of unfamiliar vendor configurations
+            Teach Tārā the security meaning of unfamiliar vendor configurations
           </div>
         </div>
       </div>
@@ -259,7 +259,7 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
           className="btn-batch-learn"
           onClick={handleBatchInscribeAll}
           disabled={untaughtCount === 0}
-          title="Batch inscribe all detected hypotheses into TĀRĀ Memory in one click"
+          title="Batch inscribe all detected hypotheses into Tārā Memory in one click"
         >
           <span>✧</span>
           <span>Learn All Hypotheses ({untaughtCount})</span>
@@ -330,7 +330,7 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
                     key={line.lineNumber}
                     className={`construct-row ${isSelected ? 'selected' : ''} ${isTaught ? 'taught' : ''}`}
                     onClick={() => handleSelectRow(line)}
-                    title={isTaught ? 'Inscribed into TĀRĀ Memory' : 'Click to customize mapping on the right'}
+                    title={isTaught ? 'Inscribed into Tārā Memory' : 'Click to customize mapping on the right'}
                   >
                     <div className="construct-row-main">
                       <span className="construct-line-badge">L{line.lineNumber}</span>
@@ -403,7 +403,7 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
                 </div>
               </div>
 
-              {/* Step 2: TĀRĀ Hypothesis */}
+              {/* Step 2: Tārā Hypothesis */}
               {selectedItem.hypothesis && (
                 <div style={{
                   padding: '8px 12px',

@@ -1,4 +1,4 @@
-// TĀRĀ Evidence & Hashing Service — SHA-256 + Audit Certificate PDF Generation
+// Tārā Evidence & Hashing Service — SHA-256 + Audit Certificate PDF Generation
 // Designed as an ancient astronomical manuscript & precision audit document
 
 import jsPDF from 'jspdf';
@@ -101,7 +101,7 @@ export async function generateReport(analysisData, complianceData, configText) {
   doc.setFontSize(11);
   doc.setFont('times', 'italic');
   doc.setTextColor(166, 106, 44);
-  doc.text('TĀRĀ PROOF — Compliance & Verification Audit Certificate', margin, y);
+  doc.text('Tārā PROOF — Compliance & Verification Audit Certificate', margin, y);
   y += 5;
 
   doc.setFontSize(8);

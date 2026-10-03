@@ -75,7 +75,7 @@ export default function Knowledge({ showToast }) {
       <div className="page-header">
         <div className="page-title-group">
           <div className="page-tag">Persistent Knowledge Layer</div>
-          <h1 className="page-title">TĀRĀ Memory</h1>
+          <h1 className="page-title">Tārā Memory</h1>
           <div className="page-subtitle">
             Curated repository of generalized configuration semantics and human-taught ground truths ({mappings.length} rule{mappings.length !== 1 ? 's' : ''} inscribed)
           </div>
@@ -128,7 +128,7 @@ export default function Knowledge({ showToast }) {
           <span className="empty-state-symbol">☵</span>
           <div className="empty-state-text">No learned mappings inscribed in memory</div>
           <div style={{ fontSize: '0.78rem', color: 'var(--color-ink-muted)', marginTop: '4px' }}>
-            Use the TĀRĀ Learning Studio to instruct the system on unfamiliar syntax, or click <strong>"Inscribe Demo Rule"</strong> above.
+            Use the Tārā Learning Studio to instruct the system on unfamiliar syntax, or click <strong>"Inscribe Demo Rule"</strong> above.
           </div>
         </div>
       ) : (
@@ -203,7 +203,7 @@ export default function Knowledge({ showToast }) {
                     {mapping.confidence || 97}% • {mapping.source || 'HUMAN_TRAINED'}
                   </span>
                   <span style={{ fontSize: '0.62rem', color: 'var(--color-gold)', display: 'block', marginTop: '2px' }}>
-                    TĀRĀ Memory
+                    Tārā Memory
                   </span>
                 </div>
                 <button

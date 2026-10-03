@@ -13,14 +13,14 @@
 
 # 1. Executive Summary
 
-TĀRĀ-NETRA is a browser-based, vendor-agnostic network security
+Tārā-NETra is a browser-based, vendor-agnostic network security
 compliance engine designed to solve one of the hardest problems in
 heterogeneous enterprise infrastructure: understanding security
 configuration across different vendors, operating systems, configuration
 syntaxes and security frameworks.
 
 Instead of building a separate parser every time a new vendor or
-unfamiliar configuration structure appears, TĀRĀ-NETRA uses an
+unfamiliar configuration structure appears, Tārā-NETra uses an
 AI-assisted interpretation layer, a vendor-neutral **Security Baseline
 Model (SBM)** and a human-in-the-loop learning mechanism.
 
@@ -28,7 +28,7 @@ The central workflow is:
 
 **UNKNOWN → EXPLAIN → TEACH → LEARN → VERIFY → AUDIT**
 
-A user can upload one or multiple configuration files. TĀRĀ-NETRA
+A user can upload one or multiple configuration files. Tārā-NETra
 identifies recognizable security constructs, highlights unknown or
 low-confidence commands, proposes their semantic meaning, and allows an
 administrator to teach the system through a visual Training Studio.
@@ -37,7 +37,7 @@ Once taught, the semantic mapping is stored in the browser's local
 knowledge base and immediately reused when the configuration is analyzed
 again.
 
-The result is not simply a compliance score. TĀRĀ-NETRA provides an
+The result is not simply a compliance score. Tārā-NETra provides an
 evidence chain:
 
 **Raw CLI → Semantic Meaning → Security Control → Framework Requirement
@@ -48,7 +48,7 @@ audit-oriented workflows.
 
 ------------------------------------------------------------------------
 
-# 2. Why TĀRĀ-NETRA?
+# 2. Why Tārā-NETra?
 
 Enterprise networks do not speak a single configuration language.
 
@@ -63,7 +63,7 @@ Traditional rule-based compliance tools often depend heavily on
 vendor-specific parsers. When syntax changes or an unfamiliar vendor
 appears, parser maintenance becomes a bottleneck.
 
-TĀRĀ-NETRA changes the abstraction.
+Tārā-NETra changes the abstraction.
 
 Instead of asking:
 
@@ -120,9 +120,9 @@ A practical compliance engine must adapt to:
 -   Specialized infrastructure
 -   Evolving configuration syntax
 
-### TĀRĀ-NETRA's response
+### Tārā-NETra's response
 
-  Challenge                     TĀRĀ-NETRA mechanism
+  Challenge                     Tārā-NETra mechanism
   ----------------------------- --------------------------------------------
   Vendor-specific syntax        Semantic normalization
   Unknown commands              Confidence-aware interpretation
@@ -135,11 +135,11 @@ A practical compliance engine must adapt to:
 
 ------------------------------------------------------------------------
 
-# 4. The TĀRĀ-NETRA Experience
+# 4. The Tārā-NETra Experience
 
 ## 4.1 The visual identity
 
-TĀRĀ means **star** and **Netra** means **eye**.
+Tārā means **star** and **Netra** means **eye**.
 
 The interface should therefore feel like a cyber-security command center
 built around the concept of a **guiding eye**.
@@ -150,7 +150,7 @@ built around the concept of a **guiding eye**.
 -   Dark navy surfaces
 -   White/soft-gray typography
 -   Electric cyan for active intelligence
--   Star-gold/golden amber for the TĀRĀ identity
+-   Star-gold/golden amber for the Tārā identity
 -   Red for critical findings
 -   Green for verified compliance
 -   Purple/blue for learning and AI interpretation
@@ -179,7 +179,7 @@ symbolism**
 
 ## Product name
 
-# TĀRĀ-NETRA
+# Tārā-NETra
 
 ### Expansion
 
@@ -197,7 +197,7 @@ Assurance**
 ### Hero statement
 
 > **Different vendors speak different configuration languages.
-> TĀRĀ-NETRA learns the security meaning behind them.**
+> Tārā-NETra learns the security meaning behind them.**
 
 ### Signature workflow
 
@@ -230,7 +230,7 @@ It should feel like a real security product.
 ## Main navigation
 
 ``` text
-TĀRĀ-NETRA
+Tārā-NETra
 ────────────────────────────────────────
 Overview
 Analyze
@@ -252,7 +252,7 @@ The first screen should immediately communicate the innovation.
 ## Hero
 
 ``` text
-TĀRĀ-NETRA
+Tārā-NETra
 
 THE GUIDING EYE
 FOR NETWORK SECURITY
@@ -291,7 +291,7 @@ ASSURANCE
 
 # 8. Overview Dashboard
 
-The dashboard should contain a visual "TĀRĀ Core" at the center.
+The dashboard should contain a visual "Tārā Core" at the center.
 
 ## Top metrics
 
@@ -309,7 +309,7 @@ Never fabricate competition-demo metrics.
 
 ## Main panels
 
-### TĀRĀ Core
+### Tārā Core
 
 A circular visualization showing:
 
@@ -317,7 +317,7 @@ A circular visualization showing:
                 SECURITY
                    ↑
                    |
-VENDOR ←──── TĀRĀ CORE ────→ FRAMEWORK
+VENDOR ←──── Tārā CORE ────→ FRAMEWORK
                    |
                    ↓
               REMEDIATION
@@ -397,7 +397,7 @@ After upload, split the screen into three panels.
 
 ``` text
 ┌────────────────┬──────────────────┬────────────────────┐
-│ RAW CONFIG     │ TĀRĀ INTERPRET    │ SEMANTIC MODEL     │
+│ RAW CONFIG     │ Tārā INTERPRET    │ SEMANTIC MODEL     │
 ├────────────────┼──────────────────┼────────────────────┤
 │ command        │ probable meaning  │ control            │
 │ command        │ probable meaning  │ parameter          │
@@ -419,14 +419,14 @@ Each configuration line receives a state:
 
 This is the part judges should remember.
 
-When TĀRĀ-NETRA encounters an unfamiliar command:
+When Tārā-NETra encounters an unfamiliar command:
 
 ``` text
 UNKNOWN CONFIGURATION CONSTRUCT
 
 > set secure-admin session-limit 900
 
-TĀRĀ-NETRA HYPOTHESIS
+Tārā-NETra HYPOTHESIS
 
 Possible meaning:
 Administrative session timeout
@@ -434,7 +434,7 @@ Administrative session timeout
 Confidence:
 62%
 
-[ TEACH TĀRĀ ]
+[ TEACH Tārā ]
 ```
 
 The Training Studio opens.
@@ -535,14 +535,14 @@ This is the project's strongest demo moment.
 
 Call this:
 
-# TĀRĀ MEMORY
+# Tārā MEMORY
 
 The page displays everything the system has learned.
 
 Example:
 
 ``` text
-TĀRĀ MEMORY
+Tārā MEMORY
 
 17 LEARNED MAPPINGS
 
@@ -570,7 +570,7 @@ The knowledge store should use JSON and browser storage.
 
 # 14. Security Baseline Model
 
-The Security Baseline Model is the heart of TĀRĀ-NETRA.
+The Security Baseline Model is the heart of Tārā-NETra.
 
 Vendor syntax is converted into standardized security concepts.
 
@@ -641,7 +641,7 @@ Framework Control
 
 # 16. Compliance Engine
 
-TĀRĀ-NETRA should use deterministic rules for final compliance
+Tārā-NETra should use deterministic rules for final compliance
 decisions.
 
 AI can interpret configuration.
@@ -857,7 +857,7 @@ This is one of the strongest explainability features.
 
 Call this:
 
-# TĀRĀ RESOLVE
+# Tārā RESOLVE
 
 The remediation view should generate vendor-specific commands from the
 semantic finding.
@@ -903,7 +903,7 @@ prototype.
 
 Call this:
 
-# TĀRĀ PROOF
+# Tārā PROOF
 
 Generate an audit-ready PDF containing:
 
@@ -993,14 +993,14 @@ Actions. citeturn0search0turn0search4
 
 ------------------------------------------------------------------------
 
-# 25. TĀRĀ-NETRA Browser-First Architecture
+# 25. Tārā-NETra Browser-First Architecture
 
 ``` text
                     GITHUB PAGES
                          │
                          ▼
               ┌─────────────────────┐
-              │   TĀRĀ-NETRA WEB UI │
+              │   Tārā-NETra WEB UI │
               │   React / Vite      │
               └──────────┬──────────┘
                          │
@@ -1011,7 +1011,7 @@ Actions. citeturn0search0turn0search4
           │              │              │
           └──────────────┼──────────────┘
                          ▼
-               TĀRĀ INTELLIGENCE CORE
+               Tārā INTELLIGENCE CORE
                          │
         ┌────────────────┼────────────────┐
         ▼                ▼                ▼
@@ -1019,7 +1019,7 @@ Actions. citeturn0search0turn0search4
         │                │                │
         └────────────────┼────────────────┘
                          ▼
-                  TĀRĀ MEMORY
+                  Tārā MEMORY
              IndexedDB / localStorage
                          │
                          ▼
@@ -1189,7 +1189,7 @@ UNKNOWN
 
 The UI can call this:
 
-# TĀRĀ INTELLIGENCE CORE
+# Tārā INTELLIGENCE CORE
 
 The architecture is AI-augmented because it performs:
 
@@ -1292,7 +1292,7 @@ Semantic Security Model
           ↓
 Vendor Syntax Mappings
           ↓
-TĀRĀ Knowledge Pack
+Tārā Knowledge Pack
 ```
 
 Each record should contain:
@@ -1395,7 +1395,7 @@ Semantic analysis:
 AVAILABLE
 ```
 
-TĀRĀ-NETRA can still interpret recognized security concepts.
+Tārā-NETra can still interpret recognized security concepts.
 
 The UI should display:
 
@@ -1541,7 +1541,7 @@ The system should retain analysis snapshots locally.
 
 ------------------------------------------------------------------------
 
-# 42. TĀRĀ Architecture
+# 42. Tārā Architecture
 
 ## Full logical architecture
 
@@ -1552,7 +1552,7 @@ The system should retain analysis snapshots locally.
                                      │
                                      ▼
                     ┌─────────────────────────────┐
-                    │       TĀRĀ-NETRA UI         │
+                    │       Tārā-NETra UI         │
                     │ React + Vite + CSS          │
                     └─────────────┬───────────────┘
                                   │
@@ -1567,7 +1567,7 @@ The system should retain analysis snapshots locally.
              └────────────────────┼────────────────────┘
                                   ▼
                     ┌─────────────────────────────┐
-                    │  TĀRĀ INTELLIGENCE CORE    │
+                    │  Tārā INTELLIGENCE CORE    │
                     │ Interpretation + Confidence │
                     └─────────────┬───────────────┘
                                   │
@@ -1579,16 +1579,16 @@ The system should retain analysis snapshots locally.
                                   │
                          ┌────────┴────────┐
                          ▼                 ▼
-                  COMPLIANCE ENGINE    TĀRĀ MEMORY
+                  COMPLIANCE ENGINE    Tārā MEMORY
                          │                 │
                          ▼                 │
                     FINDINGS ◄─────────────┘
                          │
                          ▼
-                  TĀRĀ RESOLVE
+                  Tārā RESOLVE
                          │
                          ▼
-                  TĀRĀ PROOF
+                  Tārā PROOF
                          │
                          ▼
                     PDF EXPORT
@@ -1680,7 +1680,7 @@ GitHub Actions
 GitHub Pages
    │
    ▼
-LIVE TĀRĀ-NETRA
+LIVE Tārā-NETra
 ```
 
 ------------------------------------------------------------------------
@@ -1690,7 +1690,7 @@ LIVE TĀRĀ-NETRA
 Use a workflow conceptually like:
 
 ``` yaml
-name: Deploy TARA-NETRA
+name: Deploy Tārā-NETra
 
 on:
   push:
@@ -1819,7 +1819,7 @@ This prevents:
 The judge can immediately click:
 
 ``` text
-[ RUN TĀRĀ DEMO ]
+[ RUN Tārā DEMO ]
 ```
 
 ------------------------------------------------------------------------
@@ -1830,7 +1830,7 @@ The judge can immediately click:
 
 ### 1. Landing/dashboard
 
-TĀRĀ identity + metrics + visual core.
+Tārā identity + metrics + visual core.
 
 ### 2. Configuration upload
 
@@ -1925,7 +1925,7 @@ Show the landing screen.
 Say:
 
 > "Enterprise networks don't speak one configuration language.
-> TĀRĀ-NETRA doesn't try to memorize every language. It learns the
+> Tārā-NETra doesn't try to memorize every language. It learns the
 > security meaning behind them."
 
 ------------------------------------------------------------------------
@@ -1955,7 +1955,7 @@ Show:
 ``` text
 RAW COMMAND
       ↓
-TĀRĀ HYPOTHESIS
+Tārā HYPOTHESIS
       ↓
 ADMINISTRATOR MAPPING
 ```
@@ -2016,7 +2016,7 @@ Failure
 
 ## 1:40--1:52
 
-Open TĀRĀ RESOLVE.
+Open Tārā RESOLVE.
 
 Show:
 
@@ -2030,11 +2030,11 @@ Verification command
 
 ## 1:52--2:00
 
-Generate TĀRĀ PROOF.
+Generate Tārā PROOF.
 
 Final screen:
 
-# TĀRĀ-NETRA
+# Tārā-NETra
 
 **Understand. Learn. Audit. Assure.**
 
@@ -2080,7 +2080,7 @@ This slide should communicate the innovation immediately.
 ``` text
 CONFIG
  ↓
-TĀRĀ INTELLIGENCE
+Tārā INTELLIGENCE
  ↓
 SECURITY BASELINE MODEL
  ↓
@@ -2135,7 +2135,7 @@ REMEDIATION
 
 Final line:
 
-> **TĀRĀ-NETRA turns unfamiliar configuration into actionable security
+> **Tārā-NETra turns unfamiliar configuration into actionable security
 > knowledge.**
 
 ------------------------------------------------------------------------
@@ -2228,7 +2228,7 @@ The GitHub Pages prototype should have a clean upgrade path.
               GITHUB PAGES
                    │
                    ▼
-             TĀRĀ WEB APP
+             Tārā WEB APP
                    │
                    ▼
              API GATEWAY
@@ -2264,7 +2264,7 @@ But these should remain future scope for the competition prototype.
 
 # 57. Differentiation Statement
 
-TĀRĀ-NETRA should not be positioned as:
+Tārā-NETra should not be positioned as:
 
 > "Another AI compliance dashboard."
 
@@ -2297,7 +2297,7 @@ EVIDENCE
 
 # 58. Judge-Facing One-Liner
 
-> **TĀRĀ-NETRA is a vendor-agnostic, self-learning network security
+> **Tārā-NETra is a vendor-agnostic, self-learning network security
 > compliance engine that converts unfamiliar configuration syntax into
 > explainable security controls without requiring a new parser
 > deployment.**
@@ -2306,7 +2306,7 @@ EVIDENCE
 
 # 59. Judge-Facing 30-Second Explanation
 
-> "TĀRĀ-NETRA solves the problem of heterogeneous network
+> "Tārā-NETra solves the problem of heterogeneous network
 > configurations. Instead of maintaining a separate parser for every
 > vendor, we normalize configuration into a vendor-neutral Security
 > Baseline Model. When the system encounters something unfamiliar, it
@@ -2352,7 +2352,7 @@ into the repository.
 
 # 61. Final Product Definition
 
-## TĀRĀ-NETRA
+## Tārā-NETra
 
 ### Trustworthy Adaptive Risk Analytics --- Network Reasoning & Assurance
 
@@ -2360,7 +2360,7 @@ into the repository.
 
 ``` text
                     ★
-                 TĀRĀ
+                 Tārā
                    │
                    ▼
                 NETRA
@@ -2403,7 +2403,7 @@ into the repository.
 
 # 62. Definition of Done
 
-TĀRĀ-NETRA is competition-ready when:
+Tārā-NETra is competition-ready when:
 
 -   [ ] GitHub repository is clean
 -   [ ] GitHub Pages deployment works
@@ -2433,17 +2433,17 @@ TĀRĀ-NETRA is competition-ready when:
 
 # Final Statement
 
-TĀRĀ-NETRA should feel less like a student project and more like a **new
+Tārā-NETra should feel less like a student project and more like a **new
 security product prototype**.
 
 The judge should be able to understand the entire innovation in one
 interaction:
 
-**Upload an unfamiliar configuration → see what TĀRĀ-NETRA does not
+**Upload an unfamiliar configuration → see what Tārā-NETra does not
 understand → teach it → watch the knowledge update → re-run compliance →
 trace the result back to raw configuration → generate remediation →
 export evidence.**
 
 That single loop is the product.
 
-**TĀRĀ-NETRA: The Guiding Eye for Network Security.**
+**Tārā-NETra: The Guiding Eye for Network Security.**

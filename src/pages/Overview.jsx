@@ -62,7 +62,7 @@ export default function Overview({ analysisResult, complianceResult, history, on
             <text x="452" y="139" textAnchor="start" className="yantra-sublabel">CIS • NIST • STIG • ISO</text>
 
             {/* Central Core Text: Pristine, centered, and undisturbed */}
-            <text x="260" y="126" textAnchor="middle" className="yantra-node-text">TĀRĀ CORE</text>
+            <text x="260" y="126" textAnchor="middle" className="yantra-node-text">Tārā CORE</text>
             <text x="260" y="141" textAnchor="middle" className="yantra-subnode-text">Security Baseline Model</text>
           </svg>
         </div>
@@ -77,7 +77,7 @@ export default function Overview({ analysisResult, complianceResult, history, on
             Analyze Configuration
           </button>
           <button className="btn btn-secondary" onClick={() => setIsDemoOpen(true)} title="Experience the 2-minute competition story">
-            ✦ Run TĀRĀ Demo (2-Min Flow)
+            ✦ Run Tārā Demo (2-Min Flow)
           </button>
           <button className="btn btn-tutorial" onClick={onOpenTutorial} title="Explore every feature step-by-step">
             <span>✧</span> Instrument Guide &amp; Tutorial

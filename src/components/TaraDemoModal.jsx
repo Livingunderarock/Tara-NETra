@@ -25,7 +25,7 @@ export default function TaraDemoModal({ isOpen, onClose, onAnalyze, navigate, sh
       stepNumber: 2,
       title: 'Identify Unknown Construct & AI Hypothesis',
       subtitle: 'set secure-admin session-limit 900',
-      narration: 'TĀRĀ detects recognized keywords, but line 10 contains an unfamiliar directive: "set secure-admin session-limit 900". Instead of failing, TĀRĀ generates a semantic hypothesis: "Administrative Session Timeout".',
+      narration: 'Tārā detects recognized keywords, but line 10 contains an unfamiliar directive: "set secure-admin session-limit 900". Instead of failing, Tārā generates a semantic hypothesis: "Administrative Session Timeout".',
       actionText: 'Inspect in Analyzer',
       action: () => {
         navigate('/analyze');
@@ -36,8 +36,8 @@ export default function TaraDemoModal({ isOpen, onClose, onAnalyze, navigate, sh
       stepNumber: 3,
       title: 'Human-in-the-Loop Teaching',
       subtitle: 'Synthesizing Generalized Pattern',
-      narration: 'The network administrator confirms the security intent: "ADMIN_SESSION_TIMEOUT". TĀRĀ does NOT just memorize the exact line "900". It synthesizes a generalized parameterized pattern: "set secure-admin session-limit <VALUE>".',
-      actionText: 'Teach TĀRĀ & Inscribe Generalized Pattern',
+      narration: 'The network administrator confirms the security intent: "ADMIN_SESSION_TIMEOUT". Tārā does NOT just memorize the exact line "900". It synthesizes a generalized parameterized pattern: "set secure-admin session-limit <VALUE>".',
+      actionText: 'Teach Tārā & Inscribe Generalized Pattern',
       action: () => {
         const generalized = synthesizeGeneralizedPattern(
           'set secure-admin session-limit 900',
@@ -55,7 +55,7 @@ export default function TaraDemoModal({ isOpen, onClose, onAnalyze, navigate, sh
       stepNumber: 4,
       title: 'Test Unseen Device B (CAMPUS-GW-05)',
       subtitle: 'Configuration Never Seen During Training',
-      narration: 'To prove TRUE generalization rather than memorization, we now ingest CAMPUS-GW-05. This device was NEVER seen by TĀRĀ during training and uses a different parameter value: "session-limit 600".',
+      narration: 'To prove TRUE generalization rather than memorization, we now ingest CAMPUS-GW-05. This device was NEVER seen by Tārā during training and uses a different parameter value: "session-limit 600".',
       actionText: 'Analyze Unseen Device B',
       action: () => {
         onAnalyze(sampleConfigs.unknownB.content, sampleConfigs.unknownB.name);
@@ -67,7 +67,7 @@ export default function TaraDemoModal({ isOpen, onClose, onAnalyze, navigate, sh
       stepNumber: 5,
       title: 'Learned Pattern Match & Generalization Proof',
       subtitle: 'Dynamic Parameter Extraction (600s)',
-      narration: 'Observe the result: ✓ LEARNED PATTERN MATCH! TĀRĀ automatically matched the generalized pattern from BRANCH-GW-04 and dynamically extracted 600 seconds. "This configuration was not used during training."',
+      narration: 'Observe the result: ✓ LEARNED PATTERN MATCH! Tārā automatically matched the generalized pattern from BRANCH-GW-04 and dynamically extracted 600 seconds. "This configuration was not used during training."',
       actionText: 'Verify Match in Analyzer',
       action: () => {
         navigate('/analyze');
@@ -89,7 +89,7 @@ export default function TaraDemoModal({ isOpen, onClose, onAnalyze, navigate, sh
       stepNumber: 7,
       title: 'Traceable Evidence Chain',
       subtitle: 'Raw CLI → SBM → Control → Framework → Result',
-      narration: 'Every finding in TĀRĀ is explainable and tamper-evident. Clicking any control reveals the full 5-step evidence chain from the raw configuration text to CIS/NIST/DISA STIG citations.',
+      narration: 'Every finding in Tārā is explainable and tamper-evident. Clicking any control reveals the full 5-step evidence chain from the raw configuration text to CIS/NIST/DISA STIG citations.',
       actionText: 'Inspect Findings Evidence Chain',
       action: () => {
         navigate('/findings');
@@ -98,13 +98,13 @@ export default function TaraDemoModal({ isOpen, onClose, onAnalyze, navigate, sh
     },
     {
       stepNumber: 8,
-      title: 'TĀRĀ Resolve & Cryptographic SHA-256 Proof',
+      title: 'Tārā Resolve & Cryptographic SHA-256 Proof',
       subtitle: 'Deterministic Remediation & Archival Audit Certificate',
-      narration: 'Review recommended vendor remediation in TĀRĀ Resolve, verify the Web Crypto SHA-256 integrity hash, and download the archival PDF audit certificate. "Different syntax. One security language."',
+      narration: 'Review recommended vendor remediation in Tārā Resolve, verify the Web Crypto SHA-256 integrity hash, and download the archival PDF audit certificate. "Different syntax. One security language."',
       actionText: 'View SHA-256 Proof & Export PDF',
       action: () => {
         navigate('/evidence');
-        showToast('TĀRĀ PROOF Cryptographic Integrity Active');
+        showToast('Tārā PROOF Cryptographic Integrity Active');
       }
     }
   ];
@@ -170,7 +170,7 @@ export default function TaraDemoModal({ isOpen, onClose, onAnalyze, navigate, sh
           <div>
             <div className="page-tag" style={{ color: 'var(--color-gold)' }}>Competition Demonstration</div>
             <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: 'var(--color-indigo)', margin: 0 }}>
-              TĀRĀ 2-Minute Guided Flow
+              Tārā 2-Minute Guided Flow
             </h2>
           </div>
 

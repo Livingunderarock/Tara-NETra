@@ -571,7 +571,7 @@ export default function Compliance({ complianceResult, heatmapData, analysisResu
                       className="btn btn-primary"
                       onClick={() => navigate('/remediation')}
                     >
-                      Resolve Non-Compliant Controls in TĀRĀ RESOLVE →
+                      Resolve Non-Compliant Controls in Tārā RESOLVE →
                     </button>
                   )}
                 </div>

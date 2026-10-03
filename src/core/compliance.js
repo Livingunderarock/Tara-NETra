@@ -1,4 +1,4 @@
-// TĀRĀ Compliance Engine — Deterministic compliance evaluation
+// Tārā Compliance Engine — Deterministic compliance evaluation
 // AI interprets. Rules decide. Never hallucinate compliance.
 
 import { semanticControls } from '../knowledge/semanticControls.js';

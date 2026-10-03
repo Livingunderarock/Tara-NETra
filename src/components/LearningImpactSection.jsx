@@ -31,7 +31,7 @@ export default function LearningImpactSection({ impactData, onNavigateToFindings
             Learning Impact • How Knowledge Inscription Changed the Audit
           </h2>
           <div style={{ fontSize: '0.82rem', color: 'var(--color-ink-secondary)', maxWidth: '600px', lineHeight: 1.5 }}>
-            TĀRĀ does not merely store syntax tags — learned semantic patterns directly activate deterministic compliance rules, turning unverified configurations into actionable audit evidence.
+            Tārā does not merely store syntax tags — learned semantic patterns directly activate deterministic compliance rules, turning unverified configurations into actionable audit evidence.
           </div>
         </div>
 
@@ -94,7 +94,7 @@ export default function LearningImpactSection({ impactData, onNavigateToFindings
             → ⚚ →
           </div>
           <div style={{ fontSize: '0.74rem', fontWeight: 600, color: 'var(--color-indigo)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-            TĀRĀ Learned Patterns
+            Tārā Learned Patterns
           </div>
           <div style={{ fontSize: '0.72rem', color: 'var(--color-ink-muted)', marginTop: '2px' }}>
             Deterministic Rules Re-evaluated

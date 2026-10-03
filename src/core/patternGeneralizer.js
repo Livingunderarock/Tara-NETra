@@ -1,4 +1,4 @@
-// TĀRĀ Intelligence Core — Generalized Pattern Synthesis & Matching Engine
+// Tārā Intelligence Core — Generalized Pattern Synthesis & Matching Engine
 // Bridges raw vendor CLI syntaxes to the Security Baseline Model (SBM)
 // Synthesizes generalized parameterized patterns (e.g. "command <VALUE>")
 // and extracts dynamic values from previously unseen configurations.
@@ -299,11 +299,11 @@ export function matchLearnedPattern(lineText, mapping) {
         parameter: mapping.parameter,
         parameterType: mapping.parameterType,
         confidence: mapping.confidence || 97,
-        source: 'TĀRĀ Memory',
+        source: 'Tārā Memory',
         provenance: isUnseenVariant ? '✓ LEARNED PATTERN MATCH' : '✓ HUMAN LEARNED',
         explanation: isUnseenVariant
           ? `Pattern learned from ${mapping.originDevice || 'training'} (generalized from: "${mapping.rawExample}")`
-          : `Direct administrator-taught ground truth from ${mapping.originDevice || 'TĀRĀ Memory'}`
+          : `Direct administrator-taught ground truth from ${mapping.originDevice || 'Tārā Memory'}`
       };
     }
   } catch {
@@ -319,9 +319,9 @@ export function matchLearnedPattern(lineText, mapping) {
         parameter: mapping.parameter,
         parameterType: mapping.parameterType || 'exact',
         confidence: mapping.confidence || 97,
-        source: 'TĀRĀ Memory',
+        source: 'Tārā Memory',
         provenance: '✓ HUMAN LEARNED',
-        explanation: `Direct administrator-taught ground truth from ${mapping.originDevice || 'TĀRĀ Memory'}`
+        explanation: `Direct administrator-taught ground truth from ${mapping.originDevice || 'Tārā Memory'}`
       };
     }
   }
