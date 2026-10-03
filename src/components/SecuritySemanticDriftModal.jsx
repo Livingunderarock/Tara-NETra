@@ -25,35 +25,39 @@ export default function SecuritySemanticDriftModal({ isOpen, onClose, currentCon
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: 'rgba(18, 22, 34, 0.85)',
+      backgroundColor: 'rgba(28, 23, 17, 0.78)',
+      backdropFilter: 'blur(5px)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 1000,
       padding: 'var(--space-md)',
+      animation: 'fadeIn 200ms ease forwards',
     }}>
       <div
-        className="modal-content animate-fadeIn"
+        className="animate-fadeIn"
         onClick={(e) => e.stopPropagation()}
         style={{
-          background: 'var(--color-surface)',
-          border: '1px solid rgba(176, 138, 60, 0.4)',
+          background: 'var(--color-bg-surface-elevated)',
+          border: '1.5px solid var(--color-gold)',
           borderRadius: 'var(--radius-sm)',
           maxWidth: '820px',
           width: '100%',
           maxHeight: '90vh',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: 'var(--shadow-elevation-high)',
+          boxShadow: '0 20px 60px rgba(28, 23, 17, 0.45), 0 0 0 1px rgba(176, 138, 60, 0.35)',
+          overflow: 'hidden',
         }}
       >
         {/* Modal Header */}
         <div style={{
           padding: '16px 20px',
-          borderBottom: 'var(--border-hairline)',
+          borderBottom: '1px solid rgba(176, 138, 60, 0.3)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          background: 'var(--color-bg-parchment)',
         }}>
           <div>
             <div className="page-tag" style={{ color: 'var(--color-gold)' }}>Semantic Verification</div>
@@ -229,11 +233,12 @@ export default function SecuritySemanticDriftModal({ isOpen, onClose, currentCon
         {/* Modal Footer */}
         <div style={{
           padding: '12px 20px',
-          borderTop: 'var(--border-hairline)',
+          borderTop: '1px solid rgba(176, 138, 60, 0.3)',
           display: 'flex',
           justifyContent: 'flex-end',
+          background: 'var(--color-bg-parchment)',
         }}>
-          <button type="button" className="btn btn-secondary btn-sm" onClick={onClose}>
+          <button type="button" className="btn btn-secondary btn-sm" onClick={onClose} style={{ fontWeight: 600 }}>
             Close
           </button>
         </div>

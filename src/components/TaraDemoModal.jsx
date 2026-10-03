@@ -138,51 +138,76 @@ export default function TaraDemoModal({ isOpen, onClose, onAnalyze, navigate, sh
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: 'rgba(18, 22, 34, 0.85)',
+      backgroundColor: 'rgba(28, 23, 17, 0.78)',
+      backdropFilter: 'blur(5px)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 1000,
       padding: 'var(--space-md)',
+      animation: 'fadeIn 200ms ease forwards',
     }}>
       <div
-        className="modal-content animate-fadeIn"
+        className="animate-fadeIn"
         onClick={(e) => e.stopPropagation()}
         style={{
-          background: 'var(--color-surface)',
-          border: '1px solid rgba(176, 138, 60, 0.5)',
+          background: 'var(--color-bg-surface-elevated)',
+          border: '1.5px solid var(--color-gold)',
           borderRadius: 'var(--radius-sm)',
-          maxWidth: '680px',
+          maxWidth: '720px',
           width: '100%',
-          boxShadow: 'var(--shadow-elevation-high)',
+          boxShadow: '0 20px 60px rgba(28, 23, 17, 0.45), 0 0 0 1px rgba(176, 138, 60, 0.35)',
           display: 'flex',
           flexDirection: 'column',
+          overflow: 'hidden',
         }}
       >
         {/* Modal Header */}
         <div style={{
-          padding: '16px 20px',
-          borderBottom: 'var(--border-hairline)',
+          padding: '16px 22px',
+          borderBottom: '1px solid rgba(176, 138, 60, 0.3)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          background: 'var(--color-bg-parchment)',
         }}>
-          <div>
-            <div className="page-tag" style={{ color: 'var(--color-gold)' }}>Competition Demonstration</div>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: 'var(--color-indigo)', margin: 0 }}>
-              Tārā 2-Minute Guided Flow
-            </h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <svg viewBox="0 0 36 36" fill="none" style={{ width: '32px', height: '32px', flexShrink: 0 }}>
+              <circle cx="18" cy="18" r="16" stroke="#B08A3C" strokeWidth="0.8" strokeDasharray="1.5 2.5"/>
+              <circle cx="18" cy="18" r="13" stroke="#20263A" strokeWidth="1"/>
+              <path d="M 8 18 C 11.5 12, 24.5 12, 28 18 C 24.5 24, 11.5 24, 8 18 Z" stroke="#20263A" strokeWidth="1.2"/>
+              <circle cx="18" cy="18" r="3.5" stroke="#B08A3C" strokeWidth="0.8"/>
+              <circle cx="18" cy="18" r="1.5" fill="#A66A2C"/>
+            </svg>
+            <div>
+              <div className="page-tag" style={{ color: 'var(--color-gold-deep)', fontWeight: 600, fontSize: '0.68rem', marginBottom: '2px' }}>
+                Competition Demonstration
+              </div>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.35rem', color: 'var(--color-indigo)', margin: 0, fontWeight: 600 }}>
+                Tārā 2-Minute Guided Flow
+              </h2>
+            </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '0.74rem', fontFamily: 'var(--font-mono)', color: 'var(--color-ink-muted)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{
+              fontSize: '0.74rem',
+              fontFamily: 'var(--font-mono)',
+              fontWeight: 600,
+              color: 'var(--color-indigo)',
+              background: 'rgba(176, 138, 60, 0.18)',
+              padding: '4px 10px',
+              borderRadius: '2px',
+              border: '1px solid rgba(176, 138, 60, 0.45)'
+            }}>
               Step {current.stepNumber} of {STEPS.length}
             </span>
             <button
               type="button"
               className="btn btn-ghost btn-sm"
               onClick={onClose}
-              style={{ fontSize: '1.1rem', padding: '2px 6px' }}
+              style={{ fontSize: '1.2rem', padding: '2px 8px', color: 'var(--color-ink-secondary)', cursor: 'pointer' }}
+              title="Close Demonstration"
             >
               ✕
             </button>
@@ -190,13 +215,14 @@ export default function TaraDemoModal({ isOpen, onClose, onAnalyze, navigate, sh
         </div>
 
         {/* Step Progress Line */}
-        <div style={{ display: 'flex', height: '3px', background: 'var(--color-bg-base)' }}>
+        <div style={{ display: 'flex', height: '4px', background: 'var(--color-bg-base)' }}>
           {STEPS.map((_, i) => (
             <div
               key={i}
               style={{
                 flex: 1,
-                background: i <= currentStep ? 'var(--color-gold)' : 'transparent',
+                background: i <= currentStep ? 'var(--color-gold)' : 'rgba(176, 138, 60, 0.25)',
+                borderRight: i < STEPS.length - 1 ? '1px solid var(--color-bg-base)' : 'none',
                 transition: 'background 0.3s ease',
               }}
             />
@@ -204,47 +230,62 @@ export default function TaraDemoModal({ isOpen, onClose, onAnalyze, navigate, sh
         </div>
 
         {/* Step Body */}
-        <div style={{ padding: '24px 20px', flex: 1 }}>
+        <div style={{ padding: '24px 22px', flex: 1, background: 'var(--color-bg-surface-elevated)' }}>
           <div style={{
-            fontSize: '0.7rem',
+            fontSize: '0.72rem',
             textTransform: 'uppercase',
-            letterSpacing: '1px',
+            letterSpacing: '1.5px',
             color: 'var(--color-ochre)',
-            fontWeight: 600,
-            marginBottom: '4px',
+            fontWeight: 700,
+            marginBottom: '6px',
           }}>
             {current.subtitle}
           </div>
 
           <h3 style={{
             fontFamily: 'var(--font-serif)',
-            fontSize: '1.35rem',
+            fontSize: '1.55rem',
             color: 'var(--color-indigo)',
+            fontWeight: 600,
+            lineHeight: 1.25,
             marginTop: 0,
-            marginBottom: '12px',
+            marginBottom: '16px',
           }}>
             {current.title}
           </h3>
 
-          <p style={{
-            fontSize: '0.86rem',
-            color: 'var(--color-ink-primary)',
-            lineHeight: 1.6,
+          <div style={{
             background: 'var(--color-bg-base)',
-            padding: '14px 16px',
+            border: '1px solid rgba(166, 106, 44, 0.35)',
+            borderLeft: '4px solid var(--color-ochre)',
+            padding: '16px 18px',
             borderRadius: 'var(--radius-xs)',
-            borderLeft: '3px solid var(--color-indigo)',
-            margin: '0 0 20px 0',
+            marginBottom: '22px',
+            boxShadow: 'inset 0 1px 3px rgba(28, 23, 17, 0.04)',
           }}>
-            {current.narration}
-          </p>
+            <p style={{
+              fontSize: '0.92rem',
+              color: 'var(--color-ink-primary)',
+              lineHeight: 1.65,
+              margin: 0,
+              fontWeight: 400,
+            }}>
+              {current.narration}
+            </p>
+          </div>
 
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <button
               type="button"
               className="btn btn-primary"
               onClick={handleExecuteCurrentStep}
-              style={{ padding: '10px 24px', fontSize: '0.88rem' }}
+              style={{
+                padding: '12px 28px',
+                fontSize: '0.92rem',
+                fontWeight: 600,
+                letterSpacing: '0.5px',
+                boxShadow: '0 4px 14px rgba(32, 38, 58, 0.25)',
+              }}
             >
               ✦ {current.actionText}
             </button>
@@ -253,32 +294,39 @@ export default function TaraDemoModal({ isOpen, onClose, onAnalyze, navigate, sh
 
         {/* Modal Footer */}
         <div style={{
-          padding: '14px 20px',
-          borderTop: 'var(--border-hairline)',
+          padding: '14px 22px',
+          borderTop: '1px solid rgba(176, 138, 60, 0.3)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          background: 'var(--color-bg-base)',
+          background: 'var(--color-bg-parchment)',
         }}>
           <button
             type="button"
             className="btn btn-secondary btn-sm"
             onClick={handlePrev}
             disabled={currentStep === 0}
+            style={{ fontWeight: 600 }}
           >
             ← Previous
           </button>
 
-          <span style={{ fontSize: '0.74rem', color: 'var(--color-ink-muted)', fontStyle: 'italic' }}>
+          <span style={{
+            fontSize: '0.78rem',
+            color: 'var(--color-ink-secondary)',
+            fontStyle: 'italic',
+            fontFamily: 'var(--font-serif)',
+          }}>
             "Different syntax. One security language."
           </span>
 
           <button
             type="button"
-            className="btn btn-secondary btn-sm"
+            className={currentStep === STEPS.length - 1 ? "btn btn-primary btn-sm" : "btn btn-secondary btn-sm"}
             onClick={handleNext}
+            style={{ fontWeight: 600 }}
           >
-            {currentStep === STEPS.length - 1 ? 'Finish Demo' : 'Next Step →'}
+            {currentStep === STEPS.length - 1 ? 'Finish Demo ✓' : 'Next Step →'}
           </button>
         </div>
       </div>

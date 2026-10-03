@@ -9,6 +9,8 @@
   --color-bg-parchment: #D4C5A9;       /* Grounded surface for sidebar rail & headers */
   --color-bg-surface: #E5D8C1;         /* Soft warm card/panel surface (no white glare) */
   --color-bg-surface-elevated: #EBDDC7;/* Elevated cards/modals - gentle warm tone, zero #FFFFFF */
+  --color-surface: #E5D8C1;            /* Solid warm card/panel surface alias */
+  --color-surface-elevated: #EBDDC7;   /* Solid elevated modal surface alias */
   --color-bg-subtle: #CCBCA0;          /* Inset elements & subtle tags */
   --color-bg-hover: #C4B292;           /* Quiet hover tone */
 

@@ -2354,7 +2354,7 @@ into the repository.
 
 ## Tārā-NETra
 
-### Trustworthy Adaptive Risk Analytics --- Network Reasoning & Assurance
+### Trustworthy Adaptive Risk Analytics — Network Reasoning & Assurance
 
 **The Guiding Eye for Network Security**
 
@@ -2363,7 +2363,7 @@ into the repository.
                  Tārā
                    │
                    ▼
-                NETRA
+                NETra
                    │
                    ▼
         ┌─────────────────────┐
