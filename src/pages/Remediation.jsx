@@ -125,18 +125,22 @@ export default function Remediation({ complianceResult, analysisResult }) {
                 <div style={{ marginBottom: 'var(--space-md)' }}>
                   <div className="detail-label">Recommended Vendor CLI Directives</div>
                   {selectedFix.remediation ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
-                      {Object.entries(selectedFix.remediation).map(([v, cmd]) => (
-                        <div key={v}>
-                          <div style={{ fontSize: '0.68rem', color: 'var(--color-ochre)', fontWeight: 600, marginBottom: '2px' }}>
-                            {v}:
+                    typeof selectedFix.remediation === 'string' ? (
+                      <div className="remediation-box">{selectedFix.remediation}</div>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+                        {Object.entries(selectedFix.remediation).map(([v, cmd]) => (
+                          <div key={v} style={{ borderLeft: v === vendor ? '2px solid var(--color-pass)' : 'none', paddingLeft: v === vendor ? '8px' : '0' }}>
+                            <div style={{ fontSize: '0.68rem', color: v === vendor ? 'var(--color-pass)' : 'var(--color-ochre)', fontWeight: 600, marginBottom: '2px' }}>
+                              {v} {v === vendor ? '✓ (Target Appliance Matched)' : ''}:
+                            </div>
+                            <div className="remediation-box">
+                              {cmd}
+                            </div>
                           </div>
-                          <div className="remediation-box">
-                            {cmd}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )
                   ) : (
                     <div style={{ fontSize: '0.78rem', color: 'var(--color-ink-muted)' }}>No remediation template registered</div>
                   )}
@@ -145,24 +149,37 @@ export default function Remediation({ complianceResult, analysisResult }) {
                 {/* Verification Command */}
                 {selectedFix.verification && (
                   <div style={{ marginBottom: 'var(--space-lg)' }}>
-                    <div className="detail-label">Verification Command</div>
-                    {Object.entries(selectedFix.verification).map(([v, cmd]) => (
-                      <div key={v} style={{ marginBottom: '4px' }}>
-                        <div style={{ fontSize: '0.68rem', color: 'var(--color-gold)', fontWeight: 600, marginBottom: '2px' }}>
-                          {v}:
-                        </div>
-                        <div style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.78rem',
-                          background: 'var(--color-bg-subtle)',
-                          padding: '6px 10px',
-                          borderRadius: 'var(--radius-xs)',
-                          color: 'var(--color-indigo)'
-                        }}>
-                          {cmd}
-                        </div>
+                    <div className="detail-label">Operational Verification Command</div>
+                    {typeof selectedFix.verification === 'string' ? (
+                      <div style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.78rem',
+                        background: 'var(--color-bg-subtle)',
+                        padding: '6px 10px',
+                        borderRadius: 'var(--radius-xs)',
+                        color: 'var(--color-indigo)'
+                      }}>
+                        {selectedFix.verification}
                       </div>
-                    ))}
+                    ) : (
+                      Object.entries(selectedFix.verification).map(([v, cmd]) => (
+                        <div key={v} style={{ marginBottom: '6px', borderLeft: v === vendor ? '2px solid var(--color-pass)' : 'none', paddingLeft: v === vendor ? '8px' : '0' }}>
+                          <div style={{ fontSize: '0.68rem', color: v === vendor ? 'var(--color-pass)' : 'var(--color-gold)', fontWeight: 600, marginBottom: '2px' }}>
+                            {v} {v === vendor ? '✓ (Target Appliance Matched)' : ''}:
+                          </div>
+                          <div style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.78rem',
+                            background: 'var(--color-bg-subtle)',
+                            padding: '6px 10px',
+                            borderRadius: 'var(--radius-xs)',
+                            color: 'var(--color-indigo)'
+                          }}>
+                            {cmd}
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </div>
                 )}
 

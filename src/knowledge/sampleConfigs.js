@@ -221,6 +221,7 @@ set protocols lldp interface all disable`
     name: 'BRANCH-GW-04',
     vendor: 'Unknown',
     filename: 'branch-gw-04.txt',
+    description: 'Unknown Appliance A (Training Baseline)',
     content: `# Branch Gateway Configuration
 # Device: BRANCH-GW-04
 # Firmware: SecureOS v3.2.1
@@ -262,6 +263,57 @@ services disable snmp-default
 services discovery-protocol disable external
 
 banner-message "AUTHORIZED PERSONNEL ONLY - Activity Monitored"
+
+crypto preferred-cipher aes-256-gcm
+crypto key-exchange ecdh-sha2-nistp384`
+  },
+  unknownB: {
+    name: 'CAMPUS-GW-05',
+    vendor: 'Unknown',
+    filename: 'campus-gw-05.txt',
+    description: 'Unseen Device B (Testing Generalization - Never used during training)',
+    content: `# Campus Gateway Configuration
+# Device: CAMPUS-GW-05
+# Firmware: SecureOS v3.2.1
+# NOTE: This configuration was NEVER used during training.
+
+system hostname CAMPUS-GW-05
+system domain internal.campus.corp
+
+security admin-access ssh enable
+security admin-access ssh version 2
+security admin-access telnet disable
+security admin-access web-ui https-only
+
+set secure-admin session-limit 600
+set secure-admin lockout-attempts 3
+set secure-admin lockout-duration 180
+
+authentication method local-database
+authentication password-policy min-chars 14
+authentication password-policy complexity enabled
+authentication enable-secret hash $argon2id$HASH_CAMPUS
+
+monitor syslog-server 10.5.100.50
+monitor syslog-level informational
+monitor admin-audit enabled
+monitor auth-events enabled
+
+time-sync ntp-server 10.5.100.10
+time-sync ntp-auth enabled
+
+network firewall rule 1 permit source 10.5.0.0/16 dest any proto tcp port 22
+network firewall rule 2 permit source 10.5.0.0/16 dest any proto tcp port 443
+network firewall rule 999 deny source any dest any
+network firewall default-action deny
+
+services disable telnet
+services disable ftp
+services disable tftp
+services disable snmp-default
+services discovery-protocol disable external
+
+banner-message "CAMPUS GATEWAY - AUTHORIZED ACCESS ONLY"
 
 crypto preferred-cipher aes-256-gcm
 crypto key-exchange ecdh-sha2-nistp384`

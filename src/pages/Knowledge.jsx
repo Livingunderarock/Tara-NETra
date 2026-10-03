@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { getLearnedMappings, deleteLearnedMapping, exportKnowledge, importKnowledge, clearLearnedMappings } from '../services/storage';
+import { getLearnedMappings, deleteLearnedMapping, exportKnowledge, importKnowledge, clearLearnedMappings, saveLearnedMapping } from '../services/storage';
+import { synthesizeGeneralizedPattern } from '../core/patternGeneralizer';
 
 export default function Knowledge({ showToast }) {
   const [mappings, setMappings] = useState(getLearnedMappings());
@@ -39,6 +40,18 @@ export default function Knowledge({ showToast }) {
     }
   };
 
+  const handleSeedDemoPattern = () => {
+    const generalized = synthesizeGeneralizedPattern(
+      'set secure-admin session-limit 900',
+      'ADMIN_SESSION_TIMEOUT',
+      900,
+      'BRANCH-GW-04'
+    );
+    saveLearnedMapping(generalized);
+    refresh();
+    showToast('Seeded demonstration pattern: set secure-admin session-limit <VALUE>');
+  };
+
   const handleFileImport = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -61,16 +74,19 @@ export default function Knowledge({ showToast }) {
       {/* Header */}
       <div className="page-header">
         <div className="page-title-group">
-          <div className="page-tag">Persistent Archive</div>
+          <div className="page-tag">Persistent Knowledge Layer</div>
           <h1 className="page-title">TĀRĀ Memory</h1>
           <div className="page-subtitle">
-            Curated repository of learned configuration semantics ({mappings.length} rules inscribed)
+            Curated repository of generalized configuration semantics and human-taught ground truths ({mappings.length} rule{mappings.length !== 1 ? 's' : ''} inscribed)
           </div>
         </div>
       </div>
 
       {/* Action Bar */}
       <div style={{ display: 'flex', gap: 'var(--space-sm)', marginBottom: 'var(--space-xl)', flexWrap: 'wrap', alignItems: 'center' }}>
+        <button type="button" className="btn btn-primary btn-sm" onClick={handleSeedDemoPattern}>
+          ✦ Inscribe Demo Rule (Session Timeout)
+        </button>
         <button type="button" className="btn btn-secondary btn-sm" onClick={handleExport}>
           Export Knowledge Pack
         </button>
@@ -96,7 +112,7 @@ export default function Knowledge({ showToast }) {
             className="form-textarea"
             value={importText}
             onChange={(e) => setImportText(e.target.value)}
-            placeholder="Paste TĀRĀ-NETRA knowledge JSON here..."
+            placeholder="Paste Tārā-NETra knowledge JSON here..."
             style={{ minHeight: '120px', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}
           />
           <div style={{ display: 'flex', gap: 'var(--space-sm)', marginTop: 'var(--space-md)' }}>
@@ -112,52 +128,90 @@ export default function Knowledge({ showToast }) {
           <span className="empty-state-symbol">☵</span>
           <div className="empty-state-text">No learned mappings inscribed in memory</div>
           <div style={{ fontSize: '0.78rem', color: 'var(--color-ink-muted)', marginTop: '4px' }}>
-            Use the TĀRĀ Learning Studio to instruct the system on unfamiliar syntax.
+            Use the TĀRĀ Learning Studio to instruct the system on unfamiliar syntax, or click <strong>"Inscribe Demo Rule"</strong> above.
           </div>
         </div>
       ) : (
         <div className="memory-archive-ledger">
-          <div className="ledger-header">
+          <div className="ledger-header" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', padding: '10px 16px', background: 'var(--color-bg-base)', borderBottom: 'var(--border-hairline)' }}>
             <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600, color: 'var(--color-ink-muted)' }}>
-              Raw Directive Pattern &amp; Normalized Semantic Concept
+              Generalized Pattern &amp; Normalized Semantic Concept
             </span>
-            <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600, color: 'var(--color-ink-muted)' }}>
-              Confidence &amp; Source
+            <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600, color: 'var(--color-ink-muted)', textAlign: 'right' }}>
+              Knowledge Provenance &amp; Actions
             </span>
           </div>
 
           {mappings.map((mapping) => (
-            <div key={mapping.id} className="ledger-item">
+            <div key={mapping.id} className="ledger-item" style={{ padding: '14px 16px', borderBottom: 'var(--border-hairline)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px' }}>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="ledger-command">
-                  {mapping.rawCommand || mapping.pattern}
+                {/* Generalized Pattern in Gold/Indigo */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-indigo)' }}>
+                    {mapping.learnedPattern || mapping.rawCommand || mapping.pattern}
+                  </span>
+                  {mapping.learnedPattern && mapping.learnedPattern.includes('<') && (
+                    <span className="badge badge-learned" style={{ fontSize: '0.62rem', padding: '2px 6px' }}>
+                      ✓ GENERALIZED PATTERN
+                    </span>
+                  )}
                 </div>
-                <div className="ledger-meta">
+
+                {/* Original Training Command */}
+                {mapping.rawExample && (
+                  <div style={{ fontSize: '0.72rem', color: 'var(--color-ink-muted)', marginBottom: '4px' }}>
+                    Training Example: <code style={{ color: 'var(--color-ink-secondary)', background: 'var(--color-bg-base)', padding: '1px 5px', borderRadius: '2px' }}>{mapping.rawExample}</code>
+                  </div>
+                )}
+
+                {/* Semantic Target & Parameter details */}
+                <div className="ledger-meta" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', fontSize: '0.74rem' }}>
                   <span className="ledger-arrow">⟶</span>
                   <strong style={{ color: 'var(--color-ochre)' }}>
-                    {mapping.controlName || mapping.semantic}
+                    {mapping.semanticControl || mapping.controlName || mapping.semantic}
                   </strong>
+                  <span style={{ color: 'var(--color-ink-muted)' }}>({mapping.semantic})</span>
                   <span>•</span>
                   <span>{mapping.category}</span>
+                  {mapping.parameter && (
+                    <>
+                      <span>•</span>
+                      <span style={{ color: 'var(--color-pass)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem' }}>
+                        Extracted: {mapping.parameter} ({mapping.parameterType || 'value'} = {String(mapping.value ?? mapping.extractedValue)})
+                      </span>
+                    </>
+                  )}
+                  {mapping.originDevice && (
+                    <>
+                      <span>•</span>
+                      <span style={{ color: 'var(--color-ink-muted)' }}>From: {mapping.originDevice}</span>
+                    </>
+                  )}
                   {mapping.timestamp && (
                     <>
                       <span>•</span>
-                      <span>{new Date(mapping.timestamp).toLocaleDateString()}</span>
+                      <span style={{ color: 'var(--color-ink-muted)' }}>{new Date(mapping.timestamp).toLocaleDateString()}</span>
                     </>
                   )}
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
-                <span className="badge badge-learned">
-                  {mapping.confidence || 97}% • {mapping.source || 'Admin'}
-                </span>
+              {/* Provenance & Delete Button */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)', flexShrink: 0 }}>
+                <div style={{ textAlign: 'right' }}>
+                  <span className="badge badge-learned" style={{ display: 'block', fontSize: '0.68rem', textAlign: 'center' }}>
+                    {mapping.confidence || 97}% • {mapping.source || 'HUMAN_TRAINED'}
+                  </span>
+                  <span style={{ fontSize: '0.62rem', color: 'var(--color-gold)', display: 'block', marginTop: '2px' }}>
+                    TĀRĀ Memory
+                  </span>
+                </div>
                 <button
                   type="button"
                   className="btn btn-ghost btn-sm"
                   onClick={() => handleDelete(mapping.id)}
                   title="Remove from memory"
-                  style={{ padding: '4px 8px', fontSize: '0.7rem' }}
+                  style={{ padding: '4px 8px', fontSize: '0.75rem', color: 'var(--color-ink-muted)' }}
                 >
                   ✕
                 </button>
@@ -169,3 +223,4 @@ export default function Knowledge({ showToast }) {
     </div>
   );
 }
+

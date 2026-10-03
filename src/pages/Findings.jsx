@@ -31,6 +31,19 @@ export default function Findings({ complianceResult, analysisResult, configText 
   if (severityFilter !== 'all') filtered = filtered.filter(r => r.severity === severityFilter);
 
   const configLines = configText ? configText.split('\n') : [];
+  const targetVendor = analysisResult?.vendor?.vendor || 'Generic';
+
+  const getRemediationText = (rem) => {
+    if (!rem) return 'Apply vendor hardening template.';
+    if (typeof rem === 'string') return rem;
+    return rem[targetVendor] || rem['Generic'] || Object.values(rem)[0] || 'Apply vendor hardening template.';
+  };
+
+  const getVerificationText = (ver) => {
+    if (!ver) return 'show running-config';
+    if (typeof ver === 'string') return ver;
+    return ver[targetVendor] || ver['Generic'] || Object.values(ver)[0] || 'show running-config';
+  };
 
   return (
     <div className="animate-fadeIn">
@@ -40,7 +53,7 @@ export default function Findings({ complianceResult, analysisResult, configText 
           <div className="page-tag">Audit Discoveries</div>
           <h1 className="page-title">Security Findings</h1>
           <div className="page-subtitle">
-            {results.length} controls evaluated • {results.filter(r => r.status === 'FAIL').length} deficiencies identified
+            {analysisResult?.deviceName || 'Target Appliance'} ({analysisResult?.vendor?.vendor || 'Unknown OS'}) • {results.length} controls evaluated • {results.filter(r => r.status === 'FAIL').length} deficiencies identified
           </div>
         </div>
       </div>
@@ -132,8 +145,36 @@ export default function Findings({ complianceResult, analysisResult, configText 
         <div>
           {selectedFinding ? (
             <div className="card" style={{ borderTop: '2px solid var(--color-indigo)' }}>
-              <div className="card-title">Evidence Chain</div>
-              <div className="card-subtext">Verifiable trace from raw syntax to regulatory audit conclusion</div>
+              {/* 4 Core Questions Summary */}
+              <div style={{
+                background: 'var(--color-bg-base)',
+                border: 'var(--border-hairline)',
+                padding: '12px 14px',
+                borderRadius: 'var(--radius-xs)',
+                marginTop: 'var(--space-md)',
+                display: 'grid',
+                gap: '8px',
+                fontSize: '0.74rem',
+              }}>
+                <div>
+                  <strong style={{ color: 'var(--color-indigo)' }}>1. What was found? </strong>
+                  <span>{selectedFinding.controlName} — Observed: <code>{JSON.stringify(selectedFinding.observed) || 'None'}</code> (Expected: <code>{JSON.stringify(selectedFinding.expected)}</code>)</span>
+                </div>
+                <div>
+                  <strong style={{ color: 'var(--color-indigo)' }}>2. Why does it matter? </strong>
+                  <span>{selectedFinding.description} (Risk Severity: <strong>{selectedFinding.severity}</strong>)</span>
+                </div>
+                <div>
+                  <strong style={{ color: 'var(--color-indigo)' }}>3. Which standard applies? </strong>
+                  <span>{selectedFinding.controlId} ({Object.entries(selectedFinding.frameworks).map(([k, v]) => `${k} ${v}`).join(', ')})</span>
+                </div>
+                <div>
+                  <strong style={{ color: 'var(--color-indigo)' }}>4. How can it be remediated? </strong>
+                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-ochre)', whiteSpace: 'pre-wrap' }}>
+                    {getRemediationText(selectedFinding.remediation)}
+                  </span>
+                </div>
+              </div>
 
               <div className="chain-container" style={{ marginTop: 'var(--space-md)' }}>
                 {/* Step 1: Raw Configuration */}
@@ -181,7 +222,7 @@ export default function Findings({ complianceResult, analysisResult, configText 
                     <div className="chain-line" />
                   </div>
                   <div className="chain-content">
-                    <div className="chain-label">3. Baseline Security Control</div>
+                    <div className="chain-label">3. Baseline Security Control (SBM)</div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--color-ochre)', fontWeight: 600 }}>
                       {selectedFinding.controlId}
                     </div>
@@ -218,6 +259,7 @@ export default function Findings({ complianceResult, analysisResult, configText 
                         borderColor: selectedFinding.status === 'PASS' ? 'var(--color-pass)' : selectedFinding.status === 'FAIL' ? 'var(--color-fail)' : 'var(--color-unknown)'
                       }}
                     />
+                    <div className="chain-line" />
                   </div>
                   <div className="chain-content" style={{
                     background: selectedFinding.status === 'PASS' ? 'var(--color-pass-bg)' : selectedFinding.status === 'FAIL' ? 'var(--color-fail-bg)' : 'var(--color-unknown-bg)'
@@ -225,7 +267,7 @@ export default function Findings({ complianceResult, analysisResult, configText 
                     <div className="chain-label" style={{
                       color: selectedFinding.status === 'PASS' ? 'var(--color-pass)' : selectedFinding.status === 'FAIL' ? 'var(--color-fail)' : 'var(--color-unknown)'
                     }}>
-                      5. Audit Conclusion
+                      5. Deterministic Audit Conclusion
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
                       <span className={`badge ${
@@ -239,16 +281,43 @@ export default function Findings({ complianceResult, analysisResult, configText 
                     </div>
                   </div>
                 </div>
+
+                {/* Step 6: Technical Remediation CLI */}
+                <div className="chain-step">
+                  <div className="chain-indicator">
+                    <div className="chain-dot" />
+                    <div className="chain-line" />
+                  </div>
+                  <div className="chain-content">
+                    <div className="chain-label">6. Technical Remediation Directive</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: 'var(--color-ochre)', wordBreak: 'break-all', whiteSpace: 'pre-wrap' }}>
+                      {getRemediationText(selectedFinding.remediation)}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step 7: Technical Verification Command */}
+                <div className="chain-step">
+                  <div className="chain-indicator">
+                    <div className="chain-dot" />
+                  </div>
+                  <div className="chain-content">
+                    <div className="chain-label">7. Operational Verification Command</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: 'var(--color-indigo)', wordBreak: 'break-all', whiteSpace: 'pre-wrap' }}>
+                      {getVerificationText(selectedFinding.verification)}
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Action Buttons */}
               <div style={{ display: 'flex', gap: 'var(--space-sm)', marginTop: 'var(--space-lg)' }}>
                 <button
                   type="button"
-                  className="btn btn-secondary btn-sm"
+                  className="btn btn-primary btn-sm"
                   onClick={() => navigate('/remediation')}
                 >
-                  View Remediation
+                  Open TĀRĀ Resolve ✦
                 </button>
               </div>
             </div>

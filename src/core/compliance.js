@@ -1,7 +1,7 @@
 // TĀRĀ Compliance Engine — Deterministic compliance evaluation
 // AI interprets. Rules decide. Never hallucinate compliance.
 
-import { semanticControls } from '../knowledge/semanticControls';
+import { semanticControls } from '../knowledge/semanticControls.js';
 
 // Evaluate a single control against SBM
 function evaluateControl(control, sbm) {

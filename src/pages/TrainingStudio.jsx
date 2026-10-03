@@ -1,18 +1,19 @@
 import React, { useState, useMemo } from 'react';
 import { semanticControls } from '../knowledge/semanticControls';
 import { saveLearnedMapping } from '../services/storage';
+import { synthesizeGeneralizedPattern, resolveSemanticBinding } from '../core/patternGeneralizer';
 
 // Helper to deduce best canonical hypothesis for any unfamiliar line
 function deduceHypothesis(line) {
   if (line.semantic) {
-    const ctrl = semanticControls.find(c => c.semanticParameter === line.semantic);
+    const { control, semanticParam } = resolveSemanticBinding(line.semantic);
     return {
-      semantic: line.semantic,
-      category: ctrl?.category || 'General',
-      controlName: ctrl?.name || line.semantic,
+      semantic: semanticParam,
+      category: control?.category || 'General',
+      controlName: control?.name || line.semantic,
       value: line.value !== null && line.value !== undefined ? line.value : (line.trimmed.match(/(\d+)/) ? parseInt(line.trimmed.match(/(\d+)/)[1], 10) : true),
       confidence: line.confidence || 75,
-      hypothesisText: line.hypothesis || `Matches standard: ${ctrl?.name || line.semantic}`
+      hypothesisText: line.hypothesis || `Matches standard: ${control?.name || line.semantic}`
     };
   }
 
@@ -21,7 +22,7 @@ function deduceHypothesis(line) {
   const numVal = numMatch ? parseInt(numMatch[1], 10) : true;
 
   if (lower.includes('session') || lower.includes('timeout') || lower.includes('idle')) {
-    return { semantic: 'ADMIN_SESSION_TIMEOUT', category: 'Administrative Access', controlName: 'Admin Session Timeout', value: numVal !== true ? numVal : 900, confidence: 70, hypothesisText: 'Possible: Admin Session Timeout Policy' };
+    return { semantic: 'ADMIN_SESSION_TIMEOUT', category: 'Administrative Access', controlName: 'Admin Session Timeout', value: numVal !== true ? numVal : 900, confidence: 78, hypothesisText: 'Administrative Session Timeout' };
   }
   if (lower.includes('lockout') || lower.includes('attempts') || lower.includes('retry')) {
     return { semantic: 'LOGIN_MAX_RETRIES', category: 'Administrative Access', controlName: 'Account Lockout Threshold', value: numVal !== true ? numVal : 5, confidence: 75, hypothesisText: 'Possible: Account Lockout Retry Threshold' };
@@ -63,6 +64,43 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
   const [filterMode, setFilterMode] = useState('all'); // 'all' | 'untaught' | 'learned'
   const [searchQuery, setSearchQuery] = useState('');
 
+  const liveGeneralized = useMemo(() => {
+    if (!selectedItem || !mappingSemantic) return null;
+    let val = mappingValue;
+    if (val === 'true') val = true;
+    else if (val === 'false') val = false;
+    else if (val !== '' && !isNaN(Number(val))) val = Number(val);
+    else if (val === '') val = true;
+
+    return synthesizeGeneralizedPattern(
+      selectedItem.trimmed,
+      mappingSemantic,
+      val,
+      analysisResult?.deviceName || 'Training Appliance'
+    );
+  }, [selectedItem, mappingSemantic, mappingValue, analysisResult]);
+
+  const unknownLines = useMemo(() => {
+    if (!analysisResult?.lines) return [];
+    return analysisResult.lines.filter(l =>
+      l.state === 'UNKNOWN' || l.state === 'LOW_CONFIDENCE' || l.state === 'LEARNED' || taught[l.lineNumber]
+    );
+  }, [analysisResult, taught]);
+
+  // Filtered rows for the ledger
+  const filteredLines = useMemo(() => {
+    return unknownLines.filter(line => {
+      const isTaught = !!taught[line.lineNumber] || line.state === 'LEARNED';
+      if (filterMode === 'untaught' && isTaught) return false;
+      if (filterMode === 'learned' && !isTaught) return false;
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        return line.trimmed.toLowerCase().includes(query) || (line.hypothesis && line.hypothesis.toLowerCase().includes(query));
+      }
+      return true;
+    });
+  }, [unknownLines, taught, filterMode, searchQuery]);
+
   if (!analysisResult) {
     return (
       <div className="animate-fadeIn">
@@ -83,28 +121,8 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
     );
   }
 
-  const unknownLines = useMemo(() => {
-    return analysisResult.lines.filter(l =>
-      l.state === 'UNKNOWN' || l.state === 'LOW_CONFIDENCE' || l.state === 'LEARNED' || taught[l.lineNumber]
-    );
-  }, [analysisResult, taught]);
-
   const untaughtCount = unknownLines.filter(l => !taught[l.lineNumber] && l.state !== 'LEARNED').length;
   const taughtCount = unknownLines.filter(l => taught[l.lineNumber] || l.state === 'LEARNED').length;
-
-  // Filtered rows for the ledger
-  const filteredLines = useMemo(() => {
-    return unknownLines.filter(line => {
-      const isTaught = !!taught[line.lineNumber] || line.state === 'LEARNED';
-      if (filterMode === 'untaught' && isTaught) return false;
-      if (filterMode === 'learned' && !isTaught) return false;
-      if (searchQuery.trim()) {
-        const query = searchQuery.toLowerCase();
-        return line.trimmed.toLowerCase().includes(query) || (line.hypothesis && line.hypothesis.toLowerCase().includes(query));
-      }
-      return true;
-    });
-  }, [unknownLines, taught, filterMode, searchQuery]);
 
   // Single Item Inscribe Handler
   const handleTeach = (customLine = null, customSemantic = null, customValue = null, customCategory = null) => {
@@ -112,25 +130,27 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
     const semantic = customSemantic || mappingSemantic;
     if (!targetItem || !semantic) return;
 
-    const pattern = targetItem.trimmed.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\d+/g, '\\d+');
-    const control = semanticControls.find(c => c.semanticParameter === semantic);
-
     let val = customValue !== null && customValue !== undefined ? customValue : mappingValue;
     if (val === 'true') val = true;
     else if (val === 'false') val = false;
     else if (val !== '' && !isNaN(Number(val))) val = Number(val);
     else if (val === '') val = true;
 
+    const generalized = synthesizeGeneralizedPattern(
+      targetItem.trimmed,
+      semantic,
+      val,
+      analysisResult?.deviceName || 'Training Appliance'
+    );
+
+    const control = semanticControls.find(c => c.semanticParameter === generalized.semantic);
+
     saveLearnedMapping({
-      pattern,
-      rawCommand: targetItem.trimmed,
-      semantic: semantic,
-      value: val,
-      category: customCategory || mappingCategory || control?.category || 'General',
-      controlId: control?.id || null,
-      controlName: control?.name || semantic,
-      confidence: 97,
-      source: 'Administrator',
+      ...generalized,
+      category: customCategory || mappingCategory || generalized.category || control?.category || 'General',
+      controlId: control?.id || generalized.controlId || null,
+      controlName: control?.name || generalized.controlName || semantic,
+      source: 'HUMAN_TRAINED',
     });
 
     setTaught(prev => ({ ...prev, [targetItem.lineNumber]: true }));
@@ -145,7 +165,7 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
   const handleTeachAndReprocess = () => {
     const semanticName = semanticControls.find(c => c.semanticParameter === mappingSemantic)?.name || mappingSemantic;
     handleTeach();
-    showToast(`Knowledge acquired: ${semanticName}`);
+    showToast(`Knowledge acquired: ${semanticName} (Generalized pattern inscribed)`);
     setTimeout(() => {
       onReanalyze();
     }, 350);
@@ -155,7 +175,7 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
   const handleInlineAccept = (line) => {
     const hyp = deduceHypothesis(line);
     handleTeach(line, hyp.semantic, hyp.value, hyp.category);
-    showToast(`Inscribed: ${hyp.controlName}`);
+    showToast(`Generalized pattern inscribed: ${hyp.controlName}`);
     setTimeout(() => {
       onReanalyze();
     }, 350);
@@ -169,19 +189,20 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
     const newlyTaught = {};
     untaughtLines.forEach(line => {
       const hyp = deduceHypothesis(line);
-      const pattern = line.trimmed.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\d+/g, '\\d+');
-      const control = semanticControls.find(c => c.semanticParameter === hyp.semantic);
+      const generalized = synthesizeGeneralizedPattern(
+        line.trimmed,
+        hyp.semantic,
+        hyp.value,
+        analysisResult?.deviceName || 'Training Appliance'
+      );
+      const control = semanticControls.find(c => c.semanticParameter === generalized.semantic);
 
       saveLearnedMapping({
-        pattern,
-        rawCommand: line.trimmed,
-        semantic: hyp.semantic,
-        value: hyp.value,
-        category: hyp.category,
-        controlId: control?.id || null,
-        controlName: hyp.controlName,
-        confidence: 97,
-        source: 'Administrator (Batch Inscribed)',
+        ...generalized,
+        category: hyp.category || generalized.category || control?.category || 'General',
+        controlId: control?.id || generalized.controlId || null,
+        controlName: hyp.controlName || generalized.controlName,
+        source: 'HUMAN_TRAINED (Batch Inscribed)',
       });
 
       newlyTaught[line.lineNumber] = true;
@@ -189,7 +210,7 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
 
     setTaught(prev => ({ ...prev, ...newlyTaught }));
     setSelectedItem(null);
-    showToast(`Batch Inscribed: ${untaughtLines.length} unfamiliar constructs into TĀRĀ Memory!`);
+    showToast(`Batch Inscribed: ${untaughtLines.length} generalized patterns into TĀRĀ Memory!`);
     setTimeout(() => {
       onReanalyze();
     }, 450);
@@ -450,6 +471,31 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
                 </div>
               </div>
 
+              {/* Step 4: Synthesized Generalized Pattern Preview */}
+              {liveGeneralized && (
+                <div style={{
+                  padding: '10px 12px',
+                  background: 'var(--color-bg-base)',
+                  border: '1px solid rgba(176, 138, 60, 0.4)',
+                  borderRadius: 'var(--radius-xs)',
+                  marginBottom: 'var(--space-md)'
+                }}>
+                  <div style={{ fontSize: '0.64rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--color-ochre)', fontWeight: 600, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>4. Synthesized Generalized Pattern</span>
+                    <span style={{ color: 'var(--color-pass)' }}>✓ Generalized</span>
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--color-indigo)', marginTop: '4px', fontWeight: 600 }}>
+                    {liveGeneralized.learnedPattern}
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', marginTop: '6px', fontSize: '0.68rem', color: 'var(--color-ink-muted)' }}>
+                    <div>Parameter: <strong style={{ color: 'var(--color-ink-primary)' }}>{liveGeneralized.parameter || 'EXACT'}</strong></div>
+                    <div>Extracted: <strong style={{ color: 'var(--color-pass)' }}>{String(liveGeneralized.extractedValue)}</strong></div>
+                    <div>Knowledge Source: <strong style={{ color: 'var(--color-ochre)' }}>HUMAN_TRAINED</strong></div>
+                    <div>Target SBM: <strong style={{ color: 'var(--color-indigo)' }}>{liveGeneralized.semantic}</strong></div>
+                  </div>
+                </div>
+              )}
+
               {/* Action Buttons */}
               <div style={{ display: 'flex', gap: 'var(--space-sm)', marginTop: 'var(--space-lg)' }}>
                 <button
@@ -458,7 +504,7 @@ export default function TrainingStudio({ analysisResult, onReanalyze, showToast 
                   disabled={!mappingSemantic}
                   onClick={handleTeachAndReprocess}
                 >
-                  Inscribe &amp; Re-analyze ✦
+                  Accept &amp; Learn Generalized Pattern ✦
                 </button>
                 <button
                   className="btn btn-secondary btn-sm"

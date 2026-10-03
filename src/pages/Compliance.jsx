@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { frameworkInfo } from '../knowledge/semanticControls';
 import { generateHeatmap } from '../core/compliance';
+import { calculateLearningImpact } from '../core/learningImpact';
+import LearningImpactSection from '../components/LearningImpactSection';
 
 const DOMAIN_ICONS = {
   'Administrative Access': '⚙',
@@ -108,11 +110,15 @@ function getHeatmapTileStyle(cell, isSelected, mode) {
   };
 }
 
-export default function Compliance({ complianceResult, heatmapData, analysisResult }) {
+export default function Compliance({ complianceResult, heatmapData, analysisResult, configText }) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('frameworks');
   const [selectedCell, setSelectedCell] = useState(null);
   const [heatmapMode, setHeatmapMode] = useState('assurance');
+
+  const impactData = useMemo(() => {
+    return calculateLearningImpact(configText, analysisResult, complianceResult);
+  }, [configText, analysisResult, complianceResult]);
 
   if (!complianceResult) {
     return (
@@ -121,7 +127,7 @@ export default function Compliance({ complianceResult, heatmapData, analysisResu
           <div className="page-title-group">
             <div className="page-tag">Regulatory Assurance</div>
             <h1 className="page-title">Compliance Audit</h1>
-            <div className="page-subtitle">Deterministic evaluation against international benchmarks</div>
+            <div className="page-subtitle">Curated high-value control subset aligned to CIS, NIST SP 800-53, DISA STIG and ISO/IEC 27001.</div>
           </div>
         </div>
         <div className="empty-state">
@@ -144,7 +150,7 @@ export default function Compliance({ complianceResult, heatmapData, analysisResu
           <div className="page-tag">Audit Assurance</div>
           <h1 className="page-title">Compliance Evaluation</h1>
           <div className="page-subtitle">
-            {analysisResult?.deviceName || 'Device'} — {summary.total} controls verified across {Object.keys(frameworkScores).length} standard frameworks
+            {analysisResult?.deviceName || 'Device'} — Curated high-value control subset aligned to CIS, NIST SP 800-53, DISA STIG and ISO/IEC 27001. ({summary.total} controls verified)
           </div>
         </div>
       </div>
@@ -669,6 +675,12 @@ export default function Compliance({ complianceResult, heatmapData, analysisResu
           </div>
         </div>
       )}
+
+      {/* Real Calculated Learning Impact Section */}
+      <LearningImpactSection
+        impactData={impactData}
+        onNavigateToFindings={() => navigate('/findings')}
+      />
     </div>
   );
 }

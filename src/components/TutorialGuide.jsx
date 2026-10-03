@@ -8,7 +8,7 @@ const tutorialSteps = [
     icon: '☉',
     path: '/',
     description:
-      'Heterogeneous vendors (Cisco IOS, Juniper Junos, Fortinet FortiOS) speak different configuration languages. TĀRĀ-NETRA normalizes these syntax dialects into a single, standardized, vendor-neutral Security Baseline Model (SBM).',
+      'Heterogeneous vendors (Cisco IOS, Juniper Junos, Fortinet FortiOS) speak different configuration languages. Tārā-NETra normalizes these syntax dialects into a single, standardized, vendor-neutral Security Baseline Model (SBM).',
     howToUse:
       'The central astronomical compass on the home page visualizes this architectural core. It anchors the translation between raw CLI vendor dialects and canonical cybersecurity controls.',
     cybersecurityImpact:
@@ -156,7 +156,7 @@ export default function TutorialGuide({ isOpen, onClose, navigate }) {
               <circle cx="18" cy="18" r="1.5" fill="#A66A2C"/>
             </svg>
             <div>
-              <h2 className="tutorial-modal-title">TĀRĀ-NETRA Instrument Guide</h2>
+              <h2 className="tutorial-modal-title">Tārā-NETra Instrument Guide</h2>
               <div className="tutorial-modal-subtitle">Comprehensive Tour of Operational Chambers &amp; Features</div>
             </div>
           </div>

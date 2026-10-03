@@ -1,13 +1,13 @@
-# TĀRĀ-NETRA
+# Tārā-NETra
 
-## Trustworthy Adaptive Risk Analytics --- Network Reasoning & Assurance
+## Trustworthy Adaptive Risk Analytics — Network Reasoning & Assurance
 
 ### The Guiding Eye for Network Security
 
 **Understand. Learn. Audit. Assure.**
 
 > **Core idea:** Different vendors speak different configuration
-> languages. TĀRĀ-NETRA learns the security meaning behind them.
+> languages. Tārā-NETra learns the security meaning behind them.
 
 ------------------------------------------------------------------------
 

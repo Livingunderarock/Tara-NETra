@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Routes, Route, NavLink, useNavigate } from 'react-router-dom';
 import Overview from './pages/Overview';
 import Analyze from './pages/Analyze';
@@ -9,6 +9,7 @@ import Findings from './pages/Findings';
 import Remediation from './pages/Remediation';
 import Evidence from './pages/Evidence';
 import TutorialGuide from './components/TutorialGuide';
+import TaraDemoModal from './components/TaraDemoModal';
 import { analyzeConfiguration } from './core/interpreter';
 import { evaluateCompliance, generateHeatmap } from './core/compliance';
 import { saveAnalysis, getAnalysisHistory } from './services/storage';
@@ -33,12 +34,9 @@ export default function App() {
   const [configText, setConfigText] = useState('');
   const [deviceName, setDeviceName] = useState('');
   const [toast, setToast] = useState(null);
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(() => getAnalysisHistory());
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
-
-  useEffect(() => {
-    setHistory(getAnalysisHistory());
-  }, []);
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
 
   const showToast = useCallback((message, type = 'success') => {
     setToast({ message, type });
@@ -96,7 +94,7 @@ export default function App() {
               <line x1="32" y1="18" x2="35" y2="18" stroke="#A66A2C" strokeWidth="1"/>
             </svg>
             <div>
-              <span className="sidebar-brand">TĀRĀ-NETRA</span>
+              <span className="sidebar-brand">Tārā-NETra</span>
               <div className="sidebar-devanagari">तारानेत्र</div>
             </div>
           </NavLink>
@@ -117,18 +115,28 @@ export default function App() {
           ))}
         </div>
 
+        {/* Guided 2-Minute Competition Demonstration Trigger */}
+        <button
+          className="sidebar-demo-btn"
+          onClick={() => setIsDemoOpen(true)}
+          title="Run 2-Minute Guided Competition Demonstration"
+        >
+          <span>✦</span>
+          <span>Run Tārā Demo</span>
+        </button>
+
         {/* Global Instrument Guide & Tutorial Trigger */}
         <button
           className="sidebar-tutorial-btn"
           onClick={() => setIsTutorialOpen(true)}
-          title="Interactive walkthrough of all TĀRĀ-NETRA features"
+          title="Interactive walkthrough of all Tārā-NETra features"
         >
           <span>✧</span>
           <span>Guide &amp; Tutorial</span>
         </button>
 
         <div className="sidebar-footer">
-          <div className="sidebar-footer-title">Network Reasoning & Assurance</div>
+          <div className="sidebar-footer-title">Trustworthy Adaptive Risk Analytics — Network Reasoning & Assurance</div>
           <div>SIH 2026 • Astronomical Engine</div>
         </div>
       </nav>
@@ -144,6 +152,7 @@ export default function App() {
               onAnalyze={handleAnalyze}
               onOpenTutorial={() => setIsTutorialOpen(true)}
               navigate={navigate}
+              showToast={showToast}
             />
           } />
           <Route path="/analyze" element={
@@ -170,6 +179,7 @@ export default function App() {
               complianceResult={complianceResult}
               heatmapData={heatmapData}
               analysisResult={analysisResult}
+              configText={configText}
             />
           } />
           <Route path="/findings" element={
@@ -209,6 +219,15 @@ export default function App() {
         isOpen={isTutorialOpen}
         onClose={() => setIsTutorialOpen(false)}
         navigate={navigate}
+      />
+
+      {/* Global Guided 2-Minute Competition Demo Modal */}
+      <TaraDemoModal
+        isOpen={isDemoOpen}
+        onClose={() => setIsDemoOpen(false)}
+        onAnalyze={handleAnalyze}
+        navigate={navigate}
+        showToast={showToast}
       />
     </div>
   );

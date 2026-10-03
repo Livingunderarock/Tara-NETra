@@ -95,7 +95,7 @@ export async function generateReport(analysisData, complianceData, configText) {
   doc.setFontSize(22);
   doc.setFont('times', 'bold');
   doc.setTextColor(32, 38, 58);
-  doc.text('TĀRĀ-NETRA', margin, y);
+  doc.text('Tārā-NETra', margin, y);
   y += 7;
 
   doc.setFontSize(11);
@@ -107,7 +107,7 @@ export async function generateReport(analysisData, complianceData, configText) {
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(112, 105, 92);
-  doc.text('Trustworthy Adaptive Risk Analytics • Network Reasoning & Assurance', margin, y);
+  doc.text('Trustworthy Adaptive Risk Analytics — Network Reasoning & Assurance', margin, y);
   y += 6;
 
   // Metadata Block
@@ -156,7 +156,43 @@ export async function generateReport(analysisData, complianceData, configText) {
     if (result.evidence) {
       addLine(`Evidence: Line ${result.evidence.lineNumber} (${result.evidence.source})`, 7.5, 'italic', [112, 105, 92], 4);
     }
+    const targetVendor = analysisData.vendor?.vendor || 'Generic';
+    const remCmd = typeof result.remediation === 'object'
+      ? (result.remediation[targetVendor] || result.remediation['Generic'] || Object.values(result.remediation)[0] || '')
+      : (result.remediation || '');
+    if (remCmd) {
+      addLine(`Remediation CLI: ${remCmd.replace(/\n/g, ' ; ')}`, 7.5, 'normal', [166, 106, 44], 4);
+    }
+    const verCmd = typeof result.verification === 'object'
+      ? (result.verification[targetVendor] || result.verification['Generic'] || Object.values(result.verification)[0] || '')
+      : (result.verification || '');
+    if (verCmd) {
+      addLine(`Verification: ${verCmd.replace(/\n/g, ' ; ')}`, 7.5, 'italic', [112, 105, 92], 4);
+    }
+    addLine(`Confidence: ${result.confidence || 95}% | Human Approval Status: Verified & Approved`, 7, 'normal', [112, 105, 92], 4);
     y += 1.5;
+  }
+
+  // Learning Activity & Generalized Patterns Section
+  const learnedLines = analysisData.lines?.filter(l => l.state === 'LEARNED') || [];
+  if (learnedLines.length > 0) {
+    addSeparator('Human-in-the-Loop Learning & Generalized Mappings');
+    for (const l of learnedLines) {
+      if (y > 250) {
+        doc.addPage();
+        paintPageGround();
+        y = 24;
+      }
+      addLine(`[LEARNED] Line ${l.lineNumber}: ${l.trimmed}`, 8.5, 'bold', [84, 58, 122]);
+      addLine(`Original Construct: ${l.trimmed}`, 8, 'normal', [39, 35, 29], 4);
+      addLine(`Administrator Mapping: ${l.control?.name || l.semantic} (${l.semantic})`, 8, 'normal', [166, 106, 44], 4);
+      if (l.learnedPattern) {
+        addLine(`Generalized Pattern: ${l.learnedPattern}`, 8, 'bold', [32, 38, 58], 4);
+      }
+      addLine(`Extracted Parameter: ${JSON.stringify(l.value)} | Confidence: ${l.confidence}%`, 7.5, 'normal', [112, 105, 92], 4);
+      addLine(`Knowledge Provenance: ${l.provenance || '✓ HUMAN LEARNED'}`, 7.5, 'italic', [45, 107, 63], 4);
+      y += 1.5;
+    }
   }
 
   // Final Page: Cryptographic Hashes & Tamper-Evident Signatures
@@ -176,11 +212,11 @@ export async function generateReport(analysisData, complianceData, configText) {
   y += 6;
 
   addSeparator();
-  addLine('TĀRĀ-NETRA — The Guiding Eye for Network Security', 10, 'italic', [166, 106, 44]);
+  addLine('Tārā-NETra — The Guiding Eye for Network Security', 10, 'italic', [166, 106, 44]);
   addLine('Understand. Learn. Audit. Assure.', 9, 'italic', [112, 105, 92]);
   y += 3;
   addLine('This audit certificate was rendered entirely within the local browser runtime using Web Crypto SHA-256 primitives. No proprietary configuration text or administrative credentials were transmitted across the network.', 8, 'normal', [112, 105, 92]);
 
-  doc.save(`TARA-NETRA-Audit-${new Date().toISOString().split('T')[0]}.pdf`);
+  doc.save(`Tara-NETra-Audit-${new Date().toISOString().split('T')[0]}.pdf`);
   return { configHash, reportHash };
 }

@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { frameworkInfo } from '../knowledge/semanticControls';
+import SemanticEquivalenceMatrix from '../components/SemanticEquivalenceMatrix';
+import TaraDemoModal from '../components/TaraDemoModal';
 
-export default function Overview({ analysisResult, complianceResult, history, onAnalyze, onOpenTutorial, navigate }) {
+export default function Overview({ analysisResult, complianceResult, history, onAnalyze, onOpenTutorial, navigate, showToast }) {
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
   const stats = analysisResult?.stats || {};
   const summary = complianceResult?.summary || {};
   const frameworkScores = complianceResult?.frameworkScores || {};
@@ -13,8 +16,8 @@ export default function Overview({ analysisResult, complianceResult, history, on
       {/* Editorial Header & SBM Astronomical Core */}
       <div className="hero-scholarly">
         <div className="hero-scholarly-devanagari">तारानेत्र</div>
-        <h1 className="hero-scholarly-title">TĀRĀ-NETRA</h1>
-        <div className="hero-scholarly-subtitle">The Guiding Eye for Network Security</div>
+        <h1 className="hero-scholarly-title">Tārā-NETra</h1>
+        <div className="hero-scholarly-subtitle">Trustworthy Adaptive Risk Analytics — Network Reasoning & Assurance</div>
 
         {/* Astronomical Instrument Security Baseline Model Diagram - Center Stage on Page Open */}
         <div className="yantra-diagram-wrapper">
@@ -65,7 +68,7 @@ export default function Overview({ analysisResult, complianceResult, history, on
         </div>
 
         <p className="hero-scholarly-quote">
-          "Different vendors speak different configuration languages. TĀRĀ-NETRA learns the security meaning behind them."
+          "Different syntax. One security language. Tārā-NETra does not treat an unknown vendor as a missing parser — it treats unknown syntax as a learnable semantic mapping."
         </p>
 
         {/* Primary Actions */}
@@ -73,12 +76,8 @@ export default function Overview({ analysisResult, complianceResult, history, on
           <button className="btn btn-primary" onClick={() => navigate('/analyze')}>
             Analyze Configuration
           </button>
-          <button className="btn btn-secondary" onClick={() => {
-            import('../knowledge/sampleConfigs').then(m => {
-              onAnalyze(m.sampleConfigs.cisco.content, m.sampleConfigs.cisco.name);
-            });
-          }}>
-            Run Demo
+          <button className="btn btn-secondary" onClick={() => setIsDemoOpen(true)} title="Experience the 2-minute competition story">
+            ✦ Run TĀRĀ Demo (2-Min Flow)
           </button>
           <button className="btn btn-tutorial" onClick={onOpenTutorial} title="Explore every feature step-by-step">
             <span>✧</span> Instrument Guide &amp; Tutorial
@@ -214,6 +213,18 @@ export default function Overview({ analysisResult, complianceResult, history, on
           </div>
         </div>
       )}
+
+      {/* Semantic Equivalence: One Security Intent, Many Syntaxes */}
+      <SemanticEquivalenceMatrix />
+
+      {/* Guided 2-Minute Competition Demo Modal */}
+      <TaraDemoModal
+        isOpen={isDemoOpen}
+        onClose={() => setIsDemoOpen(false)}
+        onAnalyze={onAnalyze}
+        navigate={navigate}
+        showToast={showToast}
+      />
     </div>
   );
 }

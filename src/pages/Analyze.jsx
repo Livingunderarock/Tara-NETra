@@ -1,10 +1,22 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { sampleConfigs } from '../knowledge/sampleConfigs';
+import { calculateLearningImpact } from '../core/learningImpact';
+import LearningImpactSection from '../components/LearningImpactSection';
+import SecuritySemanticDriftModal from '../components/SecuritySemanticDriftModal';
 
 export default function Analyze({ analysisResult, complianceResult, onAnalyze, configText, navigate }) {
   const [dragging, setDragging] = useState(false);
   const [selectedLine, setSelectedLine] = useState(null);
+  const [isDriftOpen, setIsDriftOpen] = useState(false);
   const fileInputRef = useRef(null);
+
+  const impactData = useMemo(() => {
+    return calculateLearningImpact(configText, analysisResult, complianceResult);
+  }, [configText, analysisResult, complianceResult]);
+
+  const unseenLearnedLines = useMemo(() => {
+    return analysisResult?.lines?.filter(l => l.isUnseenVariant) || [];
+  }, [analysisResult]);
 
   const handleFile = useCallback((file) => {
     const reader = new FileReader();
@@ -89,7 +101,16 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
         <button type="button" className="sample-btn" onClick={() => loadSample('fortinet')}>Fortinet FortiOS (CORE-FW-02)</button>
         <button type="button" className="sample-btn" onClick={() => loadSample('junos')}>Juniper JunOS (DIST-SW-03)</button>
         <button type="button" className="sample-btn" onClick={() => loadSample('unknown')} style={{ color: 'var(--color-ochre)' }}>
-          Unknown Vendor (BRANCH-GW-04)
+          Unknown Device A (BRANCH-GW-04)
+        </button>
+        <button
+          type="button"
+          className="sample-btn"
+          onClick={() => loadSample('unknownB')}
+          style={{ color: 'var(--color-gold)', border: '1px dashed rgba(176, 138, 60, 0.6)' }}
+          title="Never used during training — tests generalized learning"
+        >
+          ✦ Unseen Device B (CAMPUS-GW-05)
         </button>
       </div>
 
@@ -134,6 +155,119 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
             </div>
           </div>
 
+          {/* TĀRĀ Learning Proof: Visual Proof Architecture */}
+          {unseenLearnedLines.length > 0 ? (
+            <div className="card" style={{
+              padding: '16px 20px',
+              background: 'linear-gradient(135deg, rgba(84, 58, 122, 0.15) 0%, rgba(32, 38, 58, 0.45) 100%)',
+              border: '1.5px solid var(--color-purple)',
+              borderRadius: 'var(--radius-xs)',
+              marginBottom: 'var(--space-lg)',
+              boxShadow: '0 4px 16px rgba(84, 58, 122, 0.2)',
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span className="badge badge-learned" style={{ fontSize: '0.72rem', padding: '3px 8px' }}>
+                      ✓ TĀRĀ LEARNING PROOF
+                    </span>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>
+                      Generalization Confirmed
+                    </span>
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', color: 'var(--color-indigo)', marginTop: '4px', fontWeight: 600 }}>
+                    "This configuration was not used during training."
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--color-ink-secondary)', marginTop: '2px' }}>
+                    Pattern learned from another configuration (<strong>{unseenLearnedLines[0].originDevice || 'BRANCH-GW-04'}</strong>) and successfully generalized to unseen device <strong>{analysisResult.deviceName}</strong>.
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'right' }}>
+                  <span className="badge badge-recognized" style={{ fontSize: '0.68rem' }}>
+                    Knowledge Source: TĀRĀ Memory
+                  </span>
+                </div>
+              </div>
+
+              {/* 5-Step Visual Generalization Pipeline */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                gap: '8px',
+                background: 'var(--color-bg-base)',
+                padding: '12px',
+                borderRadius: 'var(--radius-xs)',
+                border: 'var(--border-hairline)',
+                alignItems: 'center',
+              }}>
+                <div style={{ textAlign: 'center', padding: '6px' }}>
+                  <div style={{ fontSize: '0.62rem', color: 'var(--color-ink-muted)', textTransform: 'uppercase' }}>1. Device A (Training)</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--color-indigo)', fontWeight: 600, marginTop: '2px', wordBreak: 'break-all' }}>
+                    {unseenLearnedLines[0].originalExample || 'session-limit 900'}
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'center', color: 'var(--color-ochre)', fontSize: '0.8rem' }}>→</div>
+
+                <div style={{ textAlign: 'center', padding: '6px' }}>
+                  <div style={{ fontSize: '0.62rem', color: 'var(--color-ink-muted)', textTransform: 'uppercase' }}>2. Human Teaches</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--color-ochre)', fontWeight: 600, marginTop: '2px' }}>
+                    {unseenLearnedLines[0].control?.name || unseenLearnedLines[0].semantic}
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'center', color: 'var(--color-gold)', fontSize: '0.8rem' }}>→</div>
+
+                <div style={{ textAlign: 'center', padding: '6px', background: 'rgba(176, 138, 60, 0.1)', borderRadius: 'var(--radius-xs)' }}>
+                  <div style={{ fontSize: '0.62rem', color: 'var(--color-gold)', textTransform: 'uppercase', fontWeight: 600 }}>3. Generalized Pattern</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--color-indigo)', fontWeight: 700, marginTop: '2px' }}>
+                    {unseenLearnedLines[0].learnedPattern || 'command <VALUE>'}
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'center', color: 'var(--color-purple)', fontSize: '0.8rem' }}>→</div>
+
+                <div style={{ textAlign: 'center', padding: '6px', background: 'rgba(84, 58, 122, 0.15)', borderRadius: 'var(--radius-xs)' }}>
+                  <div style={{ fontSize: '0.62rem', color: 'var(--color-purple)', textTransform: 'uppercase', fontWeight: 600 }}>4. Unseen Device B</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--color-pass)', fontWeight: 700, marginTop: '2px' }}>
+                    ✓ MATCH: {unseenLearnedLines[0].parameter || 'Value'} = {String(unseenLearnedLines[0].value)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : analysisResult.stats.learned > 0 ? (
+            <div style={{
+              padding: '12px 18px',
+              background: 'rgba(84, 58, 122, 0.12)',
+              border: '1px solid var(--color-purple)',
+              borderRadius: 'var(--radius-xs)',
+              marginBottom: 'var(--space-md)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '12px',
+            }}>
+              <div>
+                <span className="badge badge-learned" style={{ fontSize: '0.72rem', marginRight: '8px' }}>
+                  ✓ HUMAN LEARNED
+                </span>
+                <span style={{ fontSize: '0.82rem', color: 'var(--color-ink-primary)' }}>
+                  <strong>Ground Truth Active:</strong> {analysisResult.stats.learned} construct(s) recognized via TĀRĀ Memory.
+                </span>
+              </div>
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                onClick={() => loadSample('unknownB')}
+                style={{ fontSize: '0.74rem', color: 'var(--color-gold)', borderColor: 'rgba(176, 138, 60, 0.5)' }}
+              >
+                ✦ Test on Unseen Device B (CAMPUS-GW-05) →
+              </button>
+            </div>
+          ) : null}
+
           {/* Unknown Vendor Alert if applicable */}
           {analysisResult.vendor.vendor === 'Unknown' && (
             <div style={{
@@ -144,7 +278,7 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
               fontSize: '0.8rem',
               color: 'var(--color-ink-primary)'
             }}>
-              <strong>Observation Note:</strong> Vendor identification is unverified. Semantic interpretation is proceeding using cross-vendor heuristics and confidence thresholds.
+              <strong>Observation Note:</strong> Vendor identification is unverified. Semantic interpretation is proceeding using cross-vendor heuristics, learned patterns, and confidence thresholds.
             </div>
           )}
 
@@ -193,8 +327,12 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
                           'Directive'
                         )}
                       </div>
-                      <div className="interpretation-sub">
-                        Line {line.lineNumber} • {line.source}
+                      <div className="interpretation-sub" style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                        <span>Line {line.lineNumber}</span>
+                        <span>•</span>
+                        <span style={{ color: line.state === 'LEARNED' ? 'var(--color-purple)' : 'var(--color-ink-muted)', fontSize: '0.66rem' }}>
+                          {line.provenance || line.source}
+                        </span>
                       </div>
                     </div>
                     <span className={`badge ${getBadgeClass(line.state)}`}>
@@ -252,6 +390,28 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
                     </div>
                   )}
 
+                  <div className="detail-section">
+                    <div className="detail-label">Knowledge Provenance</div>
+                    <span className={`badge ${selectedLine.state === 'LEARNED' ? 'badge-learned' : 'badge-recognized'}`} style={{ fontSize: '0.7rem' }}>
+                      {selectedLine.provenance || selectedLine.source}
+                    </span>
+                  </div>
+
+                  {selectedLine.isUnseenVariant && (
+                    <div className="detail-section" style={{ background: 'rgba(84, 58, 122, 0.12)', padding: '10px 12px', borderRadius: 'var(--radius-xs)', border: '1px dashed var(--color-purple)' }}>
+                      <div className="detail-label" style={{ color: 'var(--color-purple)', fontWeight: 600 }}>TĀRĀ Learning Proof (Generalization)</div>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--color-ink-primary)', marginTop: '2px' }}>
+                        Pattern learned from another configuration (<strong>{selectedLine.originDevice}</strong>)
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--color-ochre)', marginTop: '3px' }}>
+                        Generalized Pattern: {selectedLine.learnedPattern}
+                      </div>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--color-pass)', marginTop: '3px' }}>
+                        Dynamically Extracted: {selectedLine.parameter} = {String(selectedLine.value)}
+                      </div>
+                    </div>
+                  )}
+
                   {selectedLine.control?.frameworks && (
                     <div className="detail-section">
                       <div className="detail-label">Regulatory Crosswalk</div>
@@ -289,12 +449,15 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
           </div>
 
           {/* Action Footer */}
-          <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: 'var(--space-xl)' }}>
+          <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: 'var(--space-xl)', flexWrap: 'wrap' }}>
             <button type="button" className="btn btn-primary" onClick={() => navigate('/compliance')}>
               View Compliance Audit
             </button>
             <button type="button" className="btn btn-secondary" onClick={() => navigate('/findings')}>
               Inspect Findings
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={() => setIsDriftOpen(true)}>
+              Compare Semantic Drift ◬
             </button>
             {(analysisResult.stats.unknown > 0 || analysisResult.stats.lowConfidence > 0) && (
               <button
@@ -307,6 +470,20 @@ export default function Analyze({ analysisResult, complianceResult, onAnalyze, c
               </button>
             )}
           </div>
+
+          {/* Real Calculated Learning Impact Section */}
+          <LearningImpactSection
+            impactData={impactData}
+            onNavigateToFindings={() => navigate('/findings')}
+          />
+
+          {/* Security Semantic Drift Modal */}
+          <SecuritySemanticDriftModal
+            isOpen={isDriftOpen}
+            onClose={() => setIsDriftOpen(false)}
+            currentConfigText={configText}
+            currentDeviceName={analysisResult?.deviceName}
+          />
         </div>
       )}
     </div>

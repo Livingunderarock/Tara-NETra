@@ -44,7 +44,7 @@ async function dbAdd(storeName, data) {
   });
 }
 
-async function dbGetAll(storeName) {
+export async function dbGetAll(storeName) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readonly');
@@ -183,7 +183,7 @@ export function exportKnowledge() {
   const data = {
     version: '1.0',
     exportedAt: new Date().toISOString(),
-    application: 'TARA-NETRA',
+    application: 'Tara-NETra',
     learnedMappings: getLearnedMappings(),
     analysisHistory: getAnalysisHistory(),
   };
@@ -199,8 +199,8 @@ export function exportKnowledge() {
 export function importKnowledge(jsonString) {
   try {
     const data = JSON.parse(jsonString);
-    if (data.application !== 'TARA-NETRA') {
-      throw new Error('Invalid TĀRĀ-NETRA knowledge file');
+    if (!['Tara-NETra', 'Tārā-NETra', 'TARA-NETRA', 'TĀRĀ-NETRA'].includes(data.application)) {
+      throw new Error('Invalid Tārā-NETra knowledge file');
     }
     if (data.learnedMappings) {
       const existing = getLearnedMappings();

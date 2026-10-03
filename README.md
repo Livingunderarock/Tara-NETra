@@ -1,10 +1,16 @@
-# TĀRĀ-NETRA
+# Tārā-NETra
 ## Trustworthy Adaptive Risk Analytics — Network Reasoning & Assurance
 ### *The Guiding Eye for Network Security* (तारानेत्र)
 
-> **"Different vendors speak different configuration languages. TĀRĀ-NETRA learns the security meaning behind them."**
+> **"Different syntax. One security language."**
+>
+> **"A new vendor should not require a new parser deployment."**
+>
+> **"Tārā-NETra does not treat an unknown vendor as a missing parser. It treats unknown syntax as a learnable semantic mapping."**
 
-[![Deploy TARA-NETRA](https://github.com/manas/Tara-NETra/actions/workflows/deploy.yml/badge.svg)](https://github.com/manas/Tara-NETra/actions/workflows/deploy.yml)
+*Differentiated prototype implementation covering a curated high-value control subset aligned to CIS, NIST SP 800-53, DISA STIG, and ISO/IEC 27001.*
+
+[![Deploy Tara-NETra](https://github.com/manas/Tara-NETra/actions/workflows/deploy.yml/badge.svg)](https://github.com/manas/Tara-NETra/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Vite](https://img.shields.io/badge/Vite-8.3-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
@@ -21,15 +27,15 @@ Historically, security compliance auditing has required:
 - Cloud-dependent SaaS assessment tools that expose sensitive network topologies and credentials to third-party servers.
 - Opaque scoring dashboards that fail to provide an explainable cryptographic chain of custody for auditors.
 
-**TĀRĀ-NETRA** resolves this fundamental challenge through a **zero-backend, client-side reasoning engine** that translates disparate CLI syntaxes into a vendor-neutral **Security Baseline Model (SBM)**. By combining confidence-aware semantic interpretation, a zero-scroll **Human-in-the-Loop Learning Studio**, and deterministic multi-framework rule evaluation, TĀRĀ-NETRA ensures that a new vendor never requires a software redeployment.
+**Tārā-NETra** resolves this fundamental challenge through a **zero-backend, client-side reasoning engine** that translates disparate CLI syntaxes into a vendor-neutral **Security Baseline Model (SBM)**. By combining confidence-aware semantic interpretation, a zero-scroll **Human-in-the-Loop Learning Studio**, and deterministic multi-framework rule evaluation, Tārā-NETra ensures that a new vendor never requires a software redeployment.
 
 ```
-       ┌─────────────────────────────────────────────────────────────┐
-       │               THE TĀRĀ-NETRA LEARNING CYCLE                 │
-       │                                                             │
-       │   UNKNOWN  ──►  EXPLAIN  ──►  TEACH  ──►  LEARN  ──► AUDIT  │
-       │   (Novel CLI)   (AI Hypo)   (Admin)     (Memory)   (Proof)  │
-       └─────────────────────────────────────────────────────────────┘
+       ┌────────────────────────────────────────────────────────────────────────┐
+       │                    THE Tārā-NETra LEARNING CYCLE                       │
+       │                                                                        │
+       │  UNKNOWN  ──►  EXPLAIN  ──►  TEACH  ──►  LEARN  ──► VERIFY ──► AUDIT   │
+       │(Novel CLI)    (AI Hypo)     (Admin)   (Generalize) (Unseen)   (Proof)  │
+       └────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -217,33 +223,53 @@ TĀRĀ-NETRA deterministically assesses 16 critical network security controls cr
 
 ## 5. Two-Minute Live Demonstration Script
 
-Follow this curated sequence to demonstrate the end-to-end capabilities of TĀRĀ-NETRA:
+Follow this curated sequence to demonstrate the core value proposition of TĀRĀ-NETRA:
 
-1. **Overview & Astronomical SBM Core (0:00 - 0:20)**:
-   - Load the homepage. Highlight the **Yantra SBM Astronomical Core** diagram representing the convergence of Vendors, Semantics, Frameworks, and Remediation.
-   - Click **"✧ Instrument Guide & Tutorial"** to demonstrate the self-guided onboarding modal.
-2. **Analyze Unknown Vendor Configuration (0:20 - 0:45)**:
-   - Navigate to `#/analyze` and click **"Load Unknown Vendor Sample"** (`BRANCH-GW-04`).
-   - Note that the vendor is identified with unrecognized directives highlighted in amber and red.
-   - Select line `set secure-admin session-limit 900` to inspect its normalized SBM hypothesis in the central inspector.
-3. **Zero-Scroll Training Studio: Batch Learning (0:45 - 1:15)**:
-   - Click **"Open Training Studio"** (`#/training`).
-   - Observe the two-column master-detail layout: the left ledger scrolls internally, while the right Scholar’s Teaching Desk remains pinned.
-   - Demonstrate the **"✧ Learn All Hypotheses"** button: click it once to inscribe all unknown directives into persistent TĀRĀ Memory in a single batch.
-   - Observe the instant re-analysis: all constructs transition to `✓ LEARNED` with 97% confidence.
-4. **Compliance Heatmap & Security Debt (1:15 - 1:35)**:
-   - Navigate to `#/compliance`.
-   - Inspect compliance scores across CIS, NIST, STIG, and ISO.
-   - Toggle the **Heatmap Matrix** to visualize category-by-category adherence.
-   - Review the **Security Debt** panel calculating weighted vulnerability exposure.
-5. **Explainability & TĀRĀ RESOLVE (1:35 - 1:50)**:
-   - Navigate to `#/findings` and select a failing control.
-   - Trace the 5-step explainability chain: `Raw CLI → SBM Interpretation → Security Control → Framework → Result`.
-   - Switch to `#/remediation` (**TĀRĀ RESOLVE**), inspect the vendor-tailored CLI fix and verification command, and click **"Approve Remediation"**.
-6. **Tamper-Evident Evidence & TĀRĀ PROOF PDF (1:50 - 2:00)**:
-   - Navigate to `#/evidence` (**TĀRĀ PROOF**).
-   - Verify the SHA-256 hash generated via the native Web Crypto API.
-   - Click **"Generate TĀRĀ PROOF PDF"** to produce an audit-ready, cryptographically sealed compliance package.
+1. **The Core Premise (0:00 - 0:15)**:
+   - Present TĀRĀ-NETRA: *"Enterprise networks don't speak one configuration language. TĀRĀ-NETRA learns the security meaning behind unfamiliar syntax."*
+   - Highlight the central architectural axiom: *"Different syntax. One security language."*
+
+2. **Ingest Unknown Vendor Configuration (0:15 - 0:30)**:
+   - Navigate to `#/analyze` and click **"Unknown Device A (BRANCH-GW-04)"**.
+   - Note `Vendor: UNKNOWN`. TĀRĀ recognizes baseline directives using heuristic deduction, but unfamiliar constructs remain flagged.
+   - Highlight the unknown construct on line 10: `set secure-admin session-limit 900`.
+
+3. **Inspect TĀRĀ's Semantic Hypothesis (0:30 - 0:45)**:
+   - Select `set secure-admin session-limit 900` to inspect TĀRĀ's reasoning:
+     - Classification: `UNKNOWN`
+     - Hypothesis: `Administrative Session Timeout` (78% confidence)
+     - SBM Binding: Unresolved until human confirmation.
+
+4. **Human Teaches & TĀRĀ Generalizes (0:45 - 1:00)**:
+   - Click **"Teach TĀRĀ this Construct"** to enter the **TĀRĀ Learning Studio** (`#/training`).
+   - The administrator confirms the semantic concept: `ADMIN_SESSION_TIMEOUT` (parameter: 900s).
+   - TĀRĀ does **not** simply memorize the exact CLI line. It synthesizes a **generalized parameterized pattern**:
+     `set secure-admin session-limit <VALUE>`
+   - Click **"Accept & Learn Generalized Pattern ✦"**. The mapping is inscribed into persistent **TĀRĀ Memory**.
+
+5. **Test Unseen Device B — Generalization Proof (1:00 - 1:15)**:
+   - Return to `#/analyze` and load **"✦ Unseen Device B (CAMPUS-GW-05)"**.
+   - **Crucial Point**: This device was **never used during training** and has a different parameter value: `set secure-admin session-limit 600`.
+   - Observe the result:
+     - `✓ LEARNED PATTERN MATCH`
+     - Semantic Control: `ADMIN_SESSION_TIMEOUT`
+     - Value: `600 seconds`
+     - Knowledge Source: `TĀRĀ MEMORY`
+     - Proof Banner: *"This configuration was not used during training. Pattern learned from another configuration."*
+
+6. **Learning Impact on Compliance (1:15 - 1:30)**:
+   - Inspect the **Learning Impact** section:
+     - Real calculated delta: previously unknown construct resolved, compliance decision became actionable.
+     - Traceable impact chain: `Unknown Construct → Semantic Meaning → Security Control → Framework Mapping → Compliance Result`.
+
+7. **5-Step Evidence Chain (1:30 - 1:45)**:
+   - Navigate to `#/findings` and click any failing control.
+   - Walk through the explainability chain: `Raw CLI → SBM Interpretation → Security Control → Framework Citation → Result`.
+
+8. **TĀRĀ Resolve & Cryptographic SHA-256 Proof (1:45 - 2:00)**:
+   - Switch to `#/remediation` (**TĀRĀ Resolve**): show vendor-specific remediation directive and verification command. Real devices are never automatically modified.
+   - Navigate to `#/evidence` (**TĀRĀ Proof**): compute native Web Crypto **SHA-256** digests and generate the archival PDF audit certificate.
+   - Conclude: *"Different syntax. One security language."*
 
 ---
 
